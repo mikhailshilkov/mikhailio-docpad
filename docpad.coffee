@@ -114,7 +114,8 @@ docpadConfig = {
 		# Create a collection called posts
 		# That contains all the documents that will be going to the out path posts
 		posts: ->
-			@getCollection('documents').findAllLive({relativeOutDirPath: 'posts'})
+			@getCollection("html").findAllLive({layout: 'post', draft: $exists: false},[{date:-1}])
+			#@getCollection('documents').findAllLive({relativeOutDirPath: 'posts'})
 		menuPages: ->
 			@getCollection("html").findAllLive({menu: $exists: true},[{menuOrder:1}])
 
