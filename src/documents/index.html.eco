@@ -1,12 +1,7 @@
 ---
-layout: 'default'
+layout: 'page'
 ---
 
-<ul>
-	<% for post in @getCollection('posts').sortArray(date: -1): %>
-	<li>
-		<h3><a href="<%= post.url %>"><%- post.title or post.name %></a></h3>
-		<%- post.description %>
-	</li>
-	<% end %>
-</ul>
+<% for document in @getCollection('posts').sortArray(date: -1): %>
+    <%- @partial('post', {title: document.title, url: document.url, tags: document.tags, date: document.date, content: document.contentRenderedWithoutLayouts }) %>
+<% end %>
