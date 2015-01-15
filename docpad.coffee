@@ -1,5 +1,7 @@
 # The DocPad Configuration File
 # It is simply a CoffeeScript Object which is parsed by CSON
+cheerio = require('cheerio')
+
 docpadConfig = {
 
 	# =================================
@@ -13,16 +15,15 @@ docpadConfig = {
 		site:
 			# The production url of our website
 			# If not set, will default to the calculated site URL (e.g. http://localhost:9778)
-			url: "http://website.com"
+			url: "http://mikhail.io"
 
 			# Here are some old site urls that you would like to redirect from
 			oldUrls: [
-				'www.website.com',
-				'website.herokuapp.com'
+				'mikeshilkov.workpress.com'
 			]
 
 			# The default title of our website
-			title: "Your Website"
+			title: "Mikhail Shilkov"
 
 			# The website description (for SEO)
 			description: """
@@ -79,6 +80,24 @@ docpadConfig = {
 			# Merge the document keywords with the site keywords
 			@site.keywords.concat(@document.keywords or []).join(', ')
 
+		fixLinks: (content, baseUrlOverride) ->
+			baseUrl = @site.url
+			if baseUrlOverride
+				baseUrl = baseUrlOverride
+			regex = /^(http|https|ftp|mailto):/
+
+			$ = cheerio.load(content)
+			$('img').each ->
+				$img = $(@)
+				src = $img.attr('src')
+				$img.attr('src', baseUrl + src) unless regex.test(src)
+			$('a').each ->
+				$a = $(@)
+				href = $a.attr('href')
+				$a.attr('href', baseUrl + href) unless regex.test(href)
+			$.html()
+
+		moment: require('moment')
 
 	# =================================
 	# Collections
@@ -96,6 +115,8 @@ docpadConfig = {
 		# That contains all the documents that will be going to the out path posts
 		posts: ->
 			@getCollection('documents').findAllLive({relativeOutDirPath: 'posts'})
+		menuPages: ->
+			@getCollection("html").findAllLive({menu: $exists: true},[{menuOrder:1}])
 
 
 	# =================================
