@@ -22,37 +22,33 @@ Here is a brief review of the code.
 
 First, we declare the Bubble control and derive from ContentControl to get a ready-to-use Content property for placing child control.
 
-[sourcecode language="csharp"]
-public class Bubble : ContentControl
-{
-    public Bubble()
+    public class Bubble : ContentControl
     {
-        this.DefaultStyleKey = typeof(Bubble);
+        public Bubble()
+        {
+            this.DefaultStyleKey = typeof(Bubble);
+        }
     }
-}
-[/sourcecode]
 
 Then, we go to Themes/Generic.xaml resource dictionary to declare the (default) control template. Here's how it looks:
 
-[sourcecode language="xml"]
-<Setter Property="Template">
-    <Setter.Value>
-        <ControlTemplate TargetType="localcontrols:Bubble">
-            <Grid>
-                <Path x:Name="OuterPath" Fill="#020202" StrokeThickness="0" Opacity="0.7">
-                    <Path.Effect>
-                        <BlurEffect Radius="6"/>
-                    </Path.Effect>
-                </Path>
-                <Path x:Name="InnerPath" Stroke="#8F8F8F" StrokeThickness="1">
-                </Path>
-                <ContentPresenter x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
-                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Grid>
-        </ControlTemplate>
-    </Setter.Value>
-</Setter>
-[/sourcecode]
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="localcontrols:Bubble">
+                <Grid>
+                    <Path x:Name="OuterPath" Fill="#020202" StrokeThickness="0" Opacity="0.7">
+                        <Path.Effect>
+                            <BlurEffect Radius="6"/>
+                        </Path.Effect>
+                    </Path>
+                    <Path x:Name="InnerPath" Stroke="#8F8F8F" StrokeThickness="1">
+                    </Path>
+                    <ContentPresenter x:Name="ContentContainer" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
 
 The three elements are placed into ControlTemplate:
 
@@ -62,183 +58,178 @@ The three elements are placed into ControlTemplate:
 
 Now, we can get the references to template's controls in our Bubble's method OnApplyTemplate(). We are going to render the bubble with Path controls, with pixel-based API. So, any time the content size changes, we need to adopt Paths. Let's subscribe to SizeChanged event then.
 
-[sourcecode language="csharp"]
-private Path _OuterPath;
-private Path _InnerPath;
-private ContentPresenter _ContentContainer;
+    private Path _OuterPath;
+    private Path _InnerPath;
+    private ContentPresenter _ContentContainer;
 
-public override void OnApplyTemplate()
-{
-    base.OnApplyTemplate();
-    _OuterPath = (Path)GetTemplateChild("OuterPath");
-    _InnerPath = (Path)GetTemplateChild("InnerPath");
-    _ContentContainer = (ContentPresenter)GetTemplateChild("ContentContainer");
-    if (_OuterPath != null && _ContentContainer != null)
-        _ContentContainer.SizeChanged += new SizeChangedEventHandler(OnSizeChanged);
-}
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        _OuterPath = (Path)GetTemplateChild("OuterPath");
+        _InnerPath = (Path)GetTemplateChild("InnerPath");
+        _ContentContainer = (ContentPresenter)GetTemplateChild("ContentContainer");
+        if (_OuterPath != null && _ContentContainer != null)
+            _ContentContainer.SizeChanged += new SizeChangedEventHandler(OnSizeChanged);
+    }
 
-private void OnSizeChanged(object sender, SizeChangedEventArgs e)
-{
-    Render();
-}
-[/sourcecode]
+    private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        Render();
+    }
 
 We'll need several properties to customize the look of Bubble control: Corner radius and Leader size & position.
 
-[sourcecode language="csharp"]
-/// <summary>
-/// Corner radius
-/// </summary>
-public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register("CornerRadius", typeof(int), typeof(Bubble), new PropertyMetadata(null));
-public int CornerRadius
-{
-    get
+    /// <summary>
+    /// Corner radius
+    /// </summary>
+    public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register("CornerRadius", typeof(int), typeof(Bubble), new PropertyMetadata(null));
+    public int CornerRadius
     {
-        return (int)GetValue(CornerRadiusProperty);
+        get
+        {
+            return (int)GetValue(CornerRadiusProperty);
+        }
+        set
+        {
+            SetValue(CornerRadiusProperty, value);
+        }
     }
-    set
-    {
-        SetValue(CornerRadiusProperty, value);
-    }
-}
 
-/// <summary>
-/// Leader (arrow pointer) size
-/// </summary>
-public static readonly DependencyProperty LeaderSizeProperty = DependencyProperty.Register("LeaderSize", typeof(int), typeof(Bubble), new PropertyMetadata(null));
-public int LeaderSize
-{
-    get
+    /// <summary>
+    /// Leader (arrow pointer) size
+    /// </summary>
+    public static readonly DependencyProperty LeaderSizeProperty = DependencyProperty.Register("LeaderSize", typeof(int), typeof(Bubble), new PropertyMetadata(null));
+    public int LeaderSize
     {
-        return (int)GetValue(LeaderSizeProperty);
+        get
+        {
+            return (int)GetValue(LeaderSizeProperty);
+        }
+        set
+        {
+            SetValue(LeaderSizeProperty, value);
+        }
     }
-    set
-    {
-        SetValue(LeaderSizeProperty, value);
-    }
-}
 
-/// <summary>
-/// Leader (arrow pointer) position - relative to upper border
-/// </summary>
-public static readonly DependencyProperty LeaderTopProperty = DependencyProperty.Register("LeaderTop", typeof(int), typeof(Bubble), new PropertyMetadata(null));
-public int LeaderTop
-{
-    get
+    /// <summary>
+    /// Leader (arrow pointer) position - relative to upper border
+    /// </summary>
+    public static readonly DependencyProperty LeaderTopProperty = DependencyProperty.Register("LeaderTop", typeof(int), typeof(Bubble), new PropertyMetadata(null));
+    public int LeaderTop
     {
-        return (int)GetValue(LeaderTopProperty);
+        get
+        {
+            return (int)GetValue(LeaderTopProperty);
+        }
+        set
+        {
+            SetValue(LeaderTopProperty, value);
+        }
     }
-    set
-    {
-        SetValue(LeaderTopProperty, value);
-    }
-}
 
-/// <summary>
-/// Leader (arrow pointer) position - left, right or none (hidden)
-/// </summary>
-public static readonly DependencyProperty LeaderPositionProperty = DependencyProperty.Register("LeaderPosition", typeof(BubbleLeaderPosition), typeof(Bubble), new PropertyMetadata(OnPropertyChanged));
-public BubbleLeaderPosition LeaderPosition
-{
-    get
+    /// <summary>
+    /// Leader (arrow pointer) position - left, right or none (hidden)
+    /// </summary>
+    public static readonly DependencyProperty LeaderPositionProperty = DependencyProperty.Register("LeaderPosition", typeof(BubbleLeaderPosition), typeof(Bubble), new PropertyMetadata(OnPropertyChanged));
+    public BubbleLeaderPosition LeaderPosition
     {
-        return (BubbleLeaderPosition)GetValue(LeaderPositionProperty);
+        get
+        {
+            return (BubbleLeaderPosition)GetValue(LeaderPositionProperty);
+        }
+        set
+        {
+            SetValue(LeaderPositionProperty, value);
+        }
     }
-    set
-    {
-        SetValue(LeaderPositionProperty, value);
-    }
-}
 
-public enum BubbleLeaderPosition
-{
-    None,
-    Left,
-    Right
-}
-[/sourcecode]
+    public enum BubbleLeaderPosition
+    {
+        None,
+        Left,
+        Right
+    }
 
 Now we only need to implement Render() method - quite a lot of routine work: calculating coordinates of "leader", adding Path segments into both OuterPath and InnerPath, setting margins etc.
-[sourcecode language="csharp"]
-protected void Render()
-{
-    if (_ContentContainer == null '' _OuterPath == null)
-                return;
-    double width = _ContentContainer.ActualWidth + 2 + SHADOW_SIZE * 2 + LeaderSize;
-    double height = _ContentContainer.ActualHeight + 2 + SHADOW_SIZE * 2;
 
-    // paint the outer path - used for shadow effect
-    RenderPath(_OuterPath, 0, 0, width, height, SHADOW_SIZE);
-
-    // paint the inner path - used for border rendering
-    // may be skipped in control template
-    if (_InnerPath != null)
-        RenderPath(_InnerPath, SHADOW_SIZE, SHADOW_SIZE, width - SHADOW_SIZE, height - SHADOW_SIZE, 0);
-
-    switch (LeaderPosition)
+    protected void Render()
     {
-        case BubbleLeaderPosition.None:
-            _ContentContainer.Margin = new Thickness(SHADOW_SIZE + 1);
-            break;
-        case BubbleLeaderPosition.Left:
-            _ContentContainer.Margin = new Thickness(LeaderSize + SHADOW_SIZE + 1, SHADOW_SIZE + 1, SHADOW_SIZE + 1, SHADOW_SIZE + 1);
-            break;
-        case BubbleLeaderPosition.Right:
-            _ContentContainer.Margin = new Thickness(SHADOW_SIZE + 1, SHADOW_SIZE + 1, SHADOW_SIZE + 1 + LeaderSize, SHADOW_SIZE + 1);
-            break;
-    }
-}
+        if (_ContentContainer == null '' _OuterPath == null)
+                    return;
+        double width = _ContentContainer.ActualWidth + 2 + SHADOW_SIZE * 2 + LeaderSize;
+        double height = _ContentContainer.ActualHeight + 2 + SHADOW_SIZE * 2;
 
-private void RenderPath(Path path, double left, double top, double right, double bottom, double shadowSize)
-{
-    PathGeometry geometry = new PathGeometry();
-    PathFigure figure = new PathFigure { IsClosed = true };
-    geometry.Figures.Add(figure);
-    switch (LeaderPosition)
-    {
-        case BubbleLeaderPosition.None:
-            figure.StartPoint = new Point { X = left, Y = top + CornerRadius };
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = left + CornerRadius, Y = top }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right - CornerRadius, Y = top } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = right, Y = top + CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right, Y = bottom - CornerRadius } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = right - CornerRadius, Y = bottom }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = left + CornerRadius, Y = bottom } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = left, Y = bottom - CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            break;
+        // paint the outer path - used for shadow effect
+        RenderPath(_OuterPath, 0, 0, width, height, SHADOW_SIZE);
 
-        case BubbleLeaderPosition.Left:
-            figure.StartPoint = new Point { X = left + LeaderSize, Y = top + CornerRadius };
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = left + LeaderSize + CornerRadius, Y = top }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right - CornerRadius, Y = top } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = right, Y = top + CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right, Y = bottom - CornerRadius } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = right - CornerRadius, Y = bottom }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = left + LeaderSize + CornerRadius, Y = bottom } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = left + LeaderSize, Y = bottom - CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = left + LeaderSize, Y = top + LeaderTop + 2 * LeaderSize + 2 * shadowSize } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = left, Y = top + LeaderTop + LeaderSize + shadowSize } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = left + LeaderSize, Y = top + LeaderTop } });
-            break;
+        // paint the inner path - used for border rendering
+        // may be skipped in control template
+        if (_InnerPath != null)
+            RenderPath(_InnerPath, SHADOW_SIZE, SHADOW_SIZE, width - SHADOW_SIZE, height - SHADOW_SIZE, 0);
 
-        case BubbleLeaderPosition.Right:
-            figure.StartPoint = new Point { X = left, Y = top + CornerRadius };
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = left + CornerRadius, Y = top }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right - LeaderSize - CornerRadius, Y = top } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = right - LeaderSize, Y = top + CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right - LeaderSize, Y = top + LeaderTop } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right, Y = top + LeaderTop + LeaderSize + shadowSize } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right - LeaderSize, Y = top + LeaderTop + 2 * LeaderSize + 2 * shadowSize } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = right - LeaderSize, Y = bottom - CornerRadius } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = right - LeaderSize - CornerRadius, Y = bottom }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            figure.Segments.Add(new LineSegment { Point = new Point { X = left + CornerRadius, Y = bottom } });
-            figure.Segments.Add(new ArcSegment { Point = new Point { X = left, Y = bottom - CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
-            break;
+        switch (LeaderPosition)
+        {
+            case BubbleLeaderPosition.None:
+                _ContentContainer.Margin = new Thickness(SHADOW_SIZE + 1);
+                break;
+            case BubbleLeaderPosition.Left:
+                _ContentContainer.Margin = new Thickness(LeaderSize + SHADOW_SIZE + 1, SHADOW_SIZE + 1, SHADOW_SIZE + 1, SHADOW_SIZE + 1);
+                break;
+            case BubbleLeaderPosition.Right:
+                _ContentContainer.Margin = new Thickness(SHADOW_SIZE + 1, SHADOW_SIZE + 1, SHADOW_SIZE + 1 + LeaderSize, SHADOW_SIZE + 1);
+                break;
+        }
     }
 
-    path.Data = geometry;
-}
-[/sourcecode]
+    private void RenderPath(Path path, double left, double top, double right, double bottom, double shadowSize)
+    {
+        PathGeometry geometry = new PathGeometry();
+        PathFigure figure = new PathFigure { IsClosed = true };
+        geometry.Figures.Add(figure);
+        switch (LeaderPosition)
+        {
+            case BubbleLeaderPosition.None:
+                figure.StartPoint = new Point { X = left, Y = top + CornerRadius };
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = left + CornerRadius, Y = top }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right - CornerRadius, Y = top } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = right, Y = top + CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right, Y = bottom - CornerRadius } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = right - CornerRadius, Y = bottom }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = left + CornerRadius, Y = bottom } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = left, Y = bottom - CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                break;
+
+            case BubbleLeaderPosition.Left:
+                figure.StartPoint = new Point { X = left + LeaderSize, Y = top + CornerRadius };
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = left + LeaderSize + CornerRadius, Y = top }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right - CornerRadius, Y = top } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = right, Y = top + CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right, Y = bottom - CornerRadius } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = right - CornerRadius, Y = bottom }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = left + LeaderSize + CornerRadius, Y = bottom } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = left + LeaderSize, Y = bottom - CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = left + LeaderSize, Y = top + LeaderTop + 2 * LeaderSize + 2 * shadowSize } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = left, Y = top + LeaderTop + LeaderSize + shadowSize } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = left + LeaderSize, Y = top + LeaderTop } });
+                break;
+
+            case BubbleLeaderPosition.Right:
+                figure.StartPoint = new Point { X = left, Y = top + CornerRadius };
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = left + CornerRadius, Y = top }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right - LeaderSize - CornerRadius, Y = top } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = right - LeaderSize, Y = top + CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right - LeaderSize, Y = top + LeaderTop } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right, Y = top + LeaderTop + LeaderSize + shadowSize } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right - LeaderSize, Y = top + LeaderTop + 2 * LeaderSize + 2 * shadowSize } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = right - LeaderSize, Y = bottom - CornerRadius } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = right - LeaderSize - CornerRadius, Y = bottom }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                figure.Segments.Add(new LineSegment { Point = new Point { X = left + CornerRadius, Y = bottom } });
+                figure.Segments.Add(new ArcSegment { Point = new Point { X = left, Y = bottom - CornerRadius }, SweepDirection = SweepDirection.Clockwise, Size = new Size { Width = CornerRadius, Height = CornerRadius } });
+                break;
+        }
+
+        path.Data = geometry;
+    }
 
 You can download the Bubble control test application [here](https://skydrive.live.com/redir.aspx?cid=c010011792a4b538&resid=C010011792A4B538!126&parid=root). It will show you something like this :)
 [![](http://mikeshilkov.files.wordpress.com/2012/01/bubblegirls.png "BubbleGirls")](bubblegirls.png)

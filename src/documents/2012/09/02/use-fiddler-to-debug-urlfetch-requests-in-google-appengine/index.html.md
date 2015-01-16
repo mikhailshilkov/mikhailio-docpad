@@ -16,25 +16,21 @@ It seems that the only way to overcome this limitation is to modify the code of 
 
 Stop all your developmenet AppEngine instances. Go to your AppEngine folder, and then to \google\appengine\api\. Edit urlfetch_stub.py (make a backup beforehand). Search for "connection =" line, something like
 
-[sourcecode language="python" gutter="false"]
-if _CONNECTION_SUPPORTS_TIMEOUT:
-  connection = connection_class(host, timeout=deadline)
-else:
-  connection = connection_class(host)
-[/sourcecode]
+    if _CONNECTION_SUPPORTS_TIMEOUT:
+      connection = connection_class(host, timeout=deadline)
+    else:
+      connection = connection_class(host)
 
 Substitute it with 
-[sourcecode language="python" gutter="false"]
-connection = connection_class('127.0.0.1', 8888)
-[/sourcecode]
+
+    connection = connection_class('127.0.0.1', 8888)
 
 Then, search for "connection.request" method call similar to
-[sourcecode language="python" gutter="false"]
-connection.request(method, full_path, payload, adjusted_headers)
-[/sourcecode]
+
+    connection.request(method, full_path, payload, adjusted_headers)
+
 and insert another line before it:
-[sourcecode language="python" gutter="false"]
-full_path = protocol + "://" + host + full_path
-[/sourcecode]
+
+    full_path = protocol + "://" + host + full_path
 
 Done! After you run the dev server and Fiddler2, you should be able to see urlfetch requests in web debugger. Have a nice debugging session!

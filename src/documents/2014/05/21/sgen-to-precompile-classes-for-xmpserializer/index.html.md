@@ -19,28 +19,27 @@ However, this command might fail. Sgen tool will try to prepare the helper class
 
 It's quite possible that you use MSBuild for regular automated builds of your project. We do. In this case a post-build event in the project properties won't work during those build. Then, do not add any post-build events, but instead open your .csproj file in plain text editor, and search for the following commented section:
 
-[sourcecode language="python" gutter="false"]  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-[/sourcecode]
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
 
 Uncomment the second XML node and substitute it with something like this:
-[sourcecode language="python" gutter="false"]<Target Name="AfterBuild" DependsOnTargets="AssignTargetPaths;Compile;ResolveKeySource" Inputs="$(MSBuildAllProjects);@(IntermediateAssembly)" Outputs="$(OutputPath)$(_SGenDllName)">
-    <ItemGroup>
-      <SgenTypes Include="MyNamespace.MySerializableClass1" />
-      <SgenTypes Include="MyNamespace.MySerializableClass2" />
-      <SgenTypes Include="MyNamespace.MySerializableClassN" />
-    </ItemGroup>
-    <Delete Files="$(TargetDir)$(TargetName).XmlSerializers.dll" ContinueOnError="true" />
-    <SGen BuildAssemblyName="$(TargetFileName)" BuildAssemblyPath="$(OutputPath)" References="@(ReferencePath)" ShouldGenerateSerializer="true" UseProxyTypes="false" KeyContainer="$(KeyContainerName)" KeyFile="$(KeyOriginatorFile)" DelaySign="$(DelaySign)" ToolPath="$(SGenToolPath)" Types="@(SgenTypes)">
-      <Output TaskParameter="SerializationAssembly" ItemName="SerializationAssembly" />
-    </SGen>
-  </Target>
-[/sourcecode]
+
+    <Target Name="AfterBuild" DependsOnTargets="AssignTargetPaths;Compile;ResolveKeySource" Inputs="$(MSBuildAllProjects);@(IntermediateAssembly)" Outputs="$(OutputPath)$(_SGenDllName)">
+        <ItemGroup>
+          <SgenTypes Include="MyNamespace.MySerializableClass1" />
+          <SgenTypes Include="MyNamespace.MySerializableClass2" />
+          <SgenTypes Include="MyNamespace.MySerializableClassN" />
+        </ItemGroup>
+        <Delete Files="$(TargetDir)$(TargetName).XmlSerializers.dll" ContinueOnError="true" />
+        <SGen BuildAssemblyName="$(TargetFileName)" BuildAssemblyPath="$(OutputPath)" References="@(ReferencePath)" ShouldGenerateSerializer="true" UseProxyTypes="false" KeyContainer="$(KeyContainerName)" KeyFile="$(KeyOriginatorFile)" DelaySign="$(DelaySign)" ToolPath="$(SGenToolPath)" Types="@(SgenTypes)">
+          <Output TaskParameter="SerializationAssembly" ItemName="SerializationAssembly" />
+        </SGen>
+    </Target>
 
 The ItemGroup lists all the classes that you need to precompile. You can omit this section and Types attribute of SGen node if you want to compile all classes in assembly.
 Have a nice application start-up boost!

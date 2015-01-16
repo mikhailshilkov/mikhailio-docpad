@@ -25,27 +25,22 @@ Finally, we've found the solution. [HotelsCombined](http://www.hotelscombined.co
 4.  Choose "Standard data feed" -> "Single file" -> "CSV format" (you may get XML as well)
 Parsing the CSV file is a piece of cake, here is a sample Python code to filter out hotels from St. Petersburg:
 
-[sourcecode language="python"]
-def filter_hotels(from_file):
-    with open(from_file, 'r') as fr:
-        while True:
-            line = fr.readline()
-            if len(line) == 0:
-                break # EOF
-
-            hotel = line.split(',')
-            city_code = hotel[5]
-            country_code = hotel[10]
-            if city_code == 'St_Petersburg' and country_code == 'RU':
-                hotel_name = hotel[2]
-                print hotel_name
-[/sourcecode]
+    def filter_hotels(from_file):
+        with open(from_file, 'r') as fr:
+            while True:
+                line = fr.readline()
+                if len(line) == 0:
+                    break # EOF
+                hotel = line.split(',')
+                city_code = hotel[5]
+                country_code = hotel[10]
+                if city_code == 'St_Petersburg' and country_code == 'RU':
+                    hotel_name = hotel[2]
+                    print hotel_name
 
 Here is the complete list of fields in CSV/XML:
 
-[sourcecode]
-hotelId, hotelFileName, hotelName, rating, cityId, cityFileName, cityName, stateId, stateFileName, stateName, countryCode, countryFileName, countryName, imageId, address, minRate, currencyCode, Latitude, Longitude, NumberOfReviews, ConsumerRating, PropertyType, ChainID, Facilities
-[/sourcecode]
+    hotelId, hotelFileName, hotelName, rating, cityId, cityFileName, cityName, stateId, stateFileName, stateName, countryCode, countryFileName, countryName, imageId, address, minRate, currencyCode, Latitude, Longitude, NumberOfReviews, ConsumerRating, PropertyType, ChainID, Facilities
 
 **Update:** Unfortunately, HotelsCombined.com has introduced the new regulations: they've restricted the access to data feeds by default. To get the access, a partner must submit some information on why one needs the data. The HC team will review it and then (maybe) will grant access. Sad but true. I'm in the middle of getting through this guarg, I'll let you know about the result.
 

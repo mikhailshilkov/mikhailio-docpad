@@ -24,9 +24,7 @@ Here is what I ended up with:
 
 Quite minimalistic and sexy ;-)  The control usage is self-explanatory:
 
-[sourcecode language="xml" gutter="false"]
     <local:Gauge x:Name="Gauge" Value="71" SecondValue="84" RedThreshold="60" YellowThreshold="80"
                      MinValue="0" MaxValue="100" Width="400" />
-[/sourcecode]
 
 Source code has no rocket-science inside, so I won't post it here. You can download the Gauge control test application [here](https://skydrive.live.com/redir.aspx?cid=c010011792a4b538&resid=C010011792A4B538!127&parid=root).
