@@ -48,7 +48,7 @@
                 <% for document in @getCollection('menuPages').toJSON(): %>
                     <li><a href="<%= document.url %>"><%= document.menu %></a></li>
                 <% end %>
-                <li><a href="http://msdevshow.com">Podcast</a></li>
+                <li><a href="/about">About</a></li>
                 <li class="hidden-xs">
                     <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
                     <a href="http://twitter.com/kiwo22" class="twitter"><span class="icon icon-twitter"></span></a>
@@ -68,7 +68,7 @@
 <%- @content %>
 <div class="container">
     <div class="navbar navbar-footer">
-        <p class="navbar-center navbar-text">Content copyright &copy; 2013 Jason Young</p>
+        <p class="navbar-center navbar-text">Content copyright &copy; 2015 Mikhail Shilkov</p>
     </div>
 </div>
 

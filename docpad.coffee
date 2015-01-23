@@ -1,6 +1,7 @@
 # The DocPad Configuration File
 # It is simply a CoffeeScript Object which is parsed by CSON
 cheerio = require('cheerio')
+url = require('url')
 
 docpadConfig = {
 
@@ -80,6 +81,12 @@ docpadConfig = {
 			# Merge the document keywords with the site keywords
 			@site.keywords.concat(@document.keywords or []).join(', ')
 
+		getIdForDocument: (document) ->
+			hostname = url.parse(@site.url).hostname
+			date = document.date.toISOString().split('T')[0]
+			path = document.url
+			"tag:#{hostname},#{date},#{path}"
+
 		fixLinks: (content, baseUrlOverride) ->
 			baseUrl = @site.url
 			if baseUrlOverride
@@ -118,23 +125,6 @@ docpadConfig = {
 			#@getCollection('documents').findAllLive({relativeOutDirPath: 'posts'})
 		menuPages: ->
 			@getCollection("html").findAllLive({menu: $exists: true},[{menuOrder:1}])
-
-
-	# =================================
-	# Environments
-
-	# DocPad's default environment is the production environment
-	# The development environment, actually extends from the production environment
-
-	# The following overrides our production url in our development environment with false
-	# This allows DocPad's to use it's own calculated site URL instead, due to the falsey value
-	# This allows <%- @site.url %> in our template data to work correctly, regardless what environment we are in
-
-	environments:
-		development:
-			templateData:
-				site:
-					url: false
 
 
 	# =================================

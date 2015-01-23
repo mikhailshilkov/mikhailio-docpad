@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Sgen to precompile classes for XmpSerializer
+title: Sgen to precompile classes for XmlSerializer
 date: 2014-05-21
 tags: [".NET",".NET","ASP.NET","C#","debugging","MSBuild","Performance","performance","Sgen","XmlSerializer"]
 ---
