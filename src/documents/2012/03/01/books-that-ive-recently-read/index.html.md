@@ -2,10 +2,11 @@
 layout: post
 title: Books that I've recently read
 date: 2012-03-01
-tags: ["Books","Books","Business books"]
+tags: ["Books","Business books"]
 ---
 
-**[![](http://mikeshilkov.files.wordpress.com/2012/02/stevejobsbook2.jpg "stevejobsbook")](stevejobsbook2.jpg)"Steve Jobs" **by Walter Isaacson ([link](http://www.amazon.com/Steve-Jobs-Walter-Isaacson/dp/1451648537 "Steve Jobs on Amazon"))
+![Steve Jobs book](/stevejobsbook2.jpg "Steve Jobs book")
+**"Steve Jobs" **by Walter Isaacson ([link](http://www.amazon.com/Steve-Jobs-Walter-Isaacson/dp/1451648537 "Steve Jobs on Amazon"))
 
 I guess it's one of the most popular books in the world at the moment. The story of the most influential person in IT world ever, that reveals the intense personality and extraordinary talent.
 
@@ -13,7 +14,8 @@ I never used a single product of Apple company, but still I'm very impressed wit
 
 The book is pretty long and detailed, but it's worth the time. I rate it 4 out of 5.
 
-[![](http://mikeshilkov.files.wordpress.com/2012/02/tinkov1.jpg "tinkov1")](tinkov1.jpg) **"How to Become a Businessman"** by Oleg Tinkov ([link](http://tinkov.com/payment/5/ "Tinkov books"))
+![Tinkov](/tinkov1.jpg "Tinkov") **"How to Become a Businessman"** by Oleg Tinkov ([link](http://tinkov.com/payment/5/ "Tinkov books"))
+
 A book by the most famous Russian entrepreneur. Short, simple and sharp, it gives a portion of good advice for young businessmen.
 
 To me it appeared to be really motivating. The main idea is "keep your head clean and your work hard - and you'll earn your million".
@@ -22,9 +24,9 @@ The book is quite short (you'll probably finish it in one or two nights) and wel
 
 5 star reading for a rookie businessman in Russia.
 
-[![](http://mikeshilkov.files.wordpress.com/2012/02/tinkov2.jpg "tinkov2")](tinkov2.jpg)
-
+![Tinkov 2](/tinkov2.jpg "Tinkov")
 **"I'm Just Like Anyone Else"** by Oleg Tinkov ([link](http://itunes.apple.com/us/book/im-just-like-anyone-else/id407756421 "Oleg Tinkov"))
+
 Another book of same author. He didn't mean to teach the reader, but instead he tells the story of his life and all of his businesses to the moment.
 
 The biography of strong entrepreneur and charismatic leader is definitely worth reading. And while doing that, you'll probably learn some hints and ideas on business in Russia.
@@ -32,7 +34,8 @@ The biography of strong entrepreneur and charismatic leader is definitely worth 
 Rating is 4*.
 
 **
-[![](the_art_of_the_start.jpg?w=198 "the_art_of_the_start")](http://mikeshilkov.files.wordpress.com/2012/03/the_art_of_the_start.jpg)"The Art of  the Start"** by Guy Kawasaki ([link](http://www.guykawasaki.com/the-art-of-the-start/ "Guy Kawasaki"))
+![](/the_art_of_the_start.jpg "the_art_of_the_start")"The Art of  the Start"** by Guy Kawasaki ([link](http://www.guykawasaki.com/the-art-of-the-start/ "Guy Kawasaki"))
+
 Guy is a former evangelist for Apple's Macintosh computer and now - a Silicon Valley venture capitalist.
 
 While he gives some generic valuable hints on start-up business, the book did not seem the right one for me at the moment. The author goes into great detail when it comes to raising capital, preparing awesome presentations and self-marketing.

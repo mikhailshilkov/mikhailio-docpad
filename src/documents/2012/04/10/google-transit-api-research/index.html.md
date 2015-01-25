@@ -2,7 +2,7 @@
 layout: post
 title: Google Transit API research
 date: 2012-04-10
-tags: ["API","Google Maps","Google Maps","Google Transit"]
+tags: ["API","Google Maps","Google Transit"]
 ---
 
 Recently, Google has launch a Transit service for the biggest cities of Russia: a service to caculate routes with public transport options. As a part of RnD for upcoming project, I need to understand whether there's any feasible way to calculate public transport route programmatically. I.e. I need Google Transit API.
@@ -24,6 +24,6 @@ Seems like a bit of overkill to me. Having in mind, that "unofficial" API may ch
 
 Also, I'm still not sure whether I can change the language of route directions.
 
-Update: language is specified with "hl" request parameter.
+**Update**: language is specified with "hl" request parameter.
 
-Update 2: [Google Transit API is now available](http://mikeshilkov.wordpress.com/2012/08/14/google-adds-public-transit-into-api/)!
+**Update 2**: [Google Transit API is now available](http://mikhail.io/2012/08/14/google-adds-public-transit-into-api/)!

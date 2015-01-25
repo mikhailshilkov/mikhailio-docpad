@@ -2,13 +2,14 @@
 layout: post
 title: Speech bubble custom border control in Silverlight
 date: 2012-01-26
-tags: ["C#","Silverlight","Silverlight","Speech Bubble","User Contol","WPF"]
+tags: ["C#","Silverlight","Speech Bubble","User Control","WPF"]
 ---
 
 Recently, I was trying to find a Silverlight control, which works like a standard Border, but looks like a Speech Bubble instead. This means the border would have a "leader" triangle, which could point to a related visual element. See the following example:
 
-[![](http://mikeshilkov.files.wordpress.com/2012/01/bubbles.png "Speech bubbles on a map")
-](bubbles.png)Here we have two objects on a map: two vehicle icons. Each of them has a related bubble pop-up with some status information. When we get many objects on the map, the pop-up "leaders" will help user grasp the relations between icons and info labels.
+![Speech bubbles on a map](/bubbles.png "Speech bubbles on a map")
+
+Here we have two objects on a map: two vehicle icons. Each of them has a related bubble pop-up with some status information. When we get many objects on the map, the pop-up "leaders" will help user grasp the relations between icons and info labels.
 
 First, I started with requirements list to a Bubble control; here's what I got:
 1. The control should act like a standard content control, i.e. it must allow any like of XAML content inside.
@@ -232,4 +233,4 @@ Now we only need to implement Render() method - quite a lot of routine work: cal
     }
 
 You can download the Bubble control test application [here](https://skydrive.live.com/redir.aspx?cid=c010011792a4b538&resid=C010011792A4B538!126&parid=root). It will show you something like this :)
-[![](http://mikeshilkov.files.wordpress.com/2012/01/bubblegirls.png "BubbleGirls")](bubblegirls.png)
+![Bubble girls](/bubblegirls.png "Bubble girls")

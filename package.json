@@ -36,6 +36,7 @@
     "docpad-plugin-marked": "~2.2.0",
     "docpad-plugin-partials": "~2.9.0",
     "docpad-plugin-less": "~2.2.0",
+    "docpad-plugin-cleanurls": "https://github.com/ervwalter/docpad-plugin-cleanurls/tarball/compiled",
     "cheerio": "~0.12.3",
     "moment": "~2.4.0"
   },

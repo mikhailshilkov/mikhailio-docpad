@@ -2,7 +2,7 @@
 layout: post
 title: Nice way to kill your SQL Server
 date: 2014-10-16
-tags: ["Bugs","Error log","SQL Server","SQL Server","SQL Server Service Broker"]
+tags: ["Bugs","Error log","SQL Server","SQL Server Service Broker"]
 ---
 
 Are you getting enormous amount of 
@@ -13,7 +13,7 @@ Are you getting enormous amount of
 errors from SQL Server? Keep on reading!
 
 Yesterday, when I came back from my lunch, I got a heads-up from Windows:
-[![low-disk-space](https://mikeshilkov.files.wordpress.com/2014/10/low-disk-space.gif)](low-disk-space.gif)
+![Low disk space](/low-disk-space.gif)
 
 And it was literally out of space: 0 (zero) bytes available on C: drive. Wow...
 
@@ -21,7 +21,7 @@ I cleaned up the binary files from my developments, which gave me 3 GB of free s
 
 It appeared that the SQL Server error log files grew up to 53 GB and were still growing. Here is the default folder where you can find them:
 
-[![ERRORLOG](https://mikeshilkov.files.wordpress.com/2014/10/errorlog.png)](errorlog.png)
+![SQL Server error log](/errorlog.png)
 
 To gain more time, I executed the command
 
@@ -46,7 +46,7 @@ First, let check if the queue is actually disabled
      WHERE Name = 'XQueue'  
 
 Yep, it's disabled:
-[![QDisabled](https://mikeshilkov.files.wordpress.com/2014/10/qdisabled.png)](qdisabled.png)
+![XQueue disabled](/qdisabled.png)
 
 Do we have anything queued?
 

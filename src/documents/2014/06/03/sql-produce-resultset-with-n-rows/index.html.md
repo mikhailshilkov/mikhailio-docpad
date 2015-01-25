@@ -2,7 +2,7 @@
 layout: 'post'
 title: SQL: produce resultset with N rows
 date: 2014-06-03
-tags: ["performance","SQL Server","SQL Server","T-SQL"]
+tags: ["performance","SQL Server","T-SQL"]
 ---
 
 Let's talk about T-SQL today.

@@ -2,7 +2,7 @@
 layout: post
 title: Hunting memory leaks in Silverlight
 date: 2012-02-05
-tags: ["C#","fixing memory leaks","Memory leaks","microsoft silverlight","Silverlight","WinDbg"]
+tags: ["C#","fixing memory leaks","Memory leaks","Silverlight","WinDbg"]
 ---
 
 Recently, I've spent a couple of days seeking and fixing memory leaks in our Silverlight application. It might be tough sometimes, but it's a good 'brain-teasing' practice and it's a good way to learn how inner things work.

@@ -12,6 +12,6 @@ The last one (10 weeks in September-November) was called [Introduction to Comput
 I scored about 95% on all tests and exams (they were relatively easy comparing to video material). But unfortunately, I got no certificate or even course record for this! It seems that University of Washington did not allow Coursera to issue such certificates and records... What a shame! I spent lots of time on it, and a record would be satisfactory. Please be careful if you take this course or other courses of UoW in the future.
 
 However, I got another unexpected certificate. In June, I took a course called [Human-Computer Interaction](https://www.coursera.org/course/hci) about user interface design concepts and approaches. I started it with a big delay because of my vacation, so I thought I wouldn't score enough for a certificate. But I was wrong! I got the certificate 6 months after the course ended:
-[![hci](hci.jpg)](http://mikeshilkov.wordpress.com/2012/12/26/one-certificate-missing-one-received-unexpectedly/hci/)
+![HCI certificate](/hci.jpg)
 
 The course was short but useful. I wish there would be an extension course, which would cover more details on the topic.

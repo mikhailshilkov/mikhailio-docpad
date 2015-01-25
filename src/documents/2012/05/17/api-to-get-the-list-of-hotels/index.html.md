@@ -23,6 +23,7 @@ Finally, we've found the solution. [HotelsCombined](http://www.hotelscombined.co
 2.  Register there (no company or bank data is needed)
 3.  Open "Data feeds" page
 4.  Choose "Standard data feed" -> "Single file" -> "CSV format" (you may get XML as well)
+
 Parsing the CSV file is a piece of cake, here is a sample Python code to filter out hotels from St. Petersburg:
 
     def filter_hotels(from_file):

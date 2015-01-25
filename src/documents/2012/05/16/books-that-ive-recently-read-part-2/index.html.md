@@ -2,10 +2,10 @@
 layout: post
 title: Books that I’ve recently read, part 2
 date: 2012-05-16
-tags: ["Books","Books","Business books"]
+tags: ["Books","Business books"]
 ---
 
-**![](rework3.jpg "rework")"Rework"** by Jason Fried and David Heinemeier Hansson ([link](http://www.amazon.com/Rework-Jason-Fried/dp/0307463745 "Rework book"))
+![Rework](/rework3.jpg "rework")**"Rework"** by Jason Fried and David Heinemeier Hansson ([link](http://www.amazon.com/Rework-Jason-Fried/dp/0307463745 "Rework book"))
 
 Short but practical and inspiring  entrepreneurial handbook for the twenty-first century. The guys from [37signals](http://37signals.com/ "37 signals") give no boring theory but dozens of useful hints for a business "starter".
 
@@ -13,7 +13,7 @@ The book is not deap, just a 'one-evening-reading'. And the advice they give is 
 
 Great reading for those who want to start their own business, have their own business, or are just interested in the subject. But don't believe them blind. Score is 4 of 5.
 
-![](krug.png "krug")
+![Krug](/krug.png "krug")
 
 **"Don't Make Me Think"** by Steve Krug ([link](http://www.amazon.com/exec/obidos/ASIN/0789723107 "Don"))
 
@@ -23,7 +23,7 @@ This book may seem old (first published in 2000) but the rules are still up-to-d
 
 Score is 5.
 
-![](nondesigner.jpg "NonDesigner") **"The Non-Designer's Design Book"** by Robin Williams ([link](http://www.amazon.com/exec/obidos/ASIN/0321193857 "The Non-Designer"))
+![Non-designer](/nondesigner.jpg "Non-designer") **"The Non-Designer's Design Book"** by Robin Williams ([link](http://www.amazon.com/exec/obidos/ASIN/0321193857 "The Non-Designer"))
 
 I'm far from being a good designer but I'd really love to get at least the very basics of the skill to make beautiful things (UI mostly).
 
@@ -31,7 +31,7 @@ The author of this book explains some really generic principles of design, i.e. 
 
 We'll see whether the book will help me build good-looking web pages... In any case, it's absolutely worth reading for persons who have interest in the subject.
 
-<span style="color:#000000;">**[![](toiletpaperentrepreneur.jpg?w=250 "toiletpaperentrepreneur")](https://mikeshilkov.files.wordpress.com/2012/05/toiletpaperentrepreneur.jpg)"The Toilet Paper Entrepreneur"** by Mike Michaliwicz ([link](http://www.toiletpaperentrepreneur.com/book/overview/ "The Toilet paper entrepreneur"))</span>
+![](/toiletpaperentrepreneur.jpg "toiletpaperentrepreneur") **"The Toilet Paper Entrepreneur"** by Mike Michaliwicz ([link](http://www.toiletpaperentrepreneur.com/book/overview/ "The Toilet paper entrepreneur"))
 
 The book is about running a startup without any significant budget available.
 
