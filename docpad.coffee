@@ -127,6 +127,10 @@ docpadConfig = {
 			@getCollection("html").findAllLive({menu: $exists: true},[{menuOrder:1}])
 
 
+	plugins:
+		cleanurls:
+			trailingSlashes: true
+
 	# =================================
 	# DocPad Events
 
