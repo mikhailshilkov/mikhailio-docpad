@@ -71,6 +71,9 @@ docpadConfig = {
 			else
 				@site.title
 
+		getPageUrlWithHostname: ->
+			"#{@site.url}#{@document.url}"
+
 		# Get the prepared site/document description
 		getPreparedDescription: ->
 			# if we have a document description, then we should use that, otherwise use the site's description
@@ -105,6 +108,12 @@ docpadConfig = {
 			$.html()
 
 		moment: require('moment')
+
+		getJavascriptEncodedTitle: (title) ->
+			title.replace("'", "\\'")
+
+		# Disqus.com settings
+		disqusShortName: 'mikhailio'
 
 	# =================================
 	# Collections
