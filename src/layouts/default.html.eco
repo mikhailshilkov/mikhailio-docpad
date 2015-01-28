@@ -39,7 +39,7 @@
             </button>
             <a class="navbar-brand" href="/">
                 <span class="text-primary"><%= @site.title %></span><br />
-                <span class="elevator-pitch">.NET software developer from Eindhoven area, the Netherlands</span>
+                <span class="elevator-pitch">.NET, SQL and Javascript programmer</span>
             </a>
         </div>
         <div class="collapse navbar-collapse navbar-right">
@@ -51,6 +51,7 @@
                 <li><a href="/about">About</a></li>
                 <li class="hidden-xs">
                     <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
+                    <a href="https://www.linkedin.com/in/mikhailshilkov" class="linkedin"><span class="icon icon-linkedin"></span></a>
                     <a href="http://twitter.com/kiwo22" class="twitter"><span class="icon icon-twitter"></span></a>
                     <a href="https://github.com/kiwo" class="github"><span class="icon icon-github"></span></a>
                 </li>
