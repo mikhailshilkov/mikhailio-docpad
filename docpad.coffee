@@ -26,6 +26,9 @@ docpadConfig = {
 			# The default title of our website
 			title: "Mikhail Shilkov"
 
+			# The website author's name
+			author: "Mikhail Shilkov"
+
 			# The website description (for SEO)
 			description: """
 				When your website appears in search results in say Google, the text here will be shown underneath your website's title.

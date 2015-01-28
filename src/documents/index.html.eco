@@ -5,3 +5,5 @@ layout: 'page'
 <% for document in @getCollection('posts').sortArray(date: -1): %>
     <%- @partial('post', {title: document.title, url: document.url, tags: document.tags, date: document.date, content: document.contentRenderedWithoutLayouts }) %>
 <% end %>
+
+<%- @partial('me') %>
