@@ -31,16 +31,16 @@
     "npm": "1.3"
   },
   "dependencies": {
+    "cheerio": "~0.12.3",
     "docpad": "~6.64.0",
+    "docpad-plugin-cleanurls": "https://github.com/ervwalter/docpad-plugin-cleanurls/tarball/compiled",
     "docpad-plugin-eco": "~2.0.3",
+    "docpad-plugin-ghpages": "~2.4.3",
+    "docpad-plugin-less": "~2.2.0",
     "docpad-plugin-marked": "~2.2.0",
     "docpad-plugin-partials": "~2.9.0",
-    "docpad-plugin-less": "~2.2.0",
-    "docpad-plugin-cleanurls": "https://github.com/ervwalter/docpad-plugin-cleanurls/tarball/compiled",
-    "cheerio": "~0.12.3",
     "moment": "~2.4.0"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "main": "node_modules/docpad/bin/docpad-server"
 }

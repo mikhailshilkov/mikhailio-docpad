@@ -140,6 +140,9 @@ docpadConfig = {
 
 
 	plugins:
+                ghpages:
+                        deployRemote: 'target'
+                        deployBranch: 'master'
 		cleanurls:
 			trailingSlashes: true
 
