@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <meta name="description" content="Productive software development using .NET, C#, and related technologies" />
+
+    <title>Hunting memory leaks in Silverlight | Mikhail Shilkov</title>
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/feed/" rel="alternate" title="mikhail.io" type="application/atom+xml">
+    <link href="/favicon.ico?v=2" rel="shortcut icon">
+
+    <!-- Bootstrap -->
+    <link href="/styles/site.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/scripts/vendor/html5shiv.js"></script>
+    <script src="/scripts/vendor/respond.min.js"></script>
+    <![endif]-->
+
+    <meta name="generator" content="DocPad v6.64.3" />
+    
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <span class="text-primary">Mikhail Shilkov</span><br />
+                <span class="elevator-pitch">.NET software developer from Eindhoven area, the Netherlands</span>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <!--<li><a href="/">Blog</a></li>-->
+                
+                <li><a href="http://msdevshow.com">Podcast</a></li>
+                <li class="hidden-xs">
+                    <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
+                    <a href="http://twitter.com/kiwo22" class="twitter"><span class="icon icon-twitter"></span></a>
+                    <a href="https://github.com/kiwo" class="github"><span class="icon icon-github"></span></a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right hidden-xs" role="search" action="http://google.com/search"
+                  method="get">
+                <div class="form-group">
+                    <input type="search" name="q" class="form-control" placeholder="Search">
+                    <input type="hidden" name="q" value="site:mikhail.io">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10">
+            <article class="post">
+    <div class="post-date">Feb 5th, 2012</div>
+    
+    <h1>Hunting memory leaks in Silverlight</h1>
+    
+    <div class="post-content">
+        <p>Recently, I&#39;ve spent a couple of days seeking and fixing memory leaks in our Silverlight application. It might be tough sometimes, but it&#39;s a good &#39;brain-teasing&#39; practice and it&#39;s a good way to learn how inner things work.</p>
+<p>Memory leaks in Silverlight applications may be found with WinDbg tool. Have a look here for a quick introduction:
+<a href="http://davybrion.com/blog/2009/08/finding-memory-leaks-in-silverlight-with-windbg/">http://davybrion.com/blog/2009/08/finding-memory-leaks-in-silverlight-with-windbg/</a></p>
+<p>Basically, I only use 4 commands in WinDbg. First, I enable debugging Silverlight 5 applications:</p>
+<p>[sourcecode gutter=&quot;false&quot;]
+!load C:\Program Files (x86)\Microsoft Silverlight\5.0.61118.0\sos.dll
+[/sourcecode]</p>
+<p>Then, I get the amount of instances for class names matching the search pattern:</p>
+<p>[sourcecode gutter=&quot;false&quot;]
+!dumpheap -stat -type <type name="">
+[/sourcecode]</type></p>
+<p>Next, I use the result to locate class instances&#39; addresses:</p>
+<p>[sourcecode gutter=&quot;false&quot;]
+!dumpheap -MT <mt from="" previous="">
+[/sourcecode]</mt></p>
+<p>Finally, I get the reference chain for each of address found:</p>
+<p>[sourcecode gutter=&quot;false&quot;]
+!gcroot <address>
+[/sourcecode]</address></p>
+<p>Having done this, you&#39;ll have to turn your brain on and try to figure out whether you found a memory leak and why if yes, why it takes place. Here are several examples of memory leaks that I found during last session:</p>
+<ol>
+<li>HtmlPage.Document.AttachEvent() call, which was never detached. We were using some browser-level API to subscribe on HTML document events, and never cared about unsubscribing. I got it refactored to native Silverlight event handlers, and this solved the issue.</li>
+<li>Deriving from MultiScaleTileSource. We used to have several classes for map layer rendering, inherited from MultiScaleTileSource. If an instance of such class is never used for map rendering (no assignment to MultiScaleImage.Source), then the GC never collects it (together with everything it references, of course). Another portion of refactoring helped: do not derive from MultiScaleTileSource whenever it&#39;s not needed for MultiScaleImage population. Sounds trivial, right? But it helps a lot.</li>
+<li>Improper usage of CompositionTarget.Rendering event. For our custom animated Progress control, we used to subscribe to CompositionTarget.Rendering in control constructor, and then animated the progress in event handler. As the Progress control used to be a part of control tree (in Expanded/Collapsed state), the event was never unsubsribed, which means... ta-dam... a memory leak. Now I use CompositionTarget.Rendering more carefully: subscribe to it at the point when Progress control is shown, and unsubscribe immediately after it gets collapsed.</li>
+<li>One of our major controls used to fail to unsubscribe itself from global error handler. There were a couple other similar event-related leaks. All fixed.</li>
+<li>A weird Telerik-related leak. We actively use RadGridView control throughout our application, and we dynamically set HeaderCellStyle for some of the columns depending on grid configuration. Unexpectedly enough, this led to a memory leak with the following reference stack:
+[sourcecode gutter=&quot;false&quot;]
+HandleTable:
+ 02f311f4 (pinned handle)
+ -&gt; 11ee6210 System.Object[]
+ -&gt; 10f21690 OurNamespace.Utilities.AppletHelper
+ -&gt; 10f21670 System.EventHandler<code>1[[OurNamespace.Utilities.EventArgs</code>1[[System.Exception, mscorlib]], OurNamespace.Utilities]]
+ -&gt; 10f2103c QFVClient.App
+ -&gt; 1111a9bc QFVClient.PageContainer
+ -&gt; 11122138 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 11122184 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 1188ba6c System.Windows.Controls.Grid
+ -&gt; 1188bad4 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 118912d8 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 11122dc8 System.Windows.Controls.Border
+ -&gt; 11122e30 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 11122e7c System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 11128ea4 System.Windows.Controls.Grid
+ -&gt; 11128f0c System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 11128f58 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 11128fa4 System.Windows.Controls.Border
+ -&gt; 1112900c System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 11129058 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 11132e00 System.Windows.Controls.Grid
+ -&gt; 11132e68 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 11135bc4 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 11133758 QFVClient.Controls.SearchBox
+ -&gt; 11133ca8 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 11133cf4 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 11133c40 System.Windows.ResourceDictionary
+ -&gt; 11133d30 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 11133d7c System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 11133e18 System.Windows.Style
+ -&gt; 11133e68 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 11133eb4 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 11133ef0 System.Collections.Generic.Dictionary<code>2[[System.UInt32, mscorlib],[System.Windows.DependencyObject, System.Windows]]
+ -&gt; 11133f3c System.Collections.Generic.Dictionary</code>2+Entry[[System.UInt32, mscorlib],[System.Windows.DependencyObject, System.Windows]][]
+ -&gt; 110dced0 System.Windows.Style
+ -&gt; 110dcf20 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 110dcf6c System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 110dce6c System.Windows.SetterBaseCollection
+ -&gt; 110dcfa8 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 110dcff4 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 110dcd0c System.Windows.Setter
+ -&gt; 110dcd5c System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 110dcda8 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 110dcde4 System.Collections.Generic.Dictionary<code>2[[System.UInt32, mscorlib],[System.Windows.DependencyObject, System.Windows]]
+ -&gt; 110dce30 System.Collections.Generic.Dictionary</code>2+Entry[[System.UInt32, mscorlib],[System.Windows.DependencyObject, System.Windows]][]
+ -&gt; 110dcad0 System.Windows.Controls.ControlTemplate
+ -&gt; 110dcb34 System.Windows.ResourceDictionary
+ -&gt; 110dd0d8 MS.Internal.ResourceDictionaryCollection
+ -&gt; 110dd21c System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 1111609c System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 110df418 System.Windows.ResourceDictionary
+ -&gt; 110df470 System.Collections.Generic.Dictionary<code>2[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]]
+ -&gt; 110eb8b4 System.Collections.Generic.Dictionary</code>2+Entry[[MS.Internal.IManagedPeerBase, System.Windows],[System.Object, mscorlib]][]
+ -&gt; 110ecde0 System.Windows.Style
+ -&gt; 116d1cd4 OurNamespace.Controls.TextColumn
+[/sourcecode]</li>
+</ol>
+<p>PageContainer is the application container which always exists, while TextColumn is a custom column class for a Telerik grid, which is already removed from application tree at the time point. Our TextColumn gets bound with root controls through ResourceDictionary/Style chain; and I can&#39;t explain the reason of such a leak. Though, clearing HeaderCellStyle when grid is not needed anymore does fix the problem. Weird enough.</p>
+<p>As you can see, there are numerous reasons for memory leaks in a Silverlight application. Some are obvious (e.g. global event handlers never unsubscribed), other ones are hard to understand intuitively and sometimes depend on runtime or third party internals. In any case, a way to fix or workaround always exists. Good luck with bug hunting!</p>
+
+    </div>
+
+    <p>
+      Like this post? Please share it!<br />
+      <a href="https://twitter.com/share" class="twitter-share-button" data-via="mikhail.io" data-size="large" data-count="none">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+
+    See a mistake? <a href="https://github.com/kiwo/mikhailio-docpad/edit/master/src/documents/posts/2012/02/hunting-memory-leaks-in-silverlight/index.htmlindex.html.md">Edit this post!</a><br />
+
+    
+    <div class="post-tags">
+        Posted In: C#, fixing memory leaks, Memory leaks, microsoft silverlight, Silverlight, WinDbg
+    </div>
+    
+</article>
+            The partial "me" was not found, as such it will not be rendered.
+            
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="navbar navbar-footer">
+        <p class="navbar-center navbar-text">Content copyright &copy; 2013 Jason Young</p>
+    </div>
+</div>
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+<script src="/scripts/vendor/highlight.pack.js"></script>
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>-->
+<script src="/scripts/site.js"></script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-342471-4']);
+    _gaq.push(['_setDomainName', 'mikhail.io']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+</body>
+</html>

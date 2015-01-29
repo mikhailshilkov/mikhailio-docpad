@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <meta name="description" content="Software development using .NET, C#, SQL, Javascript and related technologies" />
+
+    <title>SQL: produce resultset with N rows | Mikhail Shilkov</title>
+    <meta name="author" content="Mikhail Shilkov">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/feed/" rel="alternate" title="mikhail.io" type="application/atom+xml">
+    <link href="/favicon.ico?v=2" rel="shortcut icon">
+
+    <!-- Bootstrap -->
+    <link href="/styles/site.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/scripts/vendor/html5shiv.js"></script>
+    <script src="/scripts/vendor/respond.min.js"></script>
+    <![endif]-->
+
+    <meta name="generator" content="DocPad v6.64.3" />
+    
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <span class="text-primary">Mikhail Shilkov</span><br />
+                <span class="elevator-pitch">.NET, SQL and Javascript programmer</span>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <!--<li><a href="/">Blog</a></li>-->
+                
+                <li><a href="/">Blog</a></li>
+                <li><a href="/about">About</a></li>
+                <li class="hidden-xs">
+                    <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
+                    <a href="https://www.linkedin.com/in/mikhailshilkov" class="linkedin"><span class="icon icon-linkedin"></span></a>
+                    <a href="http://twitter.com/kiwo22" class="twitter"><span class="icon icon-twitter"></span></a>
+                    <a href="https://github.com/kiwo" class="github"><span class="icon icon-github"></span></a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right hidden-xs" role="search" action="http://google.com/search"
+                  method="get">
+                <div class="form-group">
+                    <input type="search" name="q" class="form-control" placeholder="Search">
+                    <input type="hidden" name="q" value="site:mikhail.io">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10">
+            <article class="post">
+    <div class="post-date">Jun 3rd, 2014</div>
+    
+    <h1>SQL: produce resultset with N rows</h1>
+    
+    <div class="post-content">
+        <p>Let&#39;s talk about T-SQL today.</p>
+<p>Sometimes you need to produce a result set, which would contain N rows with numbers 1...N in each row. For example, I needed to calculate some statistics per week for N weeks starting from today and going back to the past.</p>
+<p>Here is a table funtion which does the enumeration:</p>
+<pre><code>CREATE FUNCTION dbo.fnEnumerateNumbers(@max int) 
+RETURNS TABLE 
+RETURN 
+WITH
+ E1(N) AS (SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 UNION ALL
+           SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 UNION ALL
+           SELECT 1 UNION ALL SELECT 1 UNION ALL SELECT 1 UNION ALL
+           SELECT 1),                 --10E1  or 10 rows
+ E2(N) AS (SELECT 1 FROM E1 a, E1 b), --10E2  or 100 rows
+ E4(N) AS (SELECT 1 FROM E2 a, E2 b), --10E4  or 10000 rows
+ E8(N) AS (SELECT 1 FROM E4 a, E4 b)  --10E8  or 100000000 rows
+SELECT TOP (@max) N = ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) 
+  FROM E8
+</code></pre><p>Usage is trivial:</p>
+<pre><code>SELECT N
+  FROM dbo.fnEnumerateNumbers(100)
+</code></pre><p>And here is how I solved the task of enumerating weeks:</p>
+<pre><code>SELECT dateadd(week, 1 - N, getutcdate()) 
+  FROM dbo.fnEnumerateNumbers(100)
+</code></pre><p>There are multiple possibilities to implement similar function, but I believe this way is the best one in terms of performance. No temporary tables, no table reads, no dependencies on table existance, and you can define your maximum yourself.</p>
+<p>Happy coding!</p>
+
+    </div>
+
+    <p>
+      Like this post? Please share it!<br />
+      <a href="https://twitter.com/share" class="twitter-share-button" data-via="mikhail.io" data-size="large" data-count="none">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+
+    See a mistake? <a href="https://github.com/kiwo/mikhailio-docpad/edit/master/src/documents/2014/06/03/sql-produce-resultset-with-n-rows/index.html.md">Edit this post!</a><br />
+
+    
+    <div class="post-tags">
+        Posted In: performance, SQL Server, T-SQL
+    </div>
+    
+</article>
+            <div id="me">
+    <p>
+        <img src="/images/Headshot-Square.jpg" alt="Mikhail Shilkov" />
+        I'm <b>Mikhail Shilkov</b>, a software developer. I enjoy C#, Javascript and SQL development and I blog about my experience on this website.
+    </p>
+    <p>
+        <a href="https://www.linkedin.com/in/mikhailshilkov/">LinkedIn</a> &#8226;
+        <a href="http://twitter.com/kiwo22">@kiwo22</a> &#8226;
+        <a href="https://github.com/kiwo">GitHub</a> &#8226;
+        <a href="http://stackoverflow.com/users/1171619/mikhail">Stack Overflow</a>
+    </p>
+</div>
+
+            <div id="disqus_thread"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikhailio';
+    var disqus_url = 'http://mikhail.io/2014/06/03/sql-produce-resultset-with-n-rows/';
+    var disqus_identifier = disqus_url;
+    var disqus_title = 'SQL: produce resultset with N rows';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="navbar navbar-footer">
+        <p class="navbar-center navbar-text">Content copyright &copy; 2015 Mikhail Shilkov</p>
+    </div>
+</div>
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+<script src="/vendor/highlight.pack.js"></script>
+<script src="/site.js"></script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-342471-4']);
+    _gaq.push(['_setDomainName', 'mikhail.io']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+</body>
+</html>

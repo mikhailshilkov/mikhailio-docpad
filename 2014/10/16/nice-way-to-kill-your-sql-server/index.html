@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <meta name="description" content="Software development using .NET, C#, SQL, Javascript and related technologies" />
+
+    <title>Nice way to kill your SQL Server | Mikhail Shilkov</title>
+    <meta name="author" content="Mikhail Shilkov">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/feed/" rel="alternate" title="mikhail.io" type="application/atom+xml">
+    <link href="/favicon.ico?v=2" rel="shortcut icon">
+
+    <!-- Bootstrap -->
+    <link href="/styles/site.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/scripts/vendor/html5shiv.js"></script>
+    <script src="/scripts/vendor/respond.min.js"></script>
+    <![endif]-->
+
+    <meta name="generator" content="DocPad v6.64.3" />
+    
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <span class="text-primary">Mikhail Shilkov</span><br />
+                <span class="elevator-pitch">.NET, SQL and Javascript programmer</span>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <!--<li><a href="/">Blog</a></li>-->
+                
+                <li><a href="/">Blog</a></li>
+                <li><a href="/about">About</a></li>
+                <li class="hidden-xs">
+                    <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
+                    <a href="https://www.linkedin.com/in/mikhailshilkov" class="linkedin"><span class="icon icon-linkedin"></span></a>
+                    <a href="http://twitter.com/kiwo22" class="twitter"><span class="icon icon-twitter"></span></a>
+                    <a href="https://github.com/kiwo" class="github"><span class="icon icon-github"></span></a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right hidden-xs" role="search" action="http://google.com/search"
+                  method="get">
+                <div class="form-group">
+                    <input type="search" name="q" class="form-control" placeholder="Search">
+                    <input type="hidden" name="q" value="site:mikhail.io">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10">
+            <article class="post">
+    <div class="post-date">Oct 16th, 2014</div>
+    
+    <h1>Nice way to kill your SQL Server</h1>
+    
+    <div class="post-content">
+        <p>Are you getting enormous amount of </p>
+<pre><code>The activated proc &#39;...&#39; running on queue &#39;...&#39; output the following:
+&#39;The service queue &quot;...&quot; is currently disabled.
+</code></pre><p>errors from SQL Server? Keep on reading!</p>
+<p>Yesterday, when I came back from my lunch, I got a heads-up from Windows:
+<img src="/2014/10/16/nice-way-to-kill-your-sql-server//low-disk-space.gif" alt="Low disk space"></p>
+<p>And it was literally out of space: 0 (zero) bytes available on C: drive. Wow...</p>
+<p>I cleaned up the binary files from my developments, which gave me 3 GB of free space and some time to do the investigation. A short time, because disk space was counting down at about 300 MB per minute.</p>
+<p>It appeared that the SQL Server error log files grew up to 53 GB and were still growing. Here is the default folder where you can find them:</p>
+<p><img src="/2014/10/16/nice-way-to-kill-your-sql-server//errorlog.png" alt="SQL Server error log"></p>
+<p>To gain more time, I executed the command</p>
+<pre><code>exec sp_cycle_error
+</code></pre><p>is Management Studio. It renames current ERRORLOG file to ERRORLOG.1 and starts the new current. So now it was safe to delete all .1/.2/etc files and get those 53 GB back. Huh...</p>
+<p>Now it&#39;s time to figure out the actual issue. Go to Management Studio -&gt; your server -&gt; Management -&gt; SQL Server Logs -&gt; Current -&gt; (right click) -&gt; View SQL Server Log</p>
+<p>I saw millions of the following messages there (let&#39;s say my queue is named XQueue for simplicity):</p>
+<pre><code>The activated proc &#39;[dbo].[XQueueProcessor]&#39; running 
+on queue &#39;dbo.XQueue&#39; output the following:
+&#39;The service queue &quot;XQueue&quot; is currently disabled.
+</code></pre><p>So, it looks like there is a problem with SQL Server Service Broker, which is constantly trying to read something from disabled queue. Isn&#39;t it supposed to stop after 5 attempts (a.k.a. poison messages)? Ok, keep on troubleshooting.</p>
+<p>First, let check if the queue is actually disabled</p>
+<pre><code>SELECT Name, is_receive_enabled, is_enqueue_enabled
+  FROM sys.service_queues 
+ WHERE Name = &#39;XQueue&#39;  
+</code></pre><p>Yep, it&#39;s disabled:
+<img src="/2014/10/16/nice-way-to-kill-your-sql-server//qdisabled.png" alt="XQueue disabled"></p>
+<p>Do we have anything queued?</p>
+<pre><code>SELECT TOP 1000 *
+  FROM [XQueue] WITH(NOLOCK) 
+</code></pre><p>I got 9 rows back. This means we got some messages en-queued, and one of them failed to process, the message was considered as poison and the queue was disabled (which is good), but the processor still seems to be running in eternal loop.</p>
+<p>So, let&#39;s have a look at the processor. We had something like that:</p>
+<pre><code>CREATE PROCEDURE [dbo].[XQueueProcessor]
+AS
+BEGIN
+    DECLARE 
+        @queuing_order BIGINT
+        ,@conversation_handle UNIQUEIDENTIFIER
+        ,@message_enqueue_time DATETIME
+        ,@message_type_name VARCHAR(156)
+        ,@message_body VARBINARY(MAX);
+
+    WHILE(1=1) -- MAIN WHILE LOOP RECEIVING THE MESSAGE BATCHES
+    BEGIN
+        BEGIN TRANSACTION
+        BEGIN TRY
+            WAITFOR(RECEIVE TOP(1)
+                        @queuing_order = [queuing_order],
+                        @conversation_handle = [conversation_handle],
+                        @message_enqueue_time = message_enqueue_time,
+                        @message_type_name = message_type_name,
+                        @message_body = message_body
+                    FROM [dbo].[XQueue]), TIMEOUT 10
+
+            IF (@@ROWCOUNT = 0)
+            BEGIN
+                ROLLBACK TRANSACTION
+                BREAK
+            END    
+
+            -- SOME CRUD OPERATIONS HAPPEN HERE        
+
+            COMMIT TRANSACTION
+        END TRY
+        BEGIN CATCH            
+            DECLARE @Error varchar(4000) = ERROR_MESSAGE()
+            PRINT @Error
+            ROLLBACK TRANSACTION
+        END CATCH        
+    END
+END
+</code></pre><p>A-ha! So, what happens when an error occurs during the message processing? Control goes to CATCH block, error message is printed out (when we are in Service Broker, print goes directly to ERRORLOG file which we saw already), the transaction is rolled back... But we still are inside eternal loop, no BREAK or RETURN statement there, so the processor will try again to get the same message from the queue. After 5th attempt, the message will be marked as poison, the queue will get disabled, but the loop will keep running! The exception will change to &quot;The service queue is currently disabled&quot; and voila, CPU is busy and error logs are floating the disk.</p>
+<p>The fix is pretty trivial, just change the CATCH block to</p>
+<pre><code>BEGIN CATCH            
+    DECLARE @Error varchar(4000) = ERROR_MESSAGE()
+    PRINT @Error
+    ROLLBACK TRANSACTION
+    RETURN
+END CATCH        
+</code></pre><p>Be careful!</p>
+
+    </div>
+
+    <p>
+      Like this post? Please share it!<br />
+      <a href="https://twitter.com/share" class="twitter-share-button" data-via="mikhail.io" data-size="large" data-count="none">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+
+    See a mistake? <a href="https://github.com/kiwo/mikhailio-docpad/edit/master/src/documents/2014/10/16/nice-way-to-kill-your-sql-server/index.html.md">Edit this post!</a><br />
+
+    
+    <div class="post-tags">
+        Posted In: Bugs, Error log, SQL Server, SQL Server Service Broker
+    </div>
+    
+</article>
+            <div id="me">
+    <p>
+        <img src="/images/Headshot-Square.jpg" alt="Mikhail Shilkov" />
+        I'm <b>Mikhail Shilkov</b>, a software developer. I enjoy C#, Javascript and SQL development and I blog about my experience on this website.
+    </p>
+    <p>
+        <a href="https://www.linkedin.com/in/mikhailshilkov/">LinkedIn</a> &#8226;
+        <a href="http://twitter.com/kiwo22">@kiwo22</a> &#8226;
+        <a href="https://github.com/kiwo">GitHub</a> &#8226;
+        <a href="http://stackoverflow.com/users/1171619/mikhail">Stack Overflow</a>
+    </p>
+</div>
+
+            <div id="disqus_thread"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikhailio';
+    var disqus_url = 'http://mikhail.io/2014/10/16/nice-way-to-kill-your-sql-server/';
+    var disqus_identifier = disqus_url;
+    var disqus_title = 'Nice way to kill your SQL Server';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="navbar navbar-footer">
+        <p class="navbar-center navbar-text">Content copyright &copy; 2015 Mikhail Shilkov</p>
+    </div>
+</div>
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+<script src="/vendor/highlight.pack.js"></script>
+<script src="/site.js"></script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-342471-4']);
+    _gaq.push(['_setDomainName', 'mikhail.io']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+</body>
+</html>

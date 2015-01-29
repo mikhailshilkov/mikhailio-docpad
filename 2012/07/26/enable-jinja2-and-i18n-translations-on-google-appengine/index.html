@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <meta name="description" content="Software development using .NET, C#, SQL, Javascript and related technologies" />
+
+    <title>Enable jinja2 and i18n translations on Google AppEngine | Mikhail Shilkov</title>
+    <meta name="author" content="Mikhail Shilkov">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/feed/" rel="alternate" title="mikhail.io" type="application/atom+xml">
+    <link href="/favicon.ico?v=2" rel="shortcut icon">
+
+    <!-- Bootstrap -->
+    <link href="/styles/site.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/scripts/vendor/html5shiv.js"></script>
+    <script src="/scripts/vendor/respond.min.js"></script>
+    <![endif]-->
+
+    <meta name="generator" content="DocPad v6.64.3" />
+    
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <span class="text-primary">Mikhail Shilkov</span><br />
+                <span class="elevator-pitch">.NET, SQL and Javascript programmer</span>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <!--<li><a href="/">Blog</a></li>-->
+                
+                <li><a href="/">Blog</a></li>
+                <li><a href="/about">About</a></li>
+                <li class="hidden-xs">
+                    <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
+                    <a href="https://www.linkedin.com/in/mikhailshilkov" class="linkedin"><span class="icon icon-linkedin"></span></a>
+                    <a href="http://twitter.com/kiwo22" class="twitter"><span class="icon icon-twitter"></span></a>
+                    <a href="https://github.com/kiwo" class="github"><span class="icon icon-github"></span></a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right hidden-xs" role="search" action="http://google.com/search"
+                  method="get">
+                <div class="form-group">
+                    <input type="search" name="q" class="form-control" placeholder="Search">
+                    <input type="hidden" name="q" value="site:mikhail.io">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10">
+            <article class="post">
+    <div class="post-date">Jul 26th, 2012</div>
+    
+    <h1>Enable jinja2 and i18n translations on Google AppEngine</h1>
+    
+    <div class="post-content">
+        <p>My initial goal was to make our new application (based on python/AppEngine) translatable. This means the following requirements:</p>
+<ol>
+<li>All strings in the application must be translatable</li>
+<li>Translations should preferably stored in separate files</li>
+<li>It should be easy to use the translations both in .py files and html templates</li>
+</ol>
+<p>The solution that I came to after a couple of hours includes the following components: Babel (string file generation), i18n.gettext (getting strings in code) and jinja2 &lt;% trans %&gt; tag (getting strings in templates). The setup of all this is not obvious, so I&#39;ll put the steps in this blog post. Let&#39;s start!</p>
+<ol>
+<li><p>Intall Babel: <a href="http://babel.edgewall.org/">http://babel.edgewall.org/</a></p>
+<p> You need to install it, not just ref from the application, as you&#39;ll need its comman &#39;pybabel&#39; to generate locale-specific files. I use Windows, so I just downloaded the installation package.</p>
+<p> Make sure that Python folders are in your PATH variable. I use Python 2.7, so to make Babel work I&#39;ll need the following values in PATH: &quot;C:\Python27;C:\Python27\Scripts&quot;. Scripts folder contains the pybabel executable.</p>
+</li>
+<li><p>Install jinja2: <a href="http://jinja.pocoo.org/">http://jinja.pocoo.org</a>
+Once again, you need to install it, as Babel will need it to parse strings in templates. Just run</p>
+<pre><code> easy_install Jinja2
+</code></pre></li>
+<li><p>Put Babel and <a href="http://pypi.python.org/pypi/gaepytz">gaepytz</a> libraries inside your GAE application. They are required for i18n module.</p>
+</li>
+<li><p>Configure jinja2 to be used in your application. You&#39;ll need the following entry in app.yaml:</p>
+<pre><code> libraries:
+ - name: jinja2
+   version: &quot;2.6&quot;
+</code></pre><p> and your webhandler.py will look something similar to this:</p>
+<pre><code> import webapp2
+ from webapp2_extras import jinja2
+ from webapp2_extras import i18n
+ from google.appengine.ext.webapp.util import run_wsgi_app
+
+ class MainHandler(webapp2.RequestHandler):
+     @webapp2.cached_property
+     def jinja2(self):
+         return jinja2.get_jinja2(app=self.app)
+
+     def get(self):
+         i18n.get_i18n().set_locale(&#39;ru_RU&#39;) # sample locale assigned
+         ... # your web site functionality goes here
+
+ # jinja2 config with i18n enabled
+ config = {&#39;webapp2_extras.jinja2&#39;: {
+              &#39;template_path&#39;: &#39;templates&#39;,
+              &#39;environment_args&#39;: { &#39;extensions&#39;: [&#39;jinja2.ext.i18n&#39;] }
+            }
+           }
+ application = webapp2.WSGIApplication([(&#39;.*&#39;, MainHandler)], config=config)
+
+ def main():
+     run_wsgi_app(application)
+
+ if __name__ == &quot;__main__&quot;:
+     main()
+</code></pre><p> This code will work if you put your jinja2 templates into &quot;templates&quot; folder.</p>
+</li>
+<li><p>Create the translations markup. This means, you define the translatable strings in python code with a commonly used &#39;_&#39; alias:</p>
+<pre><code> from webapp2_extras.i18n import gettext as _
+
+ def do_some_text():
+     return _(&#39;some text&#39;)
+</code></pre><p> or in jijna2 template with {% trans %} block:</p>
+<pre><code> {% block buttons %}
+ &lt;div&gt;    
+     &lt;div onclick=&quot;window.print()&quot;&gt;{% trans %}Print{% endtrans %}&lt;/div&gt;
+ &lt;/div&gt;
+ {% endblock %}
+</code></pre></li>
+<li><p>Create a Babel configuration file babel.cfg (put it into the application folder for now):</p>
+<pre><code> [jinja2: **/templates/**.html]
+ encoding = utf-8
+ [python: source/*.py]
+ [extractors] 
+ jinja2 = jinja2.ext:babel_extract
+</code></pre><p> This file instructs Babel to extract translatable strings from html jinja2 templates in &quot;templates&quot; folder and python files in &quot;source&quot; folder. </p>
+</li>
+<li><p>Now it&#39;s time to create translations. First, add a &quot;locale&quot; folder in application root. Still being in root folder, run the following pybabel command to extract the translatable strings from the code</p>
+<pre><code> pybabel extract -F ./babel.cfg -o ./locale/messages.pot ./
+</code></pre><p> then initialize the locales with </p>
+<pre><code> pybabel init -l en_US -d ./locale -i ./locale/messages.pot
+ pybabel init -l ru_RU -d ./locale -i ./locale/messages.pot
+</code></pre><p> Now open locale\ru_RU\LC_MESSAGES\messages.po file in your favorite text editor, and produce the translations (you have to change &#39;msgstr&#39; only):</p>
+<pre><code> #: templates/sample.html:10
+ msgid &quot;Print&quot;
+ msgstr &quot;Печать&quot;
+ #: source/test.py:13
+ msgid &quot;some text&quot;
+ msgstr &quot;немного текста&quot;
+</code></pre><p> And finally compile the texts with</p>
+<pre><code> pybabel compile -f -d ./locale
+</code></pre></li>
+<li><p>Every time you need to add more strings, you should do the same steps as in 6, but use &quot;update&quot; instead of &quot;init&quot;:</p>
+<pre><code> pybabel update -l en_US -d ./locale -i ./locale/messages.pot
+ pybabel update -l ru_RU -d ./locale -i ./locale/messages.pot
+</code></pre></li>
+</ol>
+<p>Done! You should be able to run the application and see the strings translated.</p>
+
+    </div>
+
+    <p>
+      Like this post? Please share it!<br />
+      <a href="https://twitter.com/share" class="twitter-share-button" data-via="mikhail.io" data-size="large" data-count="none">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+
+    See a mistake? <a href="https://github.com/kiwo/mikhailio-docpad/edit/master/src/documents/2012/07/26/enable-jinja2-and-i18n-translations-on-google-appengine/index.html.md">Edit this post!</a><br />
+
+    
+    <div class="post-tags">
+        Posted In: AppEngine, i18n, jinja2, Python, Translations
+    </div>
+    
+</article>
+            <div id="me">
+    <p>
+        <img src="/images/Headshot-Square.jpg" alt="Mikhail Shilkov" />
+        I'm <b>Mikhail Shilkov</b>, a software developer. I enjoy C#, Javascript and SQL development and I blog about my experience on this website.
+    </p>
+    <p>
+        <a href="https://www.linkedin.com/in/mikhailshilkov/">LinkedIn</a> &#8226;
+        <a href="http://twitter.com/kiwo22">@kiwo22</a> &#8226;
+        <a href="https://github.com/kiwo">GitHub</a> &#8226;
+        <a href="http://stackoverflow.com/users/1171619/mikhail">Stack Overflow</a>
+    </p>
+</div>
+
+            <div id="disqus_thread"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikhailio';
+    var disqus_url = 'http://mikhail.io/2012/07/26/enable-jinja2-and-i18n-translations-on-google-appengine/';
+    var disqus_identifier = disqus_url;
+    var disqus_title = 'Enable jinja2 and i18n translations on Google AppEngine';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="navbar navbar-footer">
+        <p class="navbar-center navbar-text">Content copyright &copy; 2015 Mikhail Shilkov</p>
+    </div>
+</div>
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+<script src="/vendor/highlight.pack.js"></script>
+<script src="/site.js"></script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-342471-4']);
+    _gaq.push(['_setDomainName', 'mikhail.io']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+
+    <meta name="description" content="Software development using .NET, C#, SQL, Javascript and related technologies" />
+
+    <title>Use Fiddler to debug urlfetch requests in Google AppEngine | Mikhail Shilkov</title>
+    <meta name="author" content="Mikhail Shilkov">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/feed/" rel="alternate" title="mikhail.io" type="application/atom+xml">
+    <link href="/favicon.ico?v=2" rel="shortcut icon">
+
+    <!-- Bootstrap -->
+    <link href="/styles/site.css" rel="stylesheet" media="screen">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/scripts/vendor/html5shiv.js"></script>
+    <script src="/scripts/vendor/respond.min.js"></script>
+    <![endif]-->
+
+    <meta name="generator" content="DocPad v6.64.3" />
+    
+</head>
+<body>
+
+<div class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">
+                <span class="text-primary">Mikhail Shilkov</span><br />
+                <span class="elevator-pitch">.NET, SQL and Javascript programmer</span>
+            </a>
+        </div>
+        <div class="collapse navbar-collapse navbar-right">
+            <ul class="nav navbar-nav">
+                <!--<li><a href="/">Blog</a></li>-->
+                
+                <li><a href="/">Blog</a></li>
+                <li><a href="/about">About</a></li>
+                <li class="hidden-xs">
+                    <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
+                    <a href="https://www.linkedin.com/in/mikhailshilkov" class="linkedin"><span class="icon icon-linkedin"></span></a>
+                    <a href="http://twitter.com/kiwo22" class="twitter"><span class="icon icon-twitter"></span></a>
+                    <a href="https://github.com/kiwo" class="github"><span class="icon icon-github"></span></a>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-right hidden-xs" role="search" action="http://google.com/search"
+                  method="get">
+                <div class="form-group">
+                    <input type="search" name="q" class="form-control" placeholder="Search">
+                    <input type="hidden" name="q" value="site:mikhail.io">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10">
+            <article class="post">
+    <div class="post-date">Sep 2nd, 2012</div>
+    
+    <h1>Use Fiddler to debug urlfetch requests in Google AppEngine</h1>
+    
+    <div class="post-content">
+        <p>In <a href="http://www.tripbenefit.com" title="TripBenefit.com - travel in St. Petersburg, Russia">TripBenefit</a> application, we use a lot of web crawling to get data from third-party websites. As the application works on top of Google AppEngine, the <a href="https://developers.google.com/appengine/docs/python/urlfetch/fetchfunction?hl=ru" title="urlfetch.fetch() docs">urlfetch.fetch()</a> function is used to send HTTP requests and get responses.</p>
+<p>Some crawling is not as easy as just a simple GET request, so we have to send specific POST data, cookies and HTTP headers. And all this needs to be debugged. <a href="http://www.fiddler2.com" title="Fiddler2 web debugging tool">Fiddler2</a> is the gold standard for web debugging tools, so I&#39;d like to use it in this case too. I.e. I want to see urlfetch requests displayed in Fiddler, while I&#39;m on development env.<strong>
+</strong></p>
+<p>However, to make it work, I have to make AppEngine run all fetch requests through the Fiddler&#39;s proxy: localhost:8888. As proxies aren&#39;t supported within Google production environment, it&#39;s not supported by development engine either. There&#39;s simply no such &#39;proxy&#39; parameter in urlfetch!</p>
+<p>It seems that the only way to overcome this limitation is to modify the code of AppEngine development server. It isn&#39;t that tricky as it sounds! :)</p>
+<p>Stop all your developmenet AppEngine instances. Go to your AppEngine folder, and then to \google\appengine\api. Edit urlfetch_stub.py (make a backup beforehand). Search for &quot;connection =&quot; line, something like</p>
+<pre><code>if _CONNECTION_SUPPORTS_TIMEOUT:
+  connection = connection_class(host, timeout=deadline)
+else:
+  connection = connection_class(host)
+</code></pre><p>Substitute it with </p>
+<pre><code>connection = connection_class(&#39;127.0.0.1&#39;, 8888)
+</code></pre><p>Then, search for &quot;connection.request&quot; method call similar to</p>
+<pre><code>connection.request(method, full_path, payload, adjusted_headers)
+</code></pre><p>and insert another line before it:</p>
+<pre><code>full_path = protocol + &quot;://&quot; + host + full_path
+</code></pre><p>Done! After you run the dev server and Fiddler2, you should be able to see urlfetch requests in web debugger. Have a nice debugging session!</p>
+
+    </div>
+
+    <p>
+      Like this post? Please share it!<br />
+      <a href="https://twitter.com/share" class="twitter-share-button" data-via="mikhail.io" data-size="large" data-count="none">Tweet</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    </p>
+
+    See a mistake? <a href="https://github.com/kiwo/mikhailio-docpad/edit/master/src/documents/2012/09/02/use-fiddler-to-debug-urlfetch-requests-in-google-appengine/index.html.md">Edit this post!</a><br />
+
+    
+    <div class="post-tags">
+        Posted In: AppEngine, debugging, Fiddler, Google AppEngine, Python
+    </div>
+    
+</article>
+            <div id="me">
+    <p>
+        <img src="/images/Headshot-Square.jpg" alt="Mikhail Shilkov" />
+        I'm <b>Mikhail Shilkov</b>, a software developer. I enjoy C#, Javascript and SQL development and I blog about my experience on this website.
+    </p>
+    <p>
+        <a href="https://www.linkedin.com/in/mikhailshilkov/">LinkedIn</a> &#8226;
+        <a href="http://twitter.com/kiwo22">@kiwo22</a> &#8226;
+        <a href="https://github.com/kiwo">GitHub</a> &#8226;
+        <a href="http://stackoverflow.com/users/1171619/mikhail">Stack Overflow</a>
+    </p>
+</div>
+
+            <div id="disqus_thread"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments.</a></noscript></div>
+<script type="text/javascript">
+    var disqus_shortname = 'mikhailio';
+    var disqus_url = 'http://mikhail.io/2012/09/02/use-fiddler-to-debug-urlfetch-requests-in-google-appengine/';
+    var disqus_identifier = disqus_url;
+    var disqus_title = 'Use Fiddler to debug urlfetch requests in Google AppEngine';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="navbar navbar-footer">
+        <p class="navbar-center navbar-text">Content copyright &copy; 2015 Mikhail Shilkov</p>
+    </div>
+</div>
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+<script src="/vendor/highlight.pack.js"></script>
+<script src="/site.js"></script>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-342471-4']);
+    _gaq.push(['_setDomainName', 'mikhail.io']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+</script>
+
+</body>
+</html>
