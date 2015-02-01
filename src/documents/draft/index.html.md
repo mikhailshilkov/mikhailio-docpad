@@ -95,5 +95,3 @@ These are the basics, so what do we still need to consider?
 ### Wraping up
 
 Clean and understandable architecture provides developers with a good means of communication, helps figure out the similar vision and concepts. Architecture metaphore expressed in form of a picture of short document will bring you closer to smart design, will help find errors or plan a refactoring.
-
-2. 
