@@ -1,22 +1,22 @@
 ---
 layout: draft
 title: How we do message processing
-date: 2015-01-26
-tags: [""]
+date: 2015-02-03
+tags: ["architecture", "design", "messages", "message processing"]
 ---
 
 Our team develops a back-end system for mobile message processing. Mobile devices collect information from the complex machines and send the messages to data center. In this article I want to share our approaches to building such processing software. The ideas are quite general and can be applied to any system of the following architecture:
 ![System architecture](/architecture.jpg)
 
-The devices use communication channels to send messages to our gateway - the input point of our application. The application's goal is to understand what came in, do the required actions and save the information into the database for further processing. Let's consider the database the end point of processing. Sounds easy. But some difficulties appear with the growth of the number and divercity of incoming messages; so let's look at some of them.
+The devices use communication channels to send messages to our gateway - the input point of our application. The application's goal is to understand what came in, do the required actions and save the information into the database for further processing. Let's consider the database the end point of processing. Sounds easy. But some difficulties appear with the growth of the number and diversity of incoming messages; so let's look at some of them.
 
 A couple words about the target load level. Our system processes the messages from tenths of thousands of devices, and we get from several hundreds to a thousand messages per second. If you numbers are different by orders of magnitude, it might be the case that your problems are going to look completely different and you'll need a different set of tools to solve them.
 
 Apart from the number of messages itself, there is a problem of irregularity and peak times. The application must be ready for relatively short peaks which might be some ten times higher than average. To address this problem we organize the system as a sequence of queues and corresponding processors.
 
-The intaking gateway doesn't do much of real job: it just receives a message from a client and puts it into a queue. This operation is very cheap, thus the gateway is capable of getting a vast number of messages per second. Afterwards a separate process retrieves several messages from the queue - the amount it wants to get - and does the hard work. The processing gets asyncronous while system load is kept limited. Pehaps the time in the queue grows at peak, but that's it.
+The input gateway doesn't do much of real job: it just receives a message from a client and puts it into a queue. This operation is very cheap, thus the gateway is capable of getting a vast number of messages per second. Afterwards a separate process retrieves several messages from the queue - the amount it wants to get - and does the hard work. The processing gets asynchronous while system load is kept limited. Perhaps the time in the queue grows at peak, but that's it.
 
-Normally the message processing is non-trivial and consists of several actions. We get to the next logical step: we break down the job into several stages, each one having a separate queue and a dedicated processor. The queues and processors are independant and may reside on separate physical servers; and we can tune and scale them independently:
+Normally the message processing is non-trivial and consists of several actions. We get to the next logical step: we break down the job into several stages, each one having a separate queue and a dedicated processor. The queues and processors are independent and may reside on separate physical servers; and we can tune and scale them independently:
 ![Sequence-based architecture](/sequence.jpg)
 
 The first queue contains the messages from devices as-is, without decoding or transforming them. The first processor decodes them and puts them into the second queue. The second processor can, for instance, do some aggregation and produce information which is relevant for business, and the third processor could save the information into the database.
@@ -27,7 +27,7 @@ These are the basics, so what do we still need to consider?
 
 1. Simplicity of creation, change and support
 
-    Asyncrounous distributed processing of messages bring quite some extra complexity into the software. We constantly work on reducing this price. The code gets optimized, at first place, for increased readability and easyness to understand for all the team members, for the cost of change and support. If nobody but the author can decrypt the code, no great architecture will make the team happy.
+    Asynchronous distributed processing of messages bring quite some extra complexity into the software. We constantly work on reducing this price. The code gets optimized, at first place, for increased readability and easiness to understand for all the team members, for the cost of change and support. If nobody but the author can decrypt the code, no great architecture will make the team happy.
 
     This statements looks obvious, but it might take quite some time and effort before the team starts to consistently implement it and not just declare the principle. Do the regular refactoring in case you feel you can do the code a bit better and simpler. All the source code should get reviewed and the most critical parts are better to be developed in pair.
 
@@ -35,15 +35,15 @@ These are the basics, so what do we still need to consider?
 
     It makes sense to define your policies in case of hardware or subsystem failures from the very beginning. They will differ for different products. It might be the case that someone can throw away all the messages that come in during 5 minutes of a server reboot.
 
-    In our system we don't want to loose messages. If a particular service is not currently available, a database call times out, or there is a random processing error, it must not result in information loss. The affected messages must be saved inside the queue and will be processed right after the fix of the problem.
+    In our system we don't want to lose messages. If a particular service is not currently available, a database call times out, or there is a random processing error, it must not result in information loss. The affected messages must be saved inside the queue and will be processed right after the fix of the problem.
 
-    Suppose your code on one server calls a web service on another server in syncronous manner. If the second server is not available, the processing will fail, and you can't do anything but log the error. In case of asyncronous processing the message will wait for the second server to go live again.
+    Suppose your code on one server calls a web service on another server in synchronous manner. If the second server is not available, the processing will fail, and you can't do anything but log the error. In case of asynchronous processing the message will wait for the second server to go live again.
 
 3. Performance
 
     Processing rate per second, latency, load on the servers - those are all important parameters of application performance. That's why we choose the architecture to be flexible.
 
-    Although, don't pay TOO much attention to optimization from the very beginning. Usually the majority of performance issues is created by relatively small pieces of code. Unfortunetaly tend to be very bad at predicting where exactly those issues are going to appear. People write books [LINK] on pre-mature optimization. So make sure that your architecture allows you to fine-tune the system and forget about optimization until the first load testing.
+    Although, don't pay TOO much attention to optimization from the very beginning. Usually the majority of performance issues is created by relatively small pieces of code. Unfortunately people tend to be very bad at predicting where exactly those issues are going to appear. People write books [LINK] on pre-mature optimization. So make sure that your architecture allows you to fine-tune the system and forget about optimization until the first load testing.
 
     At the same time, and for this reason, start running the load tests early on, and then include them into your standard testing procedure. Start optimizing only when the tests reveal a specific performance problem.
 
@@ -51,7 +51,7 @@ These are the basics, so what do we still need to consider?
 
 1. Operate queues and asynchronous processors
 
-    I already described this above. Our main tools are queues and processors. While the classic approach is "get request, call remote code, wait for response, return it back to originator", now we should always use "get a message from a queue, process it, send a message to another queue". The right mix of these two approaches should enable both scalabity and easy of development.
+    I already described this above. Our main tools are queues and processors. While the classic approach is "get request, call remote code, wait for response, return it back to originator", now we should always use "get a message from a queue, process it, send a message to another queue". The right mix of these two approaches should enable both scalability and easy of development.
 
 2. Break the processing down into several stages
 
@@ -90,8 +90,8 @@ These are the basics, so what do we still need to consider?
 
 4. Automate the deployment
 
-    System setup and update must require just one or two clicks. Strive to frequent updates on production; idially - automated deployment on every commit to the dedicated branch. Deployment script will help developers maintain their personal and testing environments up-to-date.
+    System setup and update must require just one or two clicks. Strive to frequent updates on production; ideally - automated deployment on every commit to the dedicated branch. Deployment script will help developers maintain their personal and testing environments up-to-date.
 
-### Wraping up
+### Wrapping up
 
-Clean and understandable architecture provides developers with a good means of communication, helps figure out the similar vision and concepts. Architecture metaphore expressed in form of a picture of short document will bring you closer to smart design, will help find errors or plan a refactoring.
+Clean and understandable architecture provides developers with a good means of communication, helps figure out the similar vision and concepts. Architecture metaphor expressed in form of a picture of short document will bring you closer to smart design, will help find errors or plan a refactoring.
