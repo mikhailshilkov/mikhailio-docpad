@@ -5,21 +5,21 @@ date: 2015-02-03
 tags: ["architecture", "design", "messages", "message processing"]
 ---
 
-Our team develops a back-end system for mobile message processing. Mobile devices collect information from the complex machines and send the messages to data center. In this article I want to share our approaches to building such processing software. The ideas are quite general and can be applied to any system of the following architecture:
+Our team develops a back-end system that processes messages from mobile devices. The devices collect information from complex machines and send messages to our data center. In this article I want to share our approaches to building such processing software. The ideas are quite general and can be applied to any system of the following architecture:
 ![System architecture](/architecture.jpg)
 
-The devices use communication channels to send messages to our gateway - the input point of our application. The application's goal is to understand what came in, do the required actions and save the information into the database for further processing. Let's consider the database the end point of processing. Sounds easy. But some difficulties appear with the growth of the number and diversity of incoming messages; so let's look at some of them.
+The devices use communication channels to send messages to our gateway - the input point of our application. The application's goal is to understand what came in, do the required actions and save the information into the database for further processing. Let's consider the database to be the end point of processing. Sounds easy, right? But some difficulties appear with the growth of amount and diversity of incoming messages; so let's look at some of them.
 
-A couple words about the target load level. Our system processes the messages from tenths of thousands of devices, and we get from several hundreds to a thousand messages per second. If you numbers are different by orders of magnitude, it might be the case that your problems are going to look completely different and you'll need a different set of tools to solve them.
+A few words on the target load level. Our system processes the messages from tenths of thousands of devices, and we get from several hundreds to a thousand messages per second. If you numbers are different by orders of magnitude, it might be the case that your problems are going to look completely different and you'll need a different set of tools to solve them.
 
-Apart from the number of messages itself, there is a problem of irregularity and peak times. The application must be ready for relatively short peaks which might be some ten times higher than average. To address this problem we organize the system as a sequence of queues and corresponding processors.
+Apart from the number of messages itself, there is a problem of irregularity and peak times. The application must be ready for relatively short peaks which might be about ten times higher than the average expectation. To address this problem we organize the system as a sequence of queues and corresponding processors.
 
-The input gateway doesn't do much of real job: it just receives a message from a client and puts it into a queue. This operation is very cheap, thus the gateway is capable of getting a vast number of messages per second. Afterwards a separate process retrieves several messages from the queue - the amount it wants to get - and does the hard work. The processing gets asynchronous while system load is kept limited. Perhaps the time in the queue grows at peak, but that's it.
+The input gateway doesn't do much of real job: it just receives a message from a client and puts it into the queue. This operation is very cheap, thus the gateway is capable of accepting a vast number of messages per second. Afterwards a separate process retrieves several messages - the amount it wants to get - from the queue and does the hard work. The processing happens asynchronously while the load on the system remains limited. Perhaps the time in the queue grows at peaks, but that's it.
 
-Normally the message processing is non-trivial and consists of several actions. We get to the next logical step: we break down the job into several stages, each one having a separate queue and a dedicated processor. The queues and processors are independent and may reside on separate physical servers; and we can tune and scale them independently:
+Normally the message processing is non-trivial and consists of several actions. Here we get to the next logical step: we break down the job into several stages, each one having a separate queue and a dedicated processor. The queues and processors are independent and may reside on separate physical servers; and we can tune and scale them independently:
 ![Sequence-based architecture](/sequence.jpg)
 
-The first queue contains the messages from devices as-is, without decoding or transforming them. The first processor decodes them and puts them into the second queue. The second processor can, for instance, do some aggregation and produce information which is relevant for business, and the third processor could save the information into the database.
+The first queue contains the messages from devices as-is, without decoding or transforming them. The first processor decodes them and puts them into the second queue. The second processor could, for instance, call a third-party service and enrich the message with some relevant information, and the third processor could save that information into the database.
 
 These are the basics, so what do we still need to consider?
 
@@ -27,9 +27,9 @@ These are the basics, so what do we still need to consider?
 
 1. Simplicity of creation, change and support
 
-    Asynchronous distributed processing of messages bring quite some extra complexity into the software. We constantly work on reducing this price. The code gets optimized, at first place, for increased readability and easiness to understand for all the team members, for the cost of change and support. If nobody but the author can decrypt the code, no great architecture will make the team happy.
+    Asynchronous distributed message processing brings quite some extra complexity into the software product. You should constantly work on reducing this price. The code gets optimized to be, at first place, readable and straightforward for all the team members, cheap to be changed and supported. If nobody but the author can decrypt the code, no great architecture will make the team happy.
 
-    This statements looks obvious, but it might take quite some time and effort before the team starts to consistently implement it and not just declare the principle. Do the regular refactoring in case you feel you can do the code a bit better and simpler. All the source code should get reviewed and the most critical parts are better to be developed in pair.
+    This statements looks obvious, but it might take quite some time and effort before the team starts to consistently implement this principle and not just declare it. Do the regular refactoring whenever you feel you can make the code a bit better and simpler. All the source code should get reviewed and the most critical parts are better to be developed in pair.
 
 2. Fault tolerance
 
