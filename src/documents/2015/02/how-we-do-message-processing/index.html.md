@@ -1,7 +1,7 @@
 ---
 layout: post
 title: How we do message processing
-date: 2015-02-03
+date: 2015-02-05
 tags: ["architecture", "design", "messages", "message processing"]
 ---
 
@@ -10,7 +10,7 @@ Our team develops a back-end system that processes messages from mobile devices.
 
 The devices use communication channels to send messages to our gateway - the input point of our application. The application's goal is to understand what came in, do the required actions and save the information into the database for further processing. Let's consider the database to be the end point of processing. Sounds easy, right? But some difficulties appear with the growth of amount and diversity of incoming messages; so let's look at some of them.
 
-A few words on the target load level. Our system processes the messages from tenths of thousands of devices, and we get from several hundreds to a thousand messages per second. If you numbers are different by orders of magnitude, it might be the case that your problems are going to look completely different and you'll need a different set of tools to solve them.
+A few words on the target load level. Our system processes the messages from tens of thousands of devices, and we get from several hundreds to a thousand messages per second. If you numbers are different by orders of magnitude, it might be the case that your problems are going to look completely different and you'll need a different set of tools to solve them.
 
 Apart from the number of messages itself, there is a problem of irregularity and peak times. The application must be ready for relatively short peaks which might be about ten times higher than the average expectation. To address this problem we organize the system as a sequence of queues and corresponding processors.
 
