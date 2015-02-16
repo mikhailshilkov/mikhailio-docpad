@@ -140,6 +140,15 @@ docpadConfig = {
 
 
 	plugins:
+                tags:
+                       extension: '/index.html.eco'
+                       injectDocumentHelper: (document) ->
+                              document.setMeta(
+                                 layout: 'page'
+                                 data: """
+                                   <%- @partial('tag', @) %>
+                                   """
+                              )
                 ghpages:
                         deployRemote: 'target'
                         deployBranch: 'master'
