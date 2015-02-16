@@ -39,6 +39,7 @@
     "docpad-plugin-less": "~2.2.0",
     "docpad-plugin-marked": "~2.2.0",
     "docpad-plugin-partials": "~2.9.0",
+    "docpad-plugin-sitemap": "~2.0.1",
     "moment": "~2.4.0"
   },
   "devDependencies": {},
