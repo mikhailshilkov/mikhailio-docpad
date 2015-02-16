@@ -88,7 +88,7 @@ docpadConfig = {
 			@site.keywords.concat(@document.keywords or []).join(', ')
 
 		getTagUrl: (tag) ->
-			tag.replace(" ", "-").toLowerCase()
+			tag.replace(" ", "-").replace(" ", "-").toLowerCase()
 
 		getIdForDocument: (document) ->
 			hostname = url.parse(@site.url).hostname
