@@ -87,6 +87,9 @@ docpadConfig = {
 			# Merge the document keywords with the site keywords
 			@site.keywords.concat(@document.keywords or []).join(', ')
 
+		getTagUrl: (tag) ->
+			tag.replace(" ", "-").toLowerCase()
+
 		getIdForDocument: (document) ->
 			hostname = url.parse(@site.url).hostname
 			date = document.date.toISOString().split('T')[0]

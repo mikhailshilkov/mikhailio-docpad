@@ -22,7 +22,7 @@ cacheable: false
 
     <% if @tags?: %>
     <div class="post-tags">
-        Posted In: <%- ("<a href='/tags/#{tag}/'>#{tag}</a>" for tag in @tags).join(', ') %>
+        Posted In: <%- ("<a href='/tags/#{@getTagUrl(tag)}/'>#{tag}</a>" for tag in @tags).join(', ') %>
     </div>
     <% end %>
 </article>
