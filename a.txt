@@ -1,0 +1,47 @@
+[32minfo:[39m Welcome to DocPad v6.64.3 (local installation: E:\Tmp\mikhailio-docpad\node_modules\docpad)
+[33mnotice:[39m If everyone who saw this message donated $1/week, maintaining DocPad would become sustainable: http://docpad.org/donate
+[32minfo:[39m Contribute: http://docpad.org/docs/contribute
+[32minfo:[39m Plugins: cleanurls, eco, less, marked, partials
+[32minfo:[39m Environment: static
+
+  Usage: docpad [options] [command]
+
+  Commands:
+
+    action <actions>       does everything: skeleton, generate, watch, server
+    init                   initialize your directory with an empty docpad project
+    run                    does everything: skeleton, generate, watch, server
+    server                 creates a server for your generated project
+    skeleton [options]     will create a new project in your cwd based off an existing skeleton
+    render [path]          render the file at <path> and output its results to stdout
+    generate               (re)generates your project
+    watch                  watches your project for changes, and (re)generates whenever a change is made
+    update                 update your local DocPad and plugin installations to their latest compatible version
+    upgrade                upgrade your global DocPad and NPM installations to the latest
+    install [pluginName]   install plugins
+    uninstall <pluginName> uninstall a plugin
+    clean                  ensure everything is cleaned correctly (will remove your out directory)
+    info                   display the information about your docpad instance
+    help                   output the help
+    *                      anything else outputs the help
+
+  Options:
+
+    -h, --help                 output usage information
+    -V, --version              output the version number
+    -o, --out <outPath>        where to output the rendered files (to a directory) or file (to an output file)
+    -c, --config <configPath>  a custom configuration file to load in
+    -e, --env <environment>    the environment name to use for this instance, multiple names can be separated with a comma
+    -d, --debug [logLevel]     the level of debug messages you would like to display, if specified defaults to 7, otherwise 6
+    -g, --global               whether or not we should just fire the global installation of docpad
+    -f, --force                force a re-install of all modules
+    -p, --port <port>          a custom port to use for the server <port>
+    --cache                    use the database cache ability to speed up docpad
+    --silent                   don't use any prompts
+    --skeleton <skeleton>      
+    --profile                  enable profiling
+    --offline                  don't do any remote requests
+
+
+[32minfo:[39m The action completed successfully
+[32minfo:[39m Shutting down... cya next time!
