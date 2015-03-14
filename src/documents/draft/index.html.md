@@ -8,9 +8,46 @@ In this post I'd like to share my exprerience about the first hackathon that I t
 
 ![Green Hackfest](/banner.jpg)
 
-I will start with description of what was happening there (expect quite some photos), and then I'll conclude it with several pieces of advice for those who are preparing to their first hackathon.
-
 A brief introduction on what hackathon is. A hackathon, or a hackfest in this case, is an event for programmers, engineers, designers and entrepreneurs where they can get together, form teams and work on solving problems in creative way. The time is very limited, usually from 12 to 24 hours, but in this case we had a 'marathon' of 48 hours. At the start, teams get the challenge(s) definition and in the end they must pitch their ideas, prototypes and mockups to the judges to win the prizes. The participants are traditionally called hackers, which does not mean that they hack bank networks and that stuff, but rather that they strive to overcoming the usual limitation in whatever area they are competing.
+
+I will start with the more useful part - I'll give several pieces of advice for those who are preparing to their first hackathon. And then I'll get to the description of what was happening this time, so expect quite some photos.
+
+### What I learnt
+
+So, in case you are going to take part in one of those hackathons, here is what I can advise you:
+
+- Definetely go. It is going to be quite a new experience, well worth it.
+
+- Take a laptop with your favorite working environment and any other devices if they might be useful. Apart from this and some small personal things, you won't probably need anything else.
+
+- Don't be late. Otherwise you may miss the important parts: briefs and team formation.
+
+- Don't worry if you don't have a team before the event, that's normal.
+
+- Always compete for a prize. Even if it's not particularly important for you, it will help you align your actions and get more drive and fun.
+
+- Don't be shy, talk to people. If you don't know how to start, just join some other discussion by saying hello and your name. Ask what people think about briefs, what their background is, what are they going to do next and so on.
+
+- Be nice, smile, make jokes, be open and willing to help others, listen to them.
+
+- Try to join someone who has complementing background for your skills, not someone with the same skill set. If you are a software developer, search for designers, entrepreneurs and pitch speakers.
+
+- Don't come with anything prototyped. You are welcome to bring relevant ideas, but don't bring implementations. The briefs will be too specific for you to fit. And, in any case, it will be transparent to everyone whether you did your prototype on-site or beforehand. You won't have fun if you try cheating.
+
+- Focus on pitch preparation quite early. Think through your demo, and focus on making it shiny and impressive, and don't spend much time on anything else. During last hour, practice your speach and check that you fit into time limit.
+
+- If you are suggested to use a specific technology, use it, you might then compete for two prizes instead of one, which double your chances.
+
+- If you stay overnight, have some sleep. Take a sleeping bag or a mat with you.
+
+- Keep your prototype focus. You only need one impressive idea, not 10 boring ideas.
+
+- There will be someone from sponsors and technology partners to support you. Reach to them and take advice from people who are willing to help you.
+
+- Have fun!
+
+
+### How we scored at Green Hackfest
 
 So we gathered together on Friday evening, and stayed in the hackspace until Sunday night. Participants are provided with all the intrastructure during this time: power plugs, wifi, tables & chairs, food, drinks and sleeping room.
 
@@ -21,6 +58,8 @@ The whole story starts with introduction and then with briefs from sponsors. Her
 This way we got the tasks for these 2 days. There were several tasks, so everyone could choose which one suits them the best. Some folks were late, so they were having troubles afterwards to get the idea of what's expected from them.
 
 I think there were about 70 participants in beginning, and about 50 of them made it to the end. Most people came alone or in pair; and I think there were two pre-formed teams of several people. 
+
+Most people were Dutch, but a lot were not. Many international students, scientists and entrepreneurs live in the Netherlands these days, and they were all welcome. So, while some teams were speaking Dutch within the group, English was the default language for other communication all the time, which is very handy. Some participants came to the Netherlands specifically to take part in this event: I remember guys from UK, Belgium and even Serbia.
 
 I am the software developer and I was expecting that most of hackers will also be developers, mostly on experienced side. But I was quite wrong. Many people were from entrepreneural background, coming from ventures on early stage, or research environments. Many folks were students with no career set yet. In result, I was the only person who was able to write code in our team, and one of the most experienced programmers overall.
 
@@ -110,22 +149,3 @@ Here are all the hackers who stayed at the fest until the very end:
 
 ![All hackers](/IMG_4526.jpg)
 
-### What I learnt
-
-So, in case you are going to take part in one of those hackathons, here is what I can advise you:
-
-- Definetely go. It is going to be quite a new experience, well worth it.
-
-- Take a laptop with your favorite working environment and any other devices if they might be useful. Apart from this and some small personal things, you won't probably need anything else.
-
-- Don't be late. Otherwise you may miss the important parts: briefs and team formation.
-
-- Don't worry if you don't have a team before the event, that's normal.
-
-- Always compete for a prize. Even if it's not particularly important for you, it will help you align your actions and get more drive and fun.
-
-- Don't be shy, talk to people. If you don't know how to start, just join some other discussion by saying hello and your name. Ask what people think about briefs, what their background is, what are they going to do next and so on.
-
-- Be nice, smile, make jokes, be open and willing to help others, listen to them.
-
-- Try to join someone who has complementing background for your skills, not someone with the same skill set. If you are a software developer, search for designers, entrepreneurs and pitch speakers.
