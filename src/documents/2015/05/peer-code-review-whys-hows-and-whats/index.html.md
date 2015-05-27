@@ -1,7 +1,7 @@
 ---
-layout: draft
+layout: post
 title: Peer code review Why's, How's and What's
-date: 2015-04-08
+date: 2015-05-27
 tags: ["code review", "best practices", "checklist"]
 ---
 This post is a short summary on why do code reviews, what the steps are and what should actually be reviewed. The text was created to set some common ground for my team, which was just starting to conduct code reviews in a consistent way. By any means, this text is not a complete guide but rather a checklist and a starting point for discussion.
