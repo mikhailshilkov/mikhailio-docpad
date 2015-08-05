@@ -3,6 +3,7 @@ layout: post
 title: Enable jinja2 and i18n translations on Google AppEngine
 date: 2012-07-26
 tags: ["AppEngine","i18n","jinja2","Python","Translations"]
+teaser: My initial goal was to make our new application (based on python/AppEngine) translatable. This means the following requirements: (1) All strings in the application must be translatable (2) Translations should preferably stored in separate files (3) It should be easy to use the translations both in .py files and html templates
 ---
 
 My initial goal was to make our new application (based on python/AppEngine) translatable. This means the following requirements:

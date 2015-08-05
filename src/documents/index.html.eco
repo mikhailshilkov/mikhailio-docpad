@@ -2,8 +2,12 @@
 layout: 'page'
 ---
 
-<% for document in @getCollection('posts').sortArray(date: -1): %>
+<% for document in @getCollection('posts').sortArray(date: -1).slice(0, 5): %>
     <%- @partial('post', {title: document.title, url: document.url, tags: document.tags, date: document.date, content: document.contentRenderedWithoutLayouts }) %>
+<% end %>
+
+<% for document in @getCollection('posts').sortArray(date: -1).slice(5): %>
+    <%- @partial('teaser', {title: document.title, url: document.url, tags: document.tags, date: document.date, teaser: document.teaser, content: document.contentRenderedWithoutLayouts }) %>
 <% end %>
 
 <%- @partial('me') %>
