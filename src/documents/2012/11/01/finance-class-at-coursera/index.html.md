@@ -3,6 +3,7 @@ layout: post
 title: Introduction to Finance class at Coursera
 date: 2012-11-01
 tags: ["Coursera","finance","Online Classes","Online Learning","Statement of Accomplishment"]
+teaser: I've recently received a statement of accomplishment document for Coursera's online Introduction to Finance class that I took in July-September this year.
 ---
 
 I've recently received a statement of accomplishment document for [Coursera](https://www.coursera.org/ "Coursera")'s online [Introduction to Finance class](https://www.coursera.org/course/introfinance "Introduction to Finance class") that I took in July-September this year.

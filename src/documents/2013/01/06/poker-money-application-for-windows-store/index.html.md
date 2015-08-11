@@ -3,6 +3,7 @@ layout: post
 title: Poker Money application for Windows Store
 date: 2013-01-06
 tags: ["Full Tilt Poker","Poker","Poker Money","Poker Money application","Poker Stars","Windows 8","Windows RT","Windows Store"]
+teaser: Windows 8 / Windows RT / Windows Store all arrived in October 2012. I've decided to take a shot on writing a commercial application for this new platform. And that's how Poker Money app appeared.
 ---
 
 Windows 8 / Windows RT / Windows Store all arrived in October 2012.

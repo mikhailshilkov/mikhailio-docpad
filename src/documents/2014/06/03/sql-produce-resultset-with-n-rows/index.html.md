@@ -3,6 +3,7 @@ layout: 'post'
 title: SQL: produce resultset with N rows
 date: 2014-06-03
 tags: ["performance","SQL Server","T-SQL"]
+teaser: Sometimes you need to produce a result set, which would contain N rows with numbers 1...N in each row. For example, I needed to calculate some statistics per week for N weeks starting from today and going back to the past.
 ---
 
 Let's talk about T-SQL today.

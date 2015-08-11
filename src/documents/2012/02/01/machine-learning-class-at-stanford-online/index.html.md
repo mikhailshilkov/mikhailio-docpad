@@ -3,6 +3,7 @@ layout: post
 title: Machine Learning class at Stanford online
 date: 2012-02-01
 tags: ["Machine Learning","Online Classes","Online Learning","Stanford","Statement of Accomplishment"]
+teaser: Several days ago, I've received a Statement of Accomplishment document from Andrew Ng and Machine Learning online class team.
 ---
 
 Several days ago, I've received a Statement of Accomplishment document from Andrew Ng and Machine Learning online class team.

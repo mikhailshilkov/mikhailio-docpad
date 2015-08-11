@@ -3,6 +3,7 @@ layout: post
 title: Nice way to kill your SQL Server
 date: 2014-10-16
 tags: ["Bugs","Error log","SQL Server","SQL Server Service Broker"]
+teaser: The short story about how to crash your complete system by missing one line of code in SQL Server stored procedure.
 ---
 
 Are you getting enormous amount of 

@@ -3,6 +3,7 @@ layout: post
 title: API to get the list of hotels
 date: 2012-05-17
 tags: ["Hotels API","HotelsCombined","Public API","Python"]
+teaser: In our travelling application, we need to show the list of hotels in a city (St. Petersburg, Russia at the moment, but more will be needed in the future). The idea was to find a hotel information provider, and then upload the complete list into our own database.
 ---
 
 In our travelling application, we need to show the list of hotels in a city (St. Petersburg, Russia at the moment, but more will be needed in the future). The idea was to find a hotel information provider, and then upload the complete list into our own database. The following info is needed for each hotel:

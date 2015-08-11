@@ -1,0 +1,19 @@
+---
+cacheable: false
+---
+<article class="post">
+    <div class="post-date"><%=  @moment(@date).format('MMM Do, YYYY') %></div>
+    <h1><a href='<%= @url %>'><%= @title %></a></h1>
+    <div class="post-content">
+        <%= @getTeaser(@teaser, @content) %>
+    </div>
+    <div class="post-goundercut">
+        <a href='<%= @url %>'>Read further</a>
+    </div>
+
+    <% if @tags?: %>
+    <div class="post-tags">
+        Posted In: <%- ("<a href='/tags/#{@getTagUrl(tag)}/'>#{tag}</a>" for tag in @tags).join(', ') %>
+    </div>
+    <% end %>
+</article>

@@ -113,6 +113,14 @@ docpadConfig = {
 				$a.attr('href', baseUrl + href) unless regex.test(href)
 			$.html()
 
+		getTeaser: (teaser, content) ->
+			result = ""
+			if teaser
+				result = teaser
+			else if content
+				result = content.replace("&amp;#39;","'").replace("&amp;quot;",'"').replace("&#39;","'").replace("&quot;",'"').replace(/<\/?[^>]+(>|$)/g, "").substring(0, 450) 
+			result
+
 		moment: require('moment')
 
 		getJavascriptEncodedTitle: (title) ->

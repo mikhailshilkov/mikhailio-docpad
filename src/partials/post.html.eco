@@ -12,6 +12,7 @@ cacheable: false
         <%- @fixLinks(@content, @url) %>
     </div>
 
+    <% if @individualPost: %>
     <p>
       Like this post? Please share it!<br />
       <a href="https://twitter.com/share" class="twitter-share-button" data-via="MikhailShilkov" data-size="large" data-count="none">Tweet</a>
@@ -19,6 +20,7 @@ cacheable: false
     </p>
 
     See a mistake? <a href="https://github.com/mikhailshilkov/mikhailio-docpad/edit/master/src/documents<%= @url %>index.html.md">Edit this post!</a><br />
+    <% end %>
 
     <% if @tags?: %>
     <div class="post-tags">

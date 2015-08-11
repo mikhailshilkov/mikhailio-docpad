@@ -3,6 +3,7 @@ layout: post
 title: Books that I've recently read
 date: 2012-03-01
 tags: ["Books","Business books"]
+teaser: My reviews of "Steve Jobs" by Walter Isaacson, "The Art of the Start" by Guy Kawasaki, "How to Become a Businessman" and "I'm Just Like Anyone Else" by Oleg Tinkov.
 ---
 
 ![Steve Jobs book](/stevejobsbook2.jpg "Steve Jobs book")

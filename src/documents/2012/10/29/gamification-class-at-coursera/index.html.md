@@ -3,6 +3,7 @@ layout: post
 title: Gamification class at Coursera
 date: 2012-10-29
 tags: ["Coursera","gamification","Online Classes","Online Learning","Statement of Accomplishment"]
+teaser: I've recently received a statement of accomplishment document for Coursera's online Gamification class that I took in August-October this year.
 ---
 
 I've recently received a statement of accomplishment document for [Coursera](https://www.coursera.org/ "Coursera")'s online [Gamification class](https://www.coursera.org/course/gamification "Gamification class") that I took in August-October this year.
