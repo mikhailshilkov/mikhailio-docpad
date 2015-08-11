@@ -1,5 +1,5 @@
 ---
-layout: draft
+layout: post
 title: Units of measurement in domain design
 date: 2015-08-11
 tags: ["units of measurement", "domain design", "DDD", "clean code"]
