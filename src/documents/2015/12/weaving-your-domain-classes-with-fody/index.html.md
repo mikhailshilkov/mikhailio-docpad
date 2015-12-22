@@ -1,11 +1,11 @@
 ---
-layout: draft
+layout: post
 title: Weaving your domain classes with Fody
-date: 2015-12-18
+date: 2015-12-22
 tags: ["Fody", "DDD", "code generation"]
-teaser: When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive craft. Here is a simplistic example, which illustrates the problem. Let's say we are modelling Trips, and for each Trip we need to keep track of Origin, Destination and Vehicle which executes the trip, nothing else. In this article I show off one trick to reduce this boilerplate code with Fody library.
+teaser: When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive craft. In this article I show off one trick to reduce this boilerplate code with Fody library.
 ---
-When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive craft. Here is a simplistic example, which illustrates the problem. Let's say we are modelling Trips, and for each Trip we need to keep track of Origin, Destination and Vehicle which executes the trip, nothing else. Here is a code to create an sample trip:
+When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive craft. Here is a simplistic example, which illustrates the problem. Let's say we are modelling Trips, and for each `Trip` we need to keep track of `Origin`, `Destination` and `Vehicle` which executes the `Trip`, nothing else. Here is a code to create an sample trip:
 ``` cs
 var trip = new Trip(
     origin: new Location("Paris", geoParis), 
@@ -88,18 +88,18 @@ public class Trip : IEquatable<Trip>
 }
 ```
 
-That's a lot of code! It's very repetative but it's also tricky: you can do it wrong in some slight way that wouldn't be easy to catch until it silently fails one day. So imagine how many tests you need to validate it.
+That's a lot of code! It's very repetitive but it's also tricky: you can implement it incorrectly in some slight way that wouldn't be easy to catch until it silently fails one day. So imagine how many tests you need to validate it.
 
-I implemented this code with help of Resharper, which makes it so much easier, but the code is still there. So, it makes this class hard to read and hard to change - every time you add a property you should not forget to update all the corresponding methods. 
+I implemented this code with help of Resharper, which makes it so much easier, but the code is still a heavy luggage to carry on. This class is hard to read and hard to change - every time you add a property you should not forget to update all the corresponding methods. 
 
 Are there other options?
 
 Introducing Fody
 ----------------
 
-Fody is an extensible tool for weaving .net assemblies. It means, it means that you can use it to improve your code in an automatic way at the time of compilation. Fody itself doesn't do much to the code, but it has a collection of plugins to actually change it. For this example I will use two of them: 
-- NullGuard - checks that all input parameters, output parameters and return values of all types in current assembly can't not be null. If null value is passed or returned, the weaved code with throw an exception.
-- Equals - you can mark a class with [Equals] attribute and Fody will implement Equals() and GetHashCode() methods and == operator for you by comparing all public properties of the annotated class.
+[Fody](https://github.com/Fody/Fody) is an extensible tool for weaving .NET assemblies. It means that you can use it to improve your code automatically at the time of compilation. Fody itself doesn't do much to the code, but it has a collection of plugins to actually change it. For this example I will use two of them: 
+- [**NullGuard**](https://github.com/Fody/NullGuard) - guards all the input parameters, output parameters and return values of all types in a current assembly not to be null. If null value is passed or returned, the weaved code with throw an exception.
+- [**Equals**](https://github.com/Fody/Equals) - you can mark a class with `[Equals]` attribute and Fody will implement `Equals()` and `GetHashCode()` methods and `==` operator for you by comparing all public properties of the annotated class.
 
 To install them just execute 
 ``` ps
@@ -136,8 +136,8 @@ public class Trip
 ```
 
 And that's it! We still get the same functionality but the code is just trivial. Let's see how it works:
-- `Equals` attribute means that we want Fody plugin to implement all the equality-related boilerplate code for this class, including operators and `IEquatable<T>` implementation. So, this plugin is in opt-in mode.
-- I used no attributes from `NullGuard` plugin. This plugin works in opt-out mode, i.e. it changes all the classes by default, and if you don't want it for some piece of code - you can always opt out. This default makes a lot of sense to me: I don't want any nulls in my code unless I really need them due to some external contracts.
+- `Equals` attribute means that we want Fody plugin to implement all the equality-related boilerplate code for this class, including operators and `IEquatable<T>` implementation. So this plugin is in *opt-in* mode.
+- I used no attributes from `NullGuard` plugin. This plugin works in *opt-out* mode, i.e. it changes all the classes by default, and if you don't want it for some piece of code - you can always opt out. This default makes a lot of sense to me: I don't want any nulls in my code unless I really need them due to some external contracts.
 
 Let's open the resulting assembly in [ILSpy](http://ilspy.net/) to see what it compiles to. Here is the constructor:
 ``` cs
@@ -164,7 +164,7 @@ public Trip(Location origin, Location destination, Vehicle vehicle)
 }
 ```
 
-It's bit more verbose but essentially equivalent to what I did manually before. By default null guard will be very strict, so you will see that even auto-property return values are checked:
+It's bit more verbose but essentially equivalent to what I did manually before. By default null guard will be very strict, so you will see that even auto-property's return values are checked:
 ``` cs
 public Location Origin
 {
@@ -205,7 +205,7 @@ public class Trip : IEquatable<Trip>
 }
 ```
 
-There is a catch (at least at the time of writing): the auto-generated `==` and `!=` operators won't work properly if you use them at the same assembly where the type is defined. That's because the C# compiler will only use these operators properly if they are defined in compile time, and they only get defined after complication (weaving takes over place after IL is produced). See [the issue on GitHub](https://github.com/Fody/Equals/issues/10) for details.
+There is a catch (at least at the time of writing): the auto-generated `==` and `!=` operators won't work properly if you use them inside the same assembly where the type is defined. That's because the C# compiler will only use these operators properly if they are defined at compile time, and they only get defined after the compilation (weaving takes place after IL is produced). See [the issue on GitHub](https://github.com/Fody/Equals/issues/10) for details.
 
 Bonus - a proper solution
 ------------------------
@@ -218,4 +218,4 @@ type Trip =
     Vehicle : Vehicle }
 ```
 
-No nulls are possible here and equality works out of the box. There's just one possible difficulty: it's F#...
+No nulls are possible here and equality works out of the box. There's just one major detail: it's F#...
