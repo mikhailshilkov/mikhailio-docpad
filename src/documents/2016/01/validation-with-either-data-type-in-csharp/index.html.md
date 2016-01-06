@@ -1,5 +1,5 @@
 ---
-layout: draft
+layout: post
 title: Validation with Either data type in C#
 date: 2016-01-06
 tags: ["functional programming", "clean code"]
