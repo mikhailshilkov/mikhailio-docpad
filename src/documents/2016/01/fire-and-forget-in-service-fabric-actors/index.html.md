@@ -1,5 +1,5 @@
 ---
-layout: draft
+layout: post
 title: Fire-and-forget in Service Fabric actors
 date: 2016-01-13
 tags: ["Actor model", "Azure", "Akka.NET", "Service Fabric"]
