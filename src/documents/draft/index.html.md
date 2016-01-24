@@ -1,104 +1,90 @@
 ---
 layout: draft
-title: Fire-and-forget in Service Fabric actors
+title: Monads explained in C#
 date: 2016-01-13
-tags: ["Actor model", "Azure", "Akka.NET", "Service Fabric"]
-teaser: At the [recent Webscale Architecture meetup](http://www.meetup.com/Webscale-Architecture-NL/events/225979118/) we discussed two implementations of the Actor model in the .NET ecosystem: [Akka.NET](http://akka.net) and [Azure Service Fabric Actors](https://azure.microsoft.com/en-us/documentation/articles/service-fabric-reliable-actors-introduction/). One important discussion was around **Ask** vs **Tell** call model. With **Tell** model, the Sender just sends the message to the Recipient without waiting for a result to come back. **Ask** model means the Sender will at some point get a response back from the Receiver, potencially blocking its own execution.
+tags: [""]
+teaser: TODO
 ---
 
-At the [recent Webscale Architecture meetup](http://www.meetup.com/Webscale-Architecture-NL/events/225979118/) 
-we discussed two implementations of the Actor model in the .NET ecosystem: 
-[Akka.NET](http://akka.net) and [Azure Service Fabric Actors](https://azure.microsoft.com/en-us/documentation/articles/service-fabric-reliable-actors-introduction/). 
-One important discussion was
-around **Ask** vs **Tell** call model. With **Tell** model, the Sender just sends the
-message to the Recepient without waiting for a result to come back. **Ask** model
-means the Sender will at some point get a response back from the Receiver, potencially
-blocking its own execution.
+It looks like there is a mandatory post that every blogger who learns functional programming should write:
+what a Monad is. Monads have the reputation of being something very abstract and very confusing for every
+developer who is not a hipster haskell programmer. They say that once you understand what a monad is, you 
+loose the ability to explain it in simple language. Doug Crockford was the first lay this rule down, but
+it becomes kind of obvious once you read 3 or 5 "explanations" on the web. Here is my attempt.
 
-The default model of Akka.NET is **Tell**:
+Monads are container types
+--------------------------
 
-> **Tell: Fire-forget**
+Monads are containers which encapsulate some kind of functionality. It's that simple. The goals of monads
+are similar to generic goals of any encapsulation in software development practices: hide the implementation
+details from the client, but provide a proper way to use the hidden You functionality. It's not because we 
+want to be able to change the implementation, it's because we want to make the client as simple as possible
+and to enforce the best way of code structure.
 
-> This is the preferred way of sending messages. No blocking waiting for 
-> a message. This gives the best concurrency and scalability characteristics.
+Monads are flexible, so in C# they should be represented as a generic type:
 
-On the contrary, the default model for Service Fabric Actors is RPC-like
-**Ask** model. Let's have a close look at this model, and then see how we can
-implement **Tell** (or **Fire-and-Forget**) model.
+``` cs
+public class Monad<T>
+{
+}
+```
 
-Actor definition starts with an interface:
+Monad instances can be created
+------------------------------
 
-    public interface IHardWorkingActor : IActor
+Quite an obvious statement, isn't it. Having a class `Monad<T>`, there should be a way to create an object
+of this class out of an instance of type `T`. In functional world this operation is known as `return` 
+function. In C# it can be as simple as a constructor:
+
+``` cs
+public class Monad<T>
+{
+    public Monad(T instance)
     {
-        Task DoWork(string payload);
     }
+}
+```
 
-As you can see, the method does not return any useful data, which means
-the client code isn't really interested in waiting for the operation to
-complete. Here's how we implement this interface in the Actor class:
+Usually it also makes sense to define an extension method to enable fluent syntax of monad creation:
 
-    public class HardWorkingActor : Actor, IHardWorkingActor
-    {
-        public async Task DoWork(string payload)
-        {
-            ActorEventSource.Current.ActorMessage(this, "Doing Work");
-            await Task.Delay(500);
-        }
-    }
+``` cs
+public static class MonadExtensions
+{
+    public static Monad<T> Return<T>(this T instance) => new Monad<T>(instance);
+}
+```
 
-This test implementation simulates the hard work by means of an artificial 500 ms delay.
+Monads can be chained to create new monads
+------------------------------------------
 
-Now, let's look at the client code. Let's say, the client receives the payloads
-from a queue or a web front-end and needs to go as fast as possible. It gets a payload,
-creates an actor proxy to dispatch the payload to, then it just wants 
-to continue with the next payload. Here is the "Ask" implementation based on 
-the Service Fabric samples:
+This is the property which makes monads so useful, but also a bit confusing. In functional world this
+operation is known as functional composition and is expressed with `bind` function (or `>>=` operator).
+Here is the signature of `Bind` method in C#:
 
-    int i = 0;
-    var timer = new Stopwatch();
-    timer.Start();
-    while (true)
-    {
-        var proxy = ActorProxy.Create<IHardWorkingActor>(ActorId.NewId(), "fabric:/Application1");
-        await proxy.DoWork($"Work ${i++}");
-        Console.WriteLine($@"Sent work to Actor {proxy.GetActorId()}, 
-                             rate is {i / timer.Elapsed.TotalSeconds}/sec");
-    }
+``` cs
+public class Monad<T>
+{
+   public Monad<TO> Bind<TO>(Func<T, Monad<TO>> func)
+   {
+   }
+}
+```
 
-Note an `await` operator related to every call. That means that the client will
-block until the actor work is complete. When we run the client, no surprise that
-we get the rate of about 2 messages per second:
+As you can see, the `func` argument is a complicated thing. It accepts an argument of type `T` (not
+a monad) and returns an instance of `Monad<TO>` where `TO` is another type. Now, our first instance
+of `Monad<T>` knows how to bind itself to this function to produce another instance of monad of the
+new type. The full power of monads comes when we compose several of them in one chain:
 
-    Sent work to Actor 1647857287613311317, rate is 1,98643230380293/sec
+``` cs
+initialValue
+    .Return()
+    .Bind(v1 => produceV2OutOfV1(v1))
+    .Bind(v2 => produceV3OutOfV2(v2))
+    .Bind(v3 => produceV4OutOfV3(v3))
+    //...
+```
 
-That's not very exciting. What we want instead is to tell the actor to do the
-work and immediately proceed to the next one. Here's how the client call should
-look like:
+And that's about it. Let's have a look at some classic monadic types.
 
-    proxy.DoWork($"Work ${i++}").FireAndForget();
-
-Instead of `await`-ing, we make a `Task`, pass it to some (not yet existing)
-extension method and proceed immediately. It appears that the implementation 
-of such extension method is trivial:
-
-    public static class TaskHelper
-    {       
-        public static void FireAndForget(this Task task)
-        {
-            Task.Run(async() => await task).ConfigureAwait(false);
-        }
-    } 
-
-The result looks quite different from what we had before:
-
-    Sent work to Actor -8450334792912439527, rate is 408,484162592517/sec
-
-400 messages per second, which is some 200x difference... 
-
-The conclusions are simple:
-
-- Service Fabric is a powerful platform and programming paradigm which doesn't
-limit your choice of communication patterns
-
-- Design the communication models carefully based on your use case, don't
-take the defaults for granted
+Maybe (Option)
+--------------
