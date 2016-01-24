@@ -1,7 +1,7 @@
 ---
 layout: draft
 title: Monads explained in C#
-date: 2016-01-13
+date: 2016-01-24
 tags: [""]
 teaser: TODO
 ---
@@ -64,9 +64,9 @@ Here is the signature of `Bind` method in C#:
 ``` cs
 public class Monad<T>
 {
-   public Monad<TO> Bind<TO>(Func<T, Monad<TO>> func)
-   {
-   }
+    public Monad<TO> Bind<TO>(Func<T, Monad<TO>> func)
+    {
+    }
 }
 ```
 
@@ -86,5 +86,93 @@ initialValue
 
 And that's about it. Let's have a look at some classic monadic types.
 
-Maybe (Option)
---------------
+Example: Maybe (Option) type
+----------------------------
+Maybe is the 101 example for monads which is used everywhere. Maybe is another approach to dealing
+with 'no value' value which is alternative to the concept `null`. Basically your object should
+never be null, but it can either have `Some` value or be `None`. F# has a maybe implementation
+build into the language - it's called `option` type. Here is a sample implementation in C#:
+
+``` cs
+public class Maybe<T> where T : class
+{
+    private T value;
+
+    public Maybe(T someValue)
+    {
+        if (someValue == null)
+            throw new AgrumentNullException(nameof(someValue));
+        this.value = someValue;
+    }
+
+    private Maybe()
+    {
+    }
+
+    public Maybe<TO> Bind<TO>(Func<T, Maybe<TO>> func)
+    {
+        return value != null ? new Maybe<TO>(func(value)) : Maybe<TO>.None();
+    }
+
+    public static Maybe<T> None() => new Maybe<T>(null);
+}
+
+public static class MaybeExtensions
+{
+    public static Maybe<T> NullToMaybe<T>(T value)
+    {
+        return value != null ? new Maybe<T>(value) : Maybe<T>.None();
+    }
+}
+```
+
+Return function is implemented with a combination of a public constructor which accepts Some value
+(notice that null is not allowed) and a static `None` method returning an object of 'no value'.
+`NullToMaybe` combines both of them in one call. 
+
+Bind function is implemented explicitly. 
+
+Let's have a look at a use case. Let's have we have repositories which load the data from an external
+storage (I'll put them to a single class for the sake of brevity):
+
+``` cs
+public class Repository
+{
+    public Maybe<Customer> GetCustomer(int id)
+    {
+        var row = readRowFromDb(id); // returns null if not found
+        return row.NullToMaybe().Bind(r => ConvertRowToCustomer(r));
+    }
+
+    public Maybe<Address> GetAddress(int id) => ... // similar implementation
+
+    public Maybe<Order> GetOrder(int id) => ... // similar implementation
+}
+```
+
+The repository reads a row from the database and then converts its value or null to a `Maybe<DataRow>`.
+Then immediately it's bound to a function which converts a row to a domain object (I'll omit this
+function's implementation but remember that it can also return a Maybe<Customer> if that's warranted
+by requirements).
+
+Now here is a more sofisticated example of `Bind` method composition:
+
+``` cs
+Maybe<Shipper> shipperOfLastOrderOnCurrentAddress =
+    repo.GetCustomer(customerId)
+        .Bind(c => repo.GetAddress(c.Address.Id))
+        .Bind(a => repo.GetOrder(a.LastOrder.Id))
+        .Bind(o => o.Shipper);
+```
+
+If you think that the syntax looks very much like a LINQ query with a bunch of `Select`s, you are
+not the only one ;) One of the common implementations of `Maybe` implements `IEnumerable` interface
+which allows a more C#-idiomatic binding composition.
+
+Conclusion
+----------
+
+You should not be afraid of the "M-word" just because you are a C# programmer. C# does not have
+a notion of monads as predefined language constructs, but it doesn't mean we can't borrow some
+ideas from the functional world. Having said that, it's also true that C# is lacking some powerful
+ways of combining monads which are possible in Haskell and other functional languages.
