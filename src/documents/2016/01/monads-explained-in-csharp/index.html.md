@@ -1,5 +1,5 @@
 ---
-layout: draft
+layout: post
 title: Monads explained in C#
 date: 2016-01-25
 tags: ["functional programming", "monads", "maybe", "LINQ"]

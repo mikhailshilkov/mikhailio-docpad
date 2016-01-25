@@ -3,9 +3,9 @@ layout: post
 title: Weaving your domain classes with Fody
 date: 2015-12-22
 tags: ["Fody", "DDD", "code generation"]
-teaser: When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive craft. In this article I show off one trick to reduce this boilerplate code with Fody library.
+teaser: When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive cruft. In this article I show off one trick to reduce this boilerplate code with Fody library.
 ---
-When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive craft. Here is a simplistic example, which illustrates the problem. Let's say we are modelling Trips, and for each `Trip` we need to keep track of `Origin`, `Destination` and `Vehicle` which executes the `Trip`, nothing else. Here is a code to create an sample trip:
+When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive cruft. Here is a simplistic example, which illustrates the problem. Let's say we are modelling Trips, and for each `Trip` we need to keep track of `Origin`, `Destination` and `Vehicle` which executes the `Trip`, nothing else. Here is a code to create an sample trip:
 ``` cs
 var trip = new Trip(
     origin: new Location("Paris", geoParis), 
