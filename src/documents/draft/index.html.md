@@ -1,200 +1,258 @@
 ---
 layout: draft
-title: Building a Poker Bot: Cards Recognition
+title: Akka.NET-style actors in Service Fabric
 date: 2016-02-01
-tags: ["poker bot", "F#", "image recognition"]
-teaser: This is the first part of **Building a Poker Bot** series where I describe my experience developing bot software for online poker rooms. I'm building the bot with .NET framework and F# language which makes the task relatively easy and very enjoyable.
+tags: ["service fabric", "akka.net", "actor model"]
+teaser: TODO
 ---
 
-*This is the first part of **Building a Poker Bot** series where I describe my experience developing bot software 
-for online poker rooms. I'm building the bot with .NET framework and F# language which makes the task relatively 
-easy and very enjoyable.*
+Akka.NET and Service Fabric are the two actor frameworks that emerged in .NET world in the last year.
+The two implementations of actor models are quite different. These differences are multi-faceted but
+today I want to focus on API to declare an actor and to communicate to it.
 
-Screen recognition
-------------------
-
-For a human, the very first step to the ability to play poker is to understand the cards, what a hand is and 
-what the value of your hand is. E.g. in Texas Holdem each player gets 2 hole cards which form a hand. At 
-the showdown the player with the best hand wins.
-
-Poker bots are no different, they also need to be taught the notion of cards and hands. A bot should "watch" 
-the table and see which cards he is dealt with. There are several ways to achieve that but I go for a technique
-called screen recognition, i.e. the bot makes a screenshot of a table and then reads the pixels to understand
-what's going on. Very similar to what people do.
-
-Image recognition in general is a tough task. Human beings are very good at interpreting vague images and
-recognizing familiar objects. It's much more difficult for computers. General image recognition (think showing
-a photo to your computer and asking whether there is an animal there) is very tough; corporations like Google
-and Microsoft are spending numerous man-years and employ techniques like machine learning and neural networks.
-
-Fortunately, poker table recognition is much easier. The images to be recognized are machine-generated, so
-the same things are rendered more or less the same way all the time. It makes sense to keep the poker table
-size fixed to some predefined value which makes recognition task fairly easy.
-
-Card recognition steps
-----------------------
-
-There are 13 card faces (from Deuce to Ace) and 4 suits. All of them are just fixed-size images which we need to be able to
-match with. So we start with a screenshot of a poker table:
-
-![Poker table screenshot](/table.png)
-
-The table size is fixed, so are the left and the top pixel positions of hole cards. So, our first step is to extract
-the small images of cards out of the big screenshot:
-
-![Extracted card images](/cards.png)
-
-Now, we can take the recognition of card faces and suits separately. In our sample layout, suits are color coded.
-This is very friendly to humans and super simple for the bot. We pick the suit based on the color (ignoring 
-the white pixels):
-
-![Recognized suits](/suits.png)
-
-This leaves us with the task of choosing between 13 card faces. The color information is not important
-here, we can make the image grey-scale. Moreover, we can reduce the color information to the single bit per 
-pixel - call it white or black:
-
-![Black and white pixels](/blackandwhite.png)
-
-Now this mask is very simple, and we can compare it with 13 predefined masks for 13 cards pixel by pixel.
-The one with the biggest amount of matches wins.
-
-Suit recognition
-----------------
-
-Let's put some code at the table. We start with suit recognition. `getSuit` function has type 
-`Color -> string option` and converts the color of a pixel into the suit name, if possible. Hearts ("h")
-are red, Diamonds ("d") are blue, Clubs ("c") are green and Spades ("s") are black:
-
-``` fsharp
-let getSuit (c : Color) =
-  match c with
-  | _ when c.B < 127uy && c.G < 127uy && c.R > 127uy -> Some "h"
-  | _ when c.B > 127uy && c.G < 127uy && c.R < 127uy -> Some "d"
-  | _ when c.B < 127uy && c.G > 127uy && c.R < 127uy -> Some "c"
-  | _ when c.B < 127uy && c.G < 127uy && c.R < 127uy -> Some "s"
-  | _ -> None
-```
-
-This function is used by `getCardSuit` function of type `(int -> int -> Color) -> int -> int -> string`.
-Its first argument is a function which returns the color of a pixel based on `(x, y)`
-relative coordinates (starting with 0). The next two arguments are width and height of the cards. Result is
-the same suit name that we described above. The function loops through all the pixels, gets a suit per
-pixel and then returns the suit which is the most popular among them. Alternatively, we could just return
-the first suit found, but my implementation looks more resilient:
-
-``` fsharp
-let getCardSuit getPixel width height =    
-  seq { for x in 0 .. width - 1 do
-          for y in 0 .. height - 1 do
-            yield getSuit (getPixel x y) }
-  |> Seq.choose id
-  |> Seq.countBy id
-  |> Seq.maxBy (fun (v, c) -> c)
-  |> fst
-```
-
-Producing the black & white pattern
------------------------------------
-
-`getCardPattern` accepts the same parameters as `getSuits` but returns `seq<BW>` instead. This is
-a sequence of black or white pixels with a helper union type:
-
-``` fsharp
-type BW = B | W
-```
-The function body enumerates the pixels and return black or white result as a flat sequence:
-
-``` fsharp
-let getCardPattern getPixel width height =
-  let isWhite (c : Color) =
-    if c.B > 127uy && c.G > 127uy && c.R > 127uy then W
-    else B
-
-  seq { for x in 0 .. width - 1 do
-          for y in 0 .. height - 1 do
-            yield isWhite (getPixel x y) } 
-```
-
-Card face recognition
+Service Fabric Actors
 ---------------------
 
-Having a black and white pattern, we can compare it with the predefined patterns and pick the
-most similar one. A pattern is defined with a helper type
+Every actor in Service Fabric has a public interface which describes its behaviour. For this article
+I'm going to use a toy example based on weather report. Our actor will be able to get whether reports
+and then return the maximum temperature for a given period. An instance of actor will be created
+for each city (geo partitioning). Here is our interface in Service Fabric:
 
-``` fsharp
-type CardPattern = {
-  Card: string
-  Pattern: BW array
+``` cs
+public interface IWeatherActor : IActor
+{
+    Task AddWeatherReport(WeatherReport report);
+
+    Task<int?> GetMaxTemperature(Period period);
 }
 ```
 
-`Pattern` is a sequence which is equivalent to the sequence we got on the previous step. 
-`Card` is a string of hand face value 2, 3, 4 .. A. `getCardFace` has the type 
-`CardPattern[] -> seq<BW> -> string`, it accepts an array of known patterns and a pattern
-of the card to be recognized. It compares patterns pixel by pixel and returns the card
-which has the biggest amount of matches:
+We have two operations: a command and a query. They are both async (return `Task`s). The data classes
+are required to be mutable `DataContract` based DTOs:
 
-``` fsharp
-let getCardFace patterns bws =
-  let matchCount h p =
-    Seq.zip h p
-    |> Seq.map (fun (v1, v2) -> if v1 = v2 then 1 else 0)
-    |> Seq.sum
-    |> decimal
-  let maxPattern = patterns |> Array.maxBy (fun p -> matchCount bws p.Pattern)
-  maxPattern.Card
+``` cs
+[DataContract]
+public class WeatherReport
+{
+    [DataMember]
+    public DateTime Moment { get; set; }
+    [DataMember]
+    public int Temperature { get; set; }
+    [DataMember]
+    public int Humidity { get; set; }
+}
+
+[DataContract]
+public class Period
+{
+    [DataMember]
+    public DateTime From { get; set; }
+    [DataMember]
+    public DateTime Until { get; set; }
+}
 ```
 
-Getting the known patterns
---------------------------
+And here is the implementation of the weather actor:
 
-So how do we create an array of known patterns? It's tedious to do manually, so
-we use a bit of code generation.
-Basically we just take several screenshots of poker tables and feed them to the following 
-helper function:
+``` cs
+internal class WeatherActor : StatefulActor<List<WeatherReport>>, IWeatherActor
+{
+    public Task AddWeatherReport(WeatherReport report)
+    {
+        this.State = this.State ?? new List<WeatherReport>();
+        this.State.Add(report);
+        return Task.FromResult(0);
+    }
 
-``` fsharp
-let parsePattern getPixel width height =
-  getCardPattern getPixel width height
-  |> Seq.map (fun x -> if x = B then "B" else "W") 
-  |> String.concat ";"
+    public Task<int?> GetMaxTemperature(Period period)
+    {
+        return Task.FromResult(
+            (this.State ?? Enumerable.Empty<WeatherReport>())
+            .Where(r => r.Moment > period.From && r. Moment <= period.Until)
+            .Max(r => (int?)r.Temperature));
+    }
+}
 ```
 
-The function creates a string which can be copy-pasted into F# array of `BW`.
+Service Fabric provides reliable storage out of the box, so we are using it to
+store our reports. There's no code required to instantiate an actor. Here is the
+code to use it:
 
-Putting it all together
------------------------
+``` cs
+// Submit a new report
+IWeatherActor actor = ActorProxy.Create<IWeatherActor>(new ActorId("Amsterdam"));
+actor.AddWeatherReport(new WeatherReport { Moment = DateTime.Now, Temperature = 22, Humidity = 55 });
 
-Here is the facade function that will be called from the outside:
-
-``` fsharp
-let recognizeCard getPixel width height = 
-  let value = 
-    getCardPattern getPixel width height 
-    |> getCardValue patterns
-  let suit = getCardSuit getPixel width height
-  value + suit
+// Make a query somewhere else
+IWeatherActor actor = ActorProxy.Create<IWeatherActor>(new ActorId("Amsterdam"));
+var result = actor.GetMaxTemperature(new Period { From = monthAgo, Until = now });
 ```
 
-The calling code looks like this:
+Akka.NET Actors
+---------------
 
-``` fsharp
-let image = new Bitmap("...");
+Actors in Akka.NET are message based. The messages are immutable POCOs, which 
+is a great design decisions. Here are the messages for our scenario:
 
-let getPixel offsetX offsetY x y = 
-  image.GetPixel(offsetX + x, offsetY + y)
+``` cs
+public class WeatherReport
+{
+    public WeatherReport(DateTime moment, int temperature, int humidity)
+    {
+        this.Moment = moment;
+        this.Temperature = temperature;
+        this.Humidity = humidity;
+    }
 
-let hand = (recognizeCard (getPixel leftX top) width height) + (recognizeCard (getPixel rightX top) width height)
+    public DateTime Moment { get; }
+    public int Temperature { get; }
+    public int Humidity { get; }
+}
+
+public class Period
+{
+    public Period(DateTime from, DateTime until)
+    {
+        this.From = from;
+        this.Until = until;
+    }
+
+    public DateTime From { get; }
+    public DateTime Until { get; }
+}
+
 ```
 
-`leftX`, `rightX`, `top`, `width` and `height` are well-known parameters of cards locations within a screenshot, 
-which are hard coded for a given table size.
+There's no need to define any interfaces. The basic actor imlementation derives from
+`ReceiveActor` and calls `Receive` generic method to setup a callback which is called
+when a message of specified type is received:
 
-Conclusion
-----------
+``` cs
+public class WeatherActor : ReceiveActor
+{
+    private List<WeatherReport> state = new List<WeatherReport>();
 
-The full code for card recognition can be found in my [github repo](https://github.com/mikhailshilkov/mikhailio-samples/blob/master/HandRecognition.fs). It's just 75 lines of code which is
-much less that one could imagine for a task of image recognition. Similar code could be used to recognize other
-fixed objects at poker table: dealer button location, action buttons, checkboxes etc. In the next part of this
-series I will show how to recognize non-fixed parts: text and numbers.
+    public WeatherActor()
+    {
+        Receive<WeatherReport>(this.AddWeatherReport);
+        Receive<Period>(this.GetMaxTemperature);
+    }
+
+    public void AddWeatherReport(WeatherReport report)
+    {
+        this.state.Add(report);
+    }
+
+    public void GetMaxTemperature(Period period)
+    {
+        var response = this.state
+            .Where(r => r.Moment > period.From && r. Moment <= period.Until)
+            .Max(r => (int?)r.Temperature);
+        Sender.Tell(response, Self);
+    }
+}
+```
+
+Note a couple more differences in this implementation comparing to Fabric style:
+
+- State is stored in a normal class field and is not persistent or replicated
+by default. This can be solved by Akka.NET Persistance, which would save all
+messages (and potentially snapshots) to the external database. Still, it won't
+be same level of convenience as in-built Service Fabric statefullness.
+
+- `GetMaxTemperature` method does not return anything, because nobody would look
+at the returned value. Instead, it sends yet another message to the sender actor.
+So, `Request-Response` workflow is supported, but is a bit less convenient and
+explicit.
+
+Let's have a look at the client code. `ActorSelection` is the closest notion to
+Fabric's `ActorProxy`: it does not create an actor, but just gets an endpoint
+based on a name. Note, that Akka.NET actor needs to be explicitly created by
+another actor, but Lifetime management is a separate discussion, so we'll skip 
+it for now. Here is the report sender:
+
+``` cs
+// Submit a new report
+var msg = new WeatherReport { Moment = DateTime.Now, Temperature = 22, Humidity = 55 }
+Context.ActorSelection("/user/weather/Amsterdam").Tell(msg);
+```
+
+Asking `ActorSelection` is not directly possible, we would need to setup an
+inbox and receive callback messages. We'll pretend that we have an `ActorRef`
+for the sake of simplicity:
+
+``` cs
+// Make a query somewhere else
+ActoRef actor = ... ; // we have it
+var result = await actor.Ask(new Period { From = monthAgo, Until = now });
+```
+
+The Best of Two Worlds
+----------------------
+
+Now my goals is to come up with an implementation of Service Fabric actors with
+the properties that combine the good parts of both frameworks (without explicitly
+using Akka.NET), i.e.
+
+- Use the full power of Service Fabric actors, including lifetime management,
+cluster management and reliable state
+- Use the simplicity of Request-Response pattern implementation of Service Fabric
+- Support immutable POCO messages instead of `DataContract` DTOs
+- Use `ReceiveActor`-like API for message processing
+
+Here is the third implementation of our Weather Actor (the definitions of messages
+from Akka.NET example are intact):
+
+``` cs
+public class WeatherActor : StetefulReceiveActor<List<WeatherReport>>
+{
+    public WeatherActor()
+    {
+        Receive<WeatherReport>(this.AddWeatherReport);
+        Receive<Period, int>(this.GetMaxTemperature);
+    }
+
+    public Task<List<WeatherReport>> AddWeatherReport(List<WeatherReport> state, WeatherReport report)
+    {
+        state = state ?? new List<WeatherReport>();
+        state.Add(report);
+        return Task.FromResult(state);
+    }
+
+    public Task<int?> GetMaxTemperature(List<WeatherReport> state, Period period)
+    {
+        return Task.FromResult(
+            (state ?? Enumerable.Empty<WeatherReport>())
+            .Where(r => r.Moment > period.From && r. Moment <= period.Until)
+            .Max(r => (int?)r.Temperature));
+    }
+}
+```
+
+The base `ReceiveActor` class is not defined yet, we'll do it in the next section. Here is
+how it's being used:
+
+- The class is generic and it accepts the type of the state (similar to normal Fabric actors).
+- Constructor registers two `Receive` handlers: message handler and request handler. Note
+that the later accepts two type parameters: request type and response type.
+- Both handlers get state as the first argument instead of pulling it from the property of
+the base class.
+- The both return `Task`'ed data. Message handler is allowed to change the state, while
+request handler does  not change the state but just returns the response back.
+
+The client code uses our own `MessageActorProxy` class to create non-generic proxies which
+are capable to `Tell` (send a message one way) and `Ask` (do request and wait for response):
+
+``` cs
+// Submit a new report
+var actor = MessageActorProxy.Create(new ActorId("Amsterdam"), "WeatherActor");
+actor.Tell(new WeatherReport { Moment = DateTime.Now, Temperature = 22, Humidity = 55 });
+
+// Make a query somewhere else
+var actor = MessageActorProxy.Create(new ActorId("Amsterdam"), "WeatherActor");
+var result = actor.Ask(new Period { From = monthAgo, Until = now });
+```
+
+Implementation of ReceiveActor
+------------------------------
+
