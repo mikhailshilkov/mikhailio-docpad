@@ -1,5 +1,5 @@
 ---
-layout: draft
+layout: post
 title: Akka.NET-style actors in Service Fabric
 date: 2016-02-08
 tags: ["service fabric", "akka.net", "actor model"]
