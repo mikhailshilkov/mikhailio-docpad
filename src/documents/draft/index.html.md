@@ -204,6 +204,7 @@ Here is the third implementation of our Weather Actor (the definitions of messag
 from Akka.NET example are intact):
 
 ``` cs
+[ActorService(Name = "WeatherActor")]
 public class WeatherActor : StetefulReceiveActor<List<WeatherReport>>
 {
     public WeatherActor()
@@ -239,6 +240,8 @@ that the later accepts two type parameters: request type and response type.
 the base class.
 - The both return `Task`'ed data. Message handler is allowed to change the state, while
 request handler does  not change the state but just returns the response back.
+- `ServiceName` attribute is required because there are (may be) multiple classes implementing
+the same interface.
 
 The client code uses our own `MessageActorProxy` class to create non-generic proxies which
 are capable to `Tell` (send a message one way) and `Ask` (do request and wait for response):
@@ -256,3 +259,130 @@ var result = actor.Ask(new Period { From = monthAgo, Until = now });
 Implementation of ReceiveActor
 ------------------------------
 
+Let's start with the interface definition:
+
+``` cs
+public interface IReceiveActor : IActor
+{
+    Task Tell(string typeName, byte[] message);
+
+    [Readonly]
+    Task<byte[]> Ask(string typeName, byte[] message);
+}
+```
+
+The two methods for `Tell` and `Ask` accept serializes data togther with fully qualifier
+type name. This will allow passing any kind of objects which can be handled by serializer
+of choice (I used Newtonsoft JSON serializer).
+
+Actor implementation derives from `StatefulActor` and uses another type/bytes pair to store
+the serialized state:
+
+``` cs
+    [ActorService(Name = "ReceiveActor")]
+    public abstract class StatefulReceiveActor : StatefulActor<StateContainer>, IReceiveActor
+    {
+    }
+
+    [DataContract]
+    public class StateContainer
+    {
+        [DataMember]
+        public string TypeName { get; set; }
+
+        [DataMember]
+        public byte[] Data { get; set; }
+    }
+```
+
+The simplistic implementation of `Receive` generic methods uses two dictionaries
+to store the handlers:
+
+``` cs
+private Dictionary<Type, Func<object, object, Task<object>>> handlers;
+private Dictionary<Type, Func<object, object, Task<object>>> askers;
+
+public ReceiveActor()
+{
+    this.handlers = new Dictionary<Type, Func<object, object, Task<object>>>();
+    this.askers = new Dictionary<Type, Func<object, object, Task<object>>>();
+}
+
+protected void Receive<T>(Func<object, T, Task<object>> handler)
+    => this.handlers.Add(typeof(T), async (s, m) => await handler(s, (T)m));
+
+protected void Receive<TI, TO>(Func<object, TI, Task<TO>> asker)
+    => this.askers.Add(typeof(TI), async (s, m) => await asker(s, (TI)m));
+
+```
+
+The `Tell` method deserializes the message and state, then picks a handler based on
+the message type, executes it and serializes the produced state back:
+
+``` cs
+public async Task Tell(string typeName, byte[] message)
+{
+    ActorEventSource.Current.ActorMessage(this, "Received a message " + message);
+    var type = Type.GetType(typeName);
+    var typedMessage = this.serializer.Deserialize(message, type);
+
+    var typedState = this.State != null
+        ? this.serializer.Deserialize(this.State.Data, Type.GetType(this.State.TypeName))
+        : null;
+    var handler = this.handlers.FirstOrDefault(t => t.Key.IsAssignableFrom(type)).Value;
+    if (handler != null)
+    {
+        var newState = await handler(typedState, typedMessage);
+        this.State =
+            newState != null
+            ? new StateContainer { Data = this.serializer.Serialize(newState), TypeName = newState.GetType().AssemblyQualifiedName }
+            : null;
+    }
+}
+```
+
+The implementation of `Ask` is almost identical, so I'll skip it. `MessageActorProxy` 
+encapsulates the serialization around passing data to normal `ActorProxy` class:
+
+``` cs
+public class MessageActorProxy
+{
+    private readonly IStatefulMessageActor proxy;
+    private readonly ISerializer serializer = new JsonByteSerializer();
+
+    private MessageActorProxy(ActorId actorId, string serviceName)
+    {
+        this.proxy = ActorProxy.Create<IReceiveActor>(actorId, serviceName: serviceName);
+    }
+
+    public async Task Tell(object message)
+    {
+        var serialized = this.serializer.Serialize(message);
+        await this.proxy.Send(message.GetType().AssemblyQualifiedName, serialized);
+    }
+
+    public async Task<T> Ask<T>(object message)
+    {
+        var serialized = this.serializer.Serialize(message);
+        var response = await this.proxy.Ask(message.GetType().AssemblyQualifiedName, serialized);
+        return (T)this.serializer.Deserialize(response, typeof(T));
+    }
+
+    public static MessageActorProxy Create(ActorId actorId, string serviceType)
+    {
+        return new MessageActorProxy(actorId, serviceType);
+    }
+}
+```
+
+Let's briefly wrap it up.
+
+Conclusion
+----------
+
+At this stage Azure Service Fabric lacks support of some actor model best practices
+like message-based API and immutabl POCO classes. At the same time, it provides
+super powerful setup regarding cluster resource management, state replication, fault
+tolerance and communication. We can borrow some approaches that are used in Akka.NET
+framework to improve the developer experience who wants to leverage the power
+of Service Fabric.
