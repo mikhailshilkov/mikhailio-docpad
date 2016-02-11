@@ -1,395 +1,204 @@
 ---
 layout: draft
-title: Akka.NET-style actors in Service Fabric
-date: 2016-02-08
-tags: ["service fabric", "akka.net", "actor model"]
-teaser: Akka.NET and Service Fabric are the two actor frameworks that emerged in .NET world in the last year. The two implementations of actor models are quite different. These differences are multi-faceted but today I want to focus on API to define an actor and to communicate to it.
+title: Building a Poker Bot: String and Number Recognition
+date: 2016-02-10
+tags: ["poker bot", "F#", "image recognition", "OCR"]
+teaser: TODO
 ---
 
-Akka.NET and Service Fabric are the two actor frameworks that emerged in .NET world in the last year.
-The two implementations of actor models are quite different. These differences are multi-faceted but
-today I want to focus on API to define an actor and to communicate to it.
+*This is the second part of **Building a Poker Bot** series where I describe my experience developing bot software 
+for online poker rooms. I'm building the bot with .NET framework and F# language which makes the task relatively 
+easy and very enjoyable. Here is the first part:
+[Building a Poker Bot: Card Recognition](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/)
+*
 
-Service Fabric Actors
----------------------
-
-Every actor in Service Fabric has a public interface which describes its behaviour. For this article
-I'm going to use a toy example based on weather reports. Our actor will be able to get whether reports
-and then return the maximum temperature for a given period. An instance of actor will be created
-for each city (geo partitioning). Here is our interface in Service Fabric:
-
-``` cs
-public interface IWeatherActor : IActor
-{
-    Task AddWeatherReport(WeatherReport report);
-
-    Task<int?> GetMaxTemperature(Period period);
-}
-```
-
-We have two operations: a command and a query. They are both async (return `Task`). The data classes
-are required to be mutable DTOs based on `DataContract`:
-
-``` cs
-[DataContract]
-public class WeatherReport
-{
-    [DataMember]
-    public DateTime Moment { get; set; }
-    [DataMember]
-    public int Temperature { get; set; }
-    [DataMember]
-    public int Humidity { get; set; }
-}
-
-[DataContract]
-public class Period
-{
-    [DataMember]
-    public DateTime From { get; set; }
-    [DataMember]
-    public DateTime Until { get; set; }
-}
-```
-
-And here is the implementation of the weather actor:
-
-``` cs
-internal class WeatherActor : StatefulActor<List<WeatherReport>>, IWeatherActor
-{
-    public Task AddWeatherReport(WeatherReport report)
-    {
-        this.State = this.State ?? new List<WeatherReport>();
-        this.State.Add(report);
-        return Task.FromResult(0);
-    }
-
-    public Task<int?> GetMaxTemperature(Period period)
-    {
-        return Task.FromResult(
-            (this.State ?? Enumerable.Empty<WeatherReport>())
-            .Where(r => r.Moment > period.From && r. Moment <= period.Until)
-            .Max(r => (int?)r.Temperature));
-    }
-}
-```
-
-Service Fabric provides reliable storage out of the box, so we are using it to
-store our reports. There's no code required to instantiate an actor. Here is the
-code to use it:
-
-``` cs
-// Submit a new report
-IWeatherActor actor = ActorProxy.Create<IWeatherActor>(new ActorId("Amsterdam"));
-actor.AddWeatherReport(
-    new WeatherReport { Moment = DateTime.Now, Temperature = 22, Humidity = 55 });
-
-// Make a query somewhere else
-IWeatherActor actor = ActorProxy.Create<IWeatherActor>(new ActorId("Amsterdam"));
-var result = actor.GetMaxTemperature(new Period { From = monthAgo, Until = now });
-```
-
-Akka.NET Actors
----------------
-
-Actors in Akka.NET are message-based. The messages are immutable POCOs, which 
-is a great design decision. Here are the messages for our scenario:
-
-``` cs
-public class WeatherReport
-{
-    public WeatherReport(DateTime moment, int temperature, int humidity)
-    {
-        this.Moment = moment;
-        this.Temperature = temperature;
-        this.Humidity = humidity;
-    }
-
-    public DateTime Moment { get; }
-    public int Temperature { get; }
-    public int Humidity { get; }
-}
-
-public class Period
-{
-    public Period(DateTime from, DateTime until)
-    {
-        this.From = from;
-        this.Until = until;
-    }
-
-    public DateTime From { get; }
-    public DateTime Until { get; }
-}
-
-```
-
-There's no need to define any interfaces. The basic actor implementation derives from
-`ReceiveActor` and calls `Receive` generic method to setup a callback which is called
-when a message of specified type is received:
-
-``` cs
-public class WeatherActor : ReceiveActor
-{
-    private List<WeatherReport> state = new List<WeatherReport>();
-
-    public WeatherActor()
-    {
-        Receive<WeatherReport>(this.AddWeatherReport);
-        Receive<Period>(this.GetMaxTemperature);
-    }
-
-    public void AddWeatherReport(WeatherReport report)
-    {
-        this.state.Add(report);
-    }
-
-    public void GetMaxTemperature(Period period)
-    {
-        var response = this.state
-            .Where(r => r.Moment > period.From && r. Moment <= period.Until)
-            .Max(r => (int?)r.Temperature);
-        Sender.Tell(response, Self);
-    }
-}
-```
-
-Note a couple more differences in this implementation comparing to Fabric style:
-
-- State is stored in a normal class field and is not persistent or replicated
-by default. This can be solved by Akka.NET Persistence, which would save all
-messages (and potentially snapshots) to the external database. Still, it won't
-be the same level of convenience as in-built Service Fabric statefullness.
-
-- `GetMaxTemperature` method does not return anything, because nobody would look
-at the returned value. Instead, it sends yet another message to the sender actor.
-So, `Request-Response` workflow is supported but is a bit less convenient and
-explicit.
-
-Let's have a look at the client code. `ActorSelection` is the closest notion to
-Fabric's `ActorProxy`: it does not create an actor, but just gets an endpoint
-based on the name. Note that Akka.NET actor needs to be explicitly created by
-another actor, but lifetime management is a separate discussion, so we'll skip 
-it for now. Here is the report sender:
-
-``` cs
-// Submit a new report
-var msg = new WeatherReport { Moment = DateTime.Now, Temperature = 22, Humidity = 55 };
-Context.ActorSelection("/user/weather/Amsterdam").Tell(msg);
-```
-
-Asking `ActorSelection` is not directly possible, we would need to setup an
-inbox and receive callback messages. We'll pretend that we have an `ActorRef`
-for the sake of simplicity:
-
-``` cs
-// Make a query somewhere else
-ActoRef actor = ... ; // we have it
-var result = await actor.Ask(new Period { From = monthAgo, Until = now });
-```
-
-The Best of Two Worlds
+Why string recognition
 ----------------------
 
-Now my goals is to come up with an implementation of Service Fabric actors with
-the properties that combine the good parts of both frameworks (without explicitly
-using Akka.NET), i.e.
+Reading some fixed images like cards is the first step. The bot should also
+be able to read different text-based information from the screen, e.g.
 
-- Use the full power of Service Fabric actors, including lifetime management,
-cluster management and reliable state
-- Use the simplicity of Request-Response pattern implementation of Service Fabric
-- Support immutable POCO messages instead of `DataContract` DTOs
-- Use `ReceiveActor`-like API for message processing
+- Current blind levels
+- Current pot size
+- The size of bets made by each player
+- Player names
+- Stack sizes
+- Chat messages (for advanced scenarios)
 
-Here is the third implementation of our Weather Actor (the definitions of messages
-from Akka.NET example are intact):
+We need this vital information to make proper decisions, so let's look at
+how to parse them.
 
-``` cs
-[ActorService(Name = "WeatherActor")]
-public class WeatherActor : StetefulReceiveActor<List<WeatherReport>>
-{
-    public WeatherActor()
-    {
-        Receive<WeatherReport>(this.AddWeatherReport);
-        Receive<Period, int>(this.GetMaxTemperature);
-    }
+New challenges
+--------------
 
-    public Task<List<WeatherReport>> AddWeatherReport(
-        List<WeatherReport> state, WeatherReport report)
-    {
-        state = state ?? new List<WeatherReport>();
-        state.Add(report);
-        return Task.FromResult(state);
-    }
+String recognition has some specific difficulties when compared to fixed
+images like cards:
 
-    public Task<int?> GetMaxTemperature(List<WeatherReport> state, Period period)
-    {
-        return Task.FromResult(
-            (state ?? Enumerable.Empty<WeatherReport>())
-            .Where(r => r.Moment > period.From && r. Moment <= period.Until)
-            .Max(r => (int?)r.Temperature));
-    }
-}
+- The size of string is not predefined. Obviously, the longer the string, the
+more space it takes on the screen
+- The position of string is not fixed either. Some strings are aligned to
+the center, others may diverge based on other variable parts like stakes or blinds
+- Different strings might be rendered in different font size
+
+Here is what needs to be done to overcome these complications:
+
+- Pick the layout which makes your life easier 
+- Adjust fonts and positions if possible 
+- Make sure that all important strings are always visible and not overlapping to other information
+- For each string define a region where it belongs to in 100% cases. The background
+of this region should be more or less evenly filled with a color in contrast to the font color.
+
+String recognition steps
+------------------------
+
+Again we start with a screenshot of a poker table:
+
+We know our fixed regions where our labels are located, so we take those
+regions for processing:
+
+For each region we trim away the blank lines around the text (i.e. left,
+top, right and bottom padding):
+
+We find dark lines between bright symbols and we consider them as gaps
+between symbols:
+
+The final step is to compare each symbol with known patterns and find the best
+match (in case of my layout the match for symbols is always 100% perfect). Let's 
+look how these steps are implemented.
+
+Removing padding around the text
+--------------------------------
+
+Because the padding is removed from all 4 sides of the region, I decided to use
+`Array2D` data type to be able to iterate in different order. The whole algorithm operates
+with black or white points defined as a helper type:
+
+``` fs
+type BW = B | W
 ```
 
-The base `ReceiveActor` class is not defined yet, we'll do it in the next section. Here is
-how it's being used:
+So the `removePadding` function has type of `BW[,] -> BW[,]` and looks
+like this:
 
-- The base class is generic and it accepts the type of the state (similar to normal Fabric actors)
-- Constructor registers two `Receive` handlers: message handler and request handler. Note
-that the later one accepts two type parameters: request type and response type
-- Both handlers get the current state as the first argument instead of pulling it from the property of
-the base class
-- The both return `Task`'ed data. Message handler is allowed to change the state, while
-request handler does  not change the state but just returns the response back
-- `ServiceName` attribute is required because there are (may be) multiple classes implementing
-the same interface
+``` fs
+let removePadding pixels =
+  let allBlack s = Seq.exists ((=) W) s
+  let maxWidth = Array2D.length1 pixels - 1
+  let maxHeight = Array2D.length2 pixels - 1
+  let firstX = [0..maxWidth] 
+    |> Seq.tryFindIndex (fun y -> allBlack pixels.[y, 0..maxHeight])
+  let lastX = [0..maxWidth] 
+    |> Seq.tryFindIndexBack (fun y -> allBlack pixels.[y, 0..maxHeight])
+  let firstY = [0..maxHeight] 
+    |> Seq.tryFindIndex (fun x -> allBlack pixels.[0..maxWidth, x])
+  let lastY = [0..maxHeight] 
+    |> Seq.tryFindIndexBack (fun x -> allBlack pixels.[0..maxWidth, x])
 
-The client code uses our own `MessageActorProxy` class to create non-generic proxies which
-are capable to `Tell` (send a message one way) and `Ask` (do request and wait for response):
-
-``` cs
-// Submit a new report
-var actor = MessageActorProxy.Create(new ActorId("Amsterdam"), "WeatherActor");
-actor.Tell(new WeatherReport { Moment = DateTime.Now, Temperature = 22, Humidity = 55 });
-
-// Make a query somewhere else
-var actor = MessageActorProxy.Create(new ActorId("Amsterdam"), "WeatherActor");
-var result = actor.Ask(new Period { From = monthAgo, Until = now });
+  match (firstX, lastX, firstY, lastY) with
+  | (Some fx, Some lx, Some fy, Some ly) -> pixels.[fx..lx, fy..ly]
+  | _ -> Array2D.init 0 0 (fun _ _ -> B)
 ```
 
-Implementation of ReceiveActor
+The first part finds the amount of fully-black columns and rows in the array.
+Then, if white points are found, the second part returns a sub array based on
+the indeces, otherwise empty array is returned.
+
+Split the text into characters
 ------------------------------
 
-Let's start with the interface definition:
+First, we convert our 2D array into the list of lists, where each item in the
+top list represents a single column of pixels:
 
-``` cs
-public interface IReceiveActor : IActor
-{
-    Task Tell(string typeName, byte[] message);
-
-    [Readonly]
-    Task<byte[]> Ask(string typeName, byte[] message);
-}
+``` fs
+let pixelColumns =
+  [0..Array2D.length1 pixels - 1] 
+  |> Seq.map (fun x -> pixels.[x, 0..Array2D.length2 pixels - 1] |> List.ofArray)
 ```
 
-The two methods for `Tell` and `Ask` accept serializes data together with fully qualified
-type name. This will allow passing any kind of objects which can be handled by a serializer
-of choice (I used Newtonsoft JSON serializer).
+Then we can fold this list of columns into the symbols, where each symbol itself
+is the list of columns:
 
-Actor implementation derives from `StatefulActor` and uses another type/bytes pair to store
-the serialized state:
+``` fs
+let splitIntoSymbols (e : BW list) (state: BW list list list) = 
+  match state with
+  | cur::rest ->
+      if isSeparator e then
+        match cur with
+        | _::_ -> []::state // add new list
+        | _ -> state        // skip if we already have empty item
+      else (e::cur)::rest   // add e to current list
+  | _ -> [[e]]
 
-``` cs
-    public abstract class StatefulReceiveActor : StatefulActor<StateContainer>, 
-                                                 IReceiveActor
-    {
-        // ...
-    }
-
-    [DataContract]
-    public class StateContainer
-    {
-        [DataMember]
-        public string TypeName { get; set; }
-
-        [DataMember]
-        public byte[] Data { get; set; }
-    }
+Seq.foldBack splitIntoSymbols pixelColumns []
 ```
 
-The simplistic implementation of `Receive` generic methods uses two dictionaries
-to store the handlers:
+The type of `state` is a bit of brain teaser, I guess it could be improved
+by introducing some intermediate type with descriptive name, but I decided
+to leave that part for now.
 
-``` cs
-private Dictionary<Type, Func<object, object, Task<object>>> handlers;
-private Dictionary<Type, Func<object, object, Task<object>>> askers;
+Match the symbols vs known patterns
+-----------------------------------
 
-public ReceiveActor()
-{
-    this.handlers = new Dictionary<Type, Func<object, object, Task<object>>>();
-    this.askers = new Dictionary<Type, Func<object, object, Task<object>>>();
-}
+This part was already described in [my first article](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/).
+Basically we compare the list of black or white points to the patterns of
+known symbols:
 
-protected void Receive<T>(Func<object, T, Task<object>> handler)
-    => this.handlers.Add(typeof(T), async (s, m) => await handler(s, (T)m));
-
-protected void Receive<TI, TO>(Func<object, TI, Task<TO>> asker)
-    => this.askers.Add(typeof(TI), async (s, m) => await asker(s, (TI)m));
-
+``` fs
+let getChar patterns bws =
+  let samePatterns h p =
+    Seq.zip h p
+    |> Seq.forall (fun (v1, v2) -> v1 = v2)
+  let matchingPattern = 
+    patterns 
+      |> Array.filter (fun p -> List.length p.Pattern = List.length bws)
+      |> Array.filter (fun p -> samePatterns bws p.Pattern)
+      |> Array.tryHead
+  defaultArg (Option.map (fun p -> p.Char) matchingPattern) '?'
 ```
 
-The `Tell` method deserializes the message and state, then picks a handler based on
-the message type, executes it and serializes the produced state back:
+Putting it all together
+-----------------------
 
-``` cs
-public async Task Tell(string typeName, byte[] message)
-{
-    var type = Type.GetType(typeName);
-    var typedMessage = this.serializer.Deserialize(message, type);
+The `recognizeString` function accepts lower-order functions to match 
+symbols and get pixels together with width and height of the region:
 
-    var typedState = this.State != null
-        ? this.serializer.Deserialize(this.State.Data, Type.GetType(this.State.TypeName))
-        : null;
-    var handler = this.handlers.FirstOrDefault(t => t.Key.IsAssignableFrom(type)).Value;
-    if (handler != null)
-    {
-        var newState = await handler(typedState, typedMessage);
-        this.State =
-            newState != null
-            ? new StateContainer 
-              { 
-                  Data = this.serializer.Serialize(newState), 
-                  TypeName = newState.GetType().AssemblyQualifiedName 
-              }
-            : null;
-    }
-}
+``` fs
+recognizeString: (BW list list -> char) -> (int -> int -> color) -> int -> int -> string
 ```
 
-The implementation of `Ask` is almost identical, so I'll skip it. `MessageActorProxy` 
-encapsulates the serialization around passing data to normal `ActorProxy` class:
+It builds an array of pixels, removes padding and folds with recognition.
 
-``` cs
-public class MessageActorProxy
-{
-    private readonly IStatefulMessageActor proxy;
-    private readonly ISerializer serializer = new JsonByteSerializer();
+``` fs
+let recognizeString matchSymbol getPixel width height =
 
-    private MessageActorProxy(ActorId actorId, string serviceName)
-    {
-        this.proxy = ActorProxy.Create<IReceiveActor>(actorId, serviceName: serviceName);
-    }
+  let pixels = 
+    Array2D.init width height (fun x y -> isWhite (getPixel x y))
+    |> removePadding
 
-    public async Task Tell(object message)
-    {
-        var serialized = this.serializer.Serialize(message);
-        await this.proxy.Send(message.GetType().AssemblyQualifiedName, serialized);
-    }
+  let pixelColumns =
+    [0..Array2D.length1 pixels - 1] 
+    |> Seq.map (fun x -> pixels.[x, 0..Array2D.length2 pixels - 1] |> List.ofArray)      
 
-    public async Task<T> Ask<T>(object message)
-    {
-        var serialized = this.serializer.Serialize(message);
-        var fullName = message.GetType().AssemblyQualifiedName;
-        var response = await this.proxy.Ask(fullName, serialized);
-        return (T)this.serializer.Deserialize(response, typeof(T));
-    }
-
-    public static MessageActorProxy Create(ActorId actorId, string serviceType)
-    {
-        return new MessageActorProxy(actorId, serviceType);
-    }
-}
+  Seq.foldBack splitIntoSymbols pixelColumns []
+  |> List.map matchSymbol
+  |> Array.ofSeq
+  |> String.Concat
 ```
 
-Let's briefly wrap it up.
+Then we use it with a specific recognition patterns, e.g. known digits in case
+of numbers recognition:
+
+``` fs
+let recognizeNumber x =
+  recognizeString (getChar numberPatterns) x
+```
+
+A way to produce these patterns is discussed in [the previous part](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/).
 
 Conclusion
 ----------
 
-At this stage Azure Service Fabric lacks support of some actor model best practices
-like message-based API and immutable POCO classes. At the same time, it provides
-super powerful setup regarding cluster resource management, state replication, fault
-tolerance and reliable communication. We can borrow some approaches that are used in Akka.NET
-framework to improve the developer experience who wants to leverage the power
-of Service Fabric.
+String recognition takes a bit more steps to implement comparing to the recognition
+of fixed objects. Nevertheless it's pretty straightforward to implement once
+we split it into small and well-understood conversion steps. The full code 
+for card recognition can be found in [my github repo](https://github.com/mikhailshilkov/mikhailio-samples/blob/master/StringRecognition.fs).
