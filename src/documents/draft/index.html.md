@@ -7,7 +7,7 @@ teaser: TODO
 ---
 
 *This is the second part of **Building a Poker Bot** series where I describe my experience developing bot software 
-for online poker rooms. I'm building the bot with .NET framework and F# language which makes the task relatively 
+to play in online poker rooms. I'm building the bot with .NET framework and F# language which makes the task relatively 
 easy and very enjoyable. Here is the first part:
 [Building a Poker Bot: Card Recognition](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/)
 *
@@ -15,7 +15,7 @@ easy and very enjoyable. Here is the first part:
 Why string recognition
 ----------------------
 
-Reading some fixed images like cards is the first step. The bot should also
+Reading cards and other fixed images was the first step. The bot should also
 be able to read different text-based information from the screen, e.g.
 
 - Current blind levels
@@ -26,7 +26,7 @@ be able to read different text-based information from the screen, e.g.
 - Chat messages (for advanced scenarios)
 
 We need this vital information to make proper decisions, so let's look at
-how to parse them.
+how to parse the textual data.
 
 New challenges
 --------------
@@ -34,9 +34,9 @@ New challenges
 String recognition has some specific difficulties when compared to fixed
 images like cards:
 
-- The size of string is not predefined. Obviously, the longer the string, the
+- The size of a string is not predefined. Obviously, the longer the string, the
 more space it takes on the screen
-- The position of string is not fixed either. Some strings are aligned to
+- The position of a string is not fixed either. Some strings are aligned to
 the center, others may diverge based on other variable parts like stakes or blinds
 - Different strings might be rendered in different font size
 
@@ -51,18 +51,26 @@ of this region should be more or less evenly filled with a color in contrast to 
 String recognition steps
 ------------------------
 
-Again we start with a screenshot of a poker table:
+We start with a screenshot of a poker table again:
+
+![Poker table screenshot](/table.png)
 
 We know our fixed regions where our labels are located, so we take those
 regions for processing:
 
-For each region we trim away the blank lines around the text (i.e. left,
+![Regions of string recognition](/regions.png)
+
+For each region we trim away the blank margins around the text (i.e. left,
 top, right and bottom padding):
 
-We find dark lines between bright symbols and we consider them as gaps
-between symbols:
+![Margins being removed](/nomargin.png)
 
-The final step is to compare each symbol with known patterns and find the best
+We find dark lines between bright symbols and we consider them as gaps
+between characters:
+
+![Split to characters](/splitchars.png)
+
+The final step is to compare each symbol to the known patterns and find the best
 match (in case of my layout the match for symbols is always 100% perfect). Let's 
 look how these steps are implemented.
 
@@ -101,13 +109,13 @@ let removePadding pixels =
 
 The first part finds the amount of fully-black columns and rows in the array.
 Then, if white points are found, the second part returns a sub array based on
-the indeces, otherwise empty array is returned.
+the indices, otherwise empty array is returned.
 
 Split the text into characters
 ------------------------------
 
 First, we convert our 2D array into the list of lists, where each item in the
-top list represents a single column of pixels:
+top-level list represents a single column of pixels:
 
 ``` fs
 let pixelColumns =
@@ -134,14 +142,15 @@ Seq.foldBack splitIntoSymbols pixelColumns []
 
 The type of `state` is a bit of brain teaser, I guess it could be improved
 by introducing some intermediate type with descriptive name, but I decided
-to leave that part for now.
+to leave that part for now. Read it as list of symbols, which are lists of
+columns, which are lists of pixels.
 
-Match the symbols vs known patterns
+Match the symbols vs the known patterns
 -----------------------------------
 
 This part was already described in [my first article](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/).
 Basically we compare the list of black or white points to the patterns of
-known symbols:
+the known symbols:
 
 ``` fs
 let getChar patterns bws =
@@ -198,7 +207,7 @@ A way to produce these patterns is discussed in [the previous part](http://mikha
 Conclusion
 ----------
 
-String recognition takes a bit more steps to implement comparing to the recognition
+String recognition takes a bit more steps to execute comparing to the recognition
 of fixed objects. Nevertheless it's pretty straightforward to implement once
 we split it into small and well-understood conversion steps. The full code 
 for card recognition can be found in [my github repo](https://github.com/mikhailshilkov/mikhailio-samples/blob/master/StringRecognition.fs).
