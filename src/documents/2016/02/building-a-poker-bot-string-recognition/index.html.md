@@ -1,5 +1,5 @@
 ---
-layout: draft
+layout: post
 title: Building a Poker Bot: String and Number Recognition
 date: 2016-02-10
 tags: ["poker bot", "F#", "image recognition", "OCR"]
