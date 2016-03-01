@@ -1,9 +1,9 @@
 ---
-layout: draft
+layout: post
 title: Building a Poker Bot: Mouse Movements
-date: 2016-02-25
+date: 2016-03-01
 tags: ["poker bot", "F#", "human-like behavior"]
-teaser: 
+teaser: In this short post I write about the last step of the poker bot flow: clicking the buttons. So, the screen is already recognized, the hand is understood, the decisions are made and now the bot needs to execute the actions. Except for the bet sizing, this simply means clicking the right button at the poker table. 
 ---
 
 *This is the third part of **Building a Poker Bot** series where I describe my experience developing bot software 
@@ -106,9 +106,9 @@ let sinStep (from:int) (until:int) (max:int) (index:int) =
 The following animation illustrates the concept: 
 
 <svg width="778" height="190" viewBox="0 0 500 190">
-  <image id="mouse1" x="0" y="20" width="16" height="16" xlink:href="mouse_cursor-16.png" />
-  <image id="mouse2" x="0" y="90" width="16" height="16" xlink:href="mouse_cursor-16.png" />
-  <image id="mouse3" x="0" y="160" width="16" height="16" xlink:href="mouse_cursor-16.png" />
+  <image id="mouse1" x="0" y="20" width="16" height="16" xlink:href="/2016/03/building-a-poker-bot-mouse-movements/mouse_cursor-16.png" />
+  <image id="mouse2" x="0" y="90" width="16" height="16" xlink:href="/2016/03/building-a-poker-bot-mouse-movements/mouse_cursor-16.png" />
+  <image id="mouse3" x="0" y="160" width="16" height="16" xlink:href="/2016/03/building-a-poker-bot-mouse-movements/mouse_cursor-16.png" />
 
   <animate xlink:href="#mouse1" attributeName="x" from="0" to="0" values="0;450;0" keyTimes="0;0.5;1" repeatCount="indefinite" dur="2s" begin="0s" fill="none" calcMode="discrete" id="img-anim1"/>
   <animate xlink:href="#mouse2" attributeName="x" from="0" to="0" values="0;450;0" keyTimes="0;0.5;1" repeatCount="indefinite" dur="2s" begin="0s" fill="none" id="img-anim2"/>
