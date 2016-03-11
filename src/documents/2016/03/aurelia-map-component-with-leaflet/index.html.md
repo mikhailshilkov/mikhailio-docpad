@@ -13,7 +13,7 @@ my map looks like:
 
 ![Map](/map.png)
 
-So, I assume you already have an existing aurelia application, and let's start.
+So, I assume you already have an existing Aurelia application, and let's start.
 
 Install Leaflet
 ---------------
@@ -83,7 +83,7 @@ let urlTemplate = 'http://www.mysite.com/tiles?layer=background&level={z}&x={x}&
 map.addLayer(L.tileLayer(urlTemplate, { minZoom: 4, zoomOffset: 8 }));
 ```
 
-The `zoomOffset` parameter was required to fix impedence mismatch of zoom levels.
+The `zoomOffset` parameter was required to fix impedance mismatch of zoom levels.
 
 Custom Overlay Layer
 --------------------
