@@ -3,7 +3,7 @@ layout: post
 title: Validation with Either data type in C#
 date: 2016-01-06
 tags: ["functional programming", "clean code"]
-teaser: In this article we will employ a functional monadic concept **Either** to make validation code more expressive and easier to maintain.
+teaser: In this article we will employ a functional monadic concept Either to make validation code more expressive and easier to maintain.
 ---
 
 In this article we will employ a functional monadic concept **Either** to make validation
@@ -176,3 +176,6 @@ Show me the code
 ----------------
 
 You can find the definition of `Either` class in my [github repo](https://github.com/mikhailshilkov/mikhailio-samples/blob/master/Either%7BTL%2CTR%7D.cs).
+
+**Update.** Here is a link to an awesome talk on this topic: 
+[Railway oriented programming: Error handling in functional languages by Scott Wlaschin](https://vimeo.com/113707214)

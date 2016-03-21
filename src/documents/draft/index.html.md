@@ -2,7 +2,7 @@
 layout: draft
 title: Building a Poker Bot with Akka.NET Actors
 date: 2016-02-25
-tags: ["poker bot", "F#", "akka.net", "actors"]
+tags: ["poker bot", "F#", "akka.net", "actor model"]
 teaser: 
 ---
 
