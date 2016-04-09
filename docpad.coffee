@@ -163,6 +163,8 @@ docpadConfig = {
                 ghpages:
                         deployRemote: 'target'
                         deployBranch: 'master'
+		paged:
+                        startingPageNumber: 2
 		cleanurls:
 			trailingSlashes: true
 
