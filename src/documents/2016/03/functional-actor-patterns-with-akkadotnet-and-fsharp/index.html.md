@@ -61,6 +61,7 @@ define
 
 ---
 
+<a name="MessageSink"></a>
 Message Sink
 ------------
 
@@ -106,6 +107,7 @@ complex example.
 
 ---
 
+<a name="Converter"></a>
 Converter
 ---------
 
@@ -205,6 +207,7 @@ printActorRef <! 4
 
 ---
 
+<a name="StatefulConverter"></a>
 Stateful Converter
 ------------------
 
@@ -258,6 +261,7 @@ squareAndSumActorRef <! 4
 
 ---
 
+<a name="ConverterSupervisor"></a>
 Converter-Supervisor
 --------------------
 
@@ -317,6 +321,7 @@ This hierarchy is handy whenever you need multiple instances of one actor type
 
 ---
 
+<a name="RouterSupervisor"></a>
 Router-Supervisor
 -----------------
 

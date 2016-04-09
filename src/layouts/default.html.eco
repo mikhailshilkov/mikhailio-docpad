@@ -70,7 +70,7 @@
 <%- @content %>
 <div class="container">
     <div class="navbar navbar-footer">
-        <p class="navbar-center navbar-text">Content copyright &copy; 2015 Mikhail Shilkov</p>
+        <p class="navbar-center navbar-text">Content copyright &copy; 2016 Mikhail Shilkov</p>
     </div>
 </div>
 

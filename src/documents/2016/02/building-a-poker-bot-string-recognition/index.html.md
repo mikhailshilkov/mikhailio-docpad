@@ -3,7 +3,7 @@ layout: post
 title: Building a Poker Bot: String and Number Recognition
 date: 2016-02-10
 tags: ["poker bot", "F#", "image recognition", "OCR"]
-teaser: This is the second part of **Building a Poker Bot** series where I describe my experience developing bot software to play in online poker rooms. Reading cards and other fixed images was the first step. The bot should also be able to read different text-based information from the screen.
+teaser: This is the second part of Building a Poker Bot series where I describe my experience developing bot software to play in online poker rooms. Reading cards and other fixed images was the first step. The bot should also be able to read different text-based information from the screen.
 ---
 
 *This is the second part of **Building a Poker Bot** series where I describe my experience developing bot software 
