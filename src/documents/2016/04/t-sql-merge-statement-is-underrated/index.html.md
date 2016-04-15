@@ -1,5 +1,5 @@
 ---
-layout: draft
+layout: post
 title: T-SQL MERGE statement is underrated
 date: 2016-04-15
 tags: ["T-SQL", "SQL Server", "Dapper"]
