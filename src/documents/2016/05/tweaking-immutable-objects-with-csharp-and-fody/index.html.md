@@ -1,7 +1,7 @@
 ---
-layout: draft
+layout: post
 title: Tweaking immutable objects with C# and Fody
-date: 2016-05-12
+date: 2016-05-13
 tags: ["Fody","functional programming","immutability","code generation"]
 ---
 
