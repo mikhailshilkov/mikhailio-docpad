@@ -54,7 +54,6 @@ public static class MonadExtensions
     public static Monad<T> Return<T>(this T instance) => new Monad<T>(instance);
 }
 ```
-
 Monads can be chained to create new monads
 ------------------------------------------
 
@@ -87,6 +86,7 @@ initialValue
 
 And that's about it. Let's have a look at some examples.
 
+<a name="maybe"></a>
 Example: Maybe (Option) type
 ----------------------------
 `Maybe` is the 101 monad which is used everywhere. `Maybe` is another approach to dealing
