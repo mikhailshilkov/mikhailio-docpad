@@ -79,7 +79,7 @@ all the parameters that are required for this sub-graph. Do not accept any param
 which are not related. 
 
 The last parameter of each function should be a 
-[Maybe](/2016/01/monads-explained-in-csharp/#maybe) of Decision,
+[Maybe](http://mikhail.io/2016/01/monads-explained-in-csharp/#maybe) of Decision,
 so should be the function's return type.
 
 **Produce a flat list** of all the sub-graph functions. Partially apply the parameters
