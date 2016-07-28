@@ -112,7 +112,7 @@ public class Maybe<T> where T : class
 
     public Maybe<TO> Bind<TO>(Func<T, Maybe<TO>> func)
     {
-        return value != null ? new Maybe<TO>(func(value)) : Maybe<TO>.None();
+        return value != null ? func(value) : Maybe<TO>.None();
     }
 
     public static Maybe<T> None() => new Maybe<T>();
