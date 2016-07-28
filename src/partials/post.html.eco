@@ -32,7 +32,7 @@ cacheable: false
       </table>
     </p>
 
-    See a mistake? <a href="https://github.com/mikhailshilkov/mikhailio-docpad/edit/master/src/documents<%= @url %>index.html.md">Edit this post!</a><br />
+    See a mistake? <a href="https://github.com/mikhailshilkov/mikhailio-docpad/edit/master/src/documents<%= @url %>/index.html.md">Edit this post!</a><br />
     <% end %>
 
     <% if @tags?: %>
