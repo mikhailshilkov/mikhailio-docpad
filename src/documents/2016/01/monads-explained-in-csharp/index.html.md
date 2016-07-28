@@ -115,7 +115,7 @@ public class Maybe<T> where T : class
         return value != null ? new Maybe<TO>(func(value)) : Maybe<TO>.None();
     }
 
-    public static Maybe<T> None() => new Maybe<T>(null);
+    public static Maybe<T> None() => new Maybe<T>();
 }
 ```
 
