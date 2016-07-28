@@ -86,7 +86,7 @@ public Both<Response, ValidationError> Validate(Request r)
 {
     return Valid(r) 
         ? new Both<Response, ValidationError> { Data = new Response(r) }
-        : new Both<Response, ValidationError> { Data = new ValidationError(...) };
+        : new Both<Response, ValidationError> { Error = new ValidationError(...) };
 }
 ```
 
