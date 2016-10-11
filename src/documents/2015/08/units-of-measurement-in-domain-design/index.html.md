@@ -154,7 +154,7 @@ And then we can write something like
 var distance = 10.0 * km;
 ```
 
-where liter is defined in that static class:
+where `km` is defined in that static class:
 
 ```cs
 public static class Constants
