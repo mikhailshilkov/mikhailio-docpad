@@ -2,7 +2,7 @@
 layout: draft
 title: Functional Thinking for C# devs: The Basics
 date: 2015-12-18
-tags: [""]
+tags: []
 teaser: TODO
 ---
 

@@ -2,7 +2,7 @@
 layout: draft
 title: Refactoring
 date: 2015-10-14
-tags: ["clean code"]
+tags: []
 teaser: TODO
 ---
 Let's say we have a service which receives some scanned documents and put them into the database. You are new to the code but you got an assignment to fix a bug or implement a change request. Here is the code that you see:

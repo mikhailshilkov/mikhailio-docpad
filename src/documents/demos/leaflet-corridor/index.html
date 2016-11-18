@@ -25,10 +25,11 @@
     }).addTo(map);
 
     var options = { 
+      corridor: 1000,
       className: 'route-corridor'
     };
 
-    var line = L.corridor(coords, 1000, options);
+    var line = L.corridor(coords, options);
     map.fitBounds(line.getBounds());
     map.addLayer(line);
   </script>
