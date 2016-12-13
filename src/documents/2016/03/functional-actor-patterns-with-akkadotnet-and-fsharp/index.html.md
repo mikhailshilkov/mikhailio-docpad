@@ -83,12 +83,11 @@ let print msg =
   printn "Message received: %A" msg
 ```
 
-So how do we make an actor out of this function? The `actorOf2` helper function
-from Akka.NET F# extensions comes into play:
+So how do we make an actor out of this function? Well, it's already implemented
+as `actorOf` helper function in Akka.NET F# extensions:
 
 ``` fs
-let actorOfSink (f : 'a -> unit) =
-  actorOf2 (fun _ msg -> f msg)
+let actorOfSink (f : 'a -> unit) = actorOf f
 ```
 
 And here is how we spawn an actor instance:
