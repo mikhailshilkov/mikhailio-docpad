@@ -2,7 +2,7 @@
 layout: post
 title: My Functional Programming & F# Talks at Webscale Architecture Meetup
 date: 2017-01-10
-tags: ["talk", "meetup", "functional programming", "fsharp", "slides"]
+tags: ["talk", "meetup", "functional programming", "F#", "slides"]
 ---
 
 On January 10th of 2017 I gave two talks at the
