@@ -2,7 +2,7 @@
 layout: post
 title: Comparing Scala to F#
 date: 2016-08-05
-tags: ["F#", "Scala", "Functional programming", "Coursera"]
+tags: ["F#", "scala", "functional programming", "coursera"]
 ---
 
 F# and Scala are quite similar languages from 10.000 feet view. Both are

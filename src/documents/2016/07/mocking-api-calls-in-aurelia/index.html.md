@@ -2,7 +2,7 @@
 layout: post
 title: Mocking API calls in Aurelia
 date: 2016-07-27
-tags: ["Aurelia", "BrowserSync", "REST", "API"]
+tags: ["aurelia", "browsersync", "REST", "API"]
 ---
 
 [Aurelia](http://aurelia.io) is a modern and slick single-page application framework. 

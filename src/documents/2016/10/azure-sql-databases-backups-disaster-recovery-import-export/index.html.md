@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Azure SQL Databases: backups, disaster recovery, import and export
+title: Azure SQL Databases: Backups, Disaster Recovery, Import and Export
 date: 2016-10-11
-tags: ["Azure", "Azure SQL Database", "Disaster recovery"]
+tags: ["azure", "azure sql database", "disaster recovery"]
 ---
 
 Azure SQL Database is a managed cloud database-as-a-service. It provides

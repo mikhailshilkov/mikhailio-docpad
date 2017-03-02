@@ -6,4 +6,4 @@ layout: page
 <div class="tag-title">
 <span class="tag-tagname"><%= @document.tag %></span> Posts
 </div>
-<%- @partial('abstract-list', { collection: @getCollection('posts').findAll({tags: '$in': @document.tag}) }) %>
+<%- @partial('abstract-list', { collection: @getCollection('posts').findAll({tags.toLowerCase(): '$in': @document.tag.toLowerCase()}) }) %>
