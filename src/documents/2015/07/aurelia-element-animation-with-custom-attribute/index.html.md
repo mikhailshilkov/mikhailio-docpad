@@ -2,7 +2,7 @@
 layout: post
 title: Aurelia element animation with custom attribute
 date: 2015-07-28
-tags: ["javascript","ES2015","Aurelia","animation"]
+tags: ["Javascript","Aurelia","Animation"]
 teaser: I've been exploring Aurelia javascript UI framework recently to get some experience needed for our next big project. One thing that I couldn't implement out of the box was a kind of animation. I have a grid of values bound to View Model. View Model communicates to server, receives any updates of data and the grid got immediately updated, all that works great with Aurelia. Now I want to highlight the cell which has just received an updated value with a small background animation...
 ---
 I've been exploring [Aurelia](http://aurelia.io) javascript UI framework recently to get some experience needed

@@ -2,7 +2,7 @@
 layout: post
 title: Aurelia Map Component with Leaflet
 date: 2016-03-11
-tags: ["aurelia", "leaflet", "typescript", "javascript", "maps"]
+tags: ["Aurelia", "Leaflet", "Typescript", "Javascript", "Maps"]
 teaser: This is a short tutorial on how to create a map control in [aurelia](http://aurelia.io) application. I am using the [Leaflet](http://leafletjs.com) library with custom tile source and I also show the way to implement your own overlay layer. Here is what my map looks like: ![Map](/map.png)
 ---
 

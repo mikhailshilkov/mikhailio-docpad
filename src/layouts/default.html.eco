@@ -48,8 +48,6 @@
                 <% for document in @getCollection('menuPages').toJSON(): %>
                     <li><a href="<%= document.url %>"><%= document.menu %></a></li>
                 <% end %>
-                <li><a href="/">Blog</a></li>
-                <li><a href="/about">About</a></li>
                 <li class="hidden-xs">
                     <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
                     <a href="https://www.linkedin.com/in/mikhailshilkov" class="linkedin"><span class="icon icon-linkedin"></span></a>
@@ -70,7 +68,7 @@
 <%- @content %>
 <div class="container">
     <div class="navbar navbar-footer">
-        <p class="navbar-center navbar-text">Content copyright &copy; 2016 Mikhail Shilkov</p>
+        <p class="navbar-center navbar-text">Content copyright &copy; 2017 Mikhail Shilkov</p>
     </div>
 </div>
 

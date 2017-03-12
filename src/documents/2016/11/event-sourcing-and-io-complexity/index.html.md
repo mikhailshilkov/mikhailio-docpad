@@ -2,7 +2,7 @@
 layout: post
 title: Event Sourcing and IO Complexity
 date: 2016-11-18
-tags: ["event sourcing", "cqrs"]
+tags: ["Event Sourcing", "CQRS"]
 ---
 
 **Event Sourcing** is an approach, when an append-only store is used to record the full series of events that 

@@ -2,7 +2,7 @@
 layout: post
 title: Building a Poker Bot: Mouse Movements
 date: 2016-03-01
-tags: ["poker bot", "F#", "human-like behavior"]
+tags: ["Poker Bot", "F#", "Human-like Behavior"]
 teaser: In this short post I write about the last step of the poker bot flow: clicking the buttons. So, the screen is already recognized, the hand is understood, the decisions are made and now the bot needs to execute the actions. Except for the bet sizing, this simply means clicking the right button at the poker table. 
 ---
 

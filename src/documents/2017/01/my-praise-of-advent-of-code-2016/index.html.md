@@ -2,7 +2,7 @@
 layout: post
 title: My Praise of Advent of Code 2016
 date: 2017-01-26
-tags: ["F#", "programming puzzles", "advent of code"]
+tags: ["F#", "Programming Puzzles", "Advent of Code", "Programming Puzzles"]
 ---
 
 During the last days of December I was pleasing my internal need for solving 

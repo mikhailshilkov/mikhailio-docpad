@@ -2,7 +2,7 @@
 layout: post
 title: Dependency Inversion Implies Interfaces Are Owned by High-level Modules
 date: 2016-05-27
-tags: ["solid","dependency inversion","dependency injection","clean code"]
+tags: ["SOLID","Dependency Inversion","Dependency Injection","Clean Code"]
 ---
 
 Dependency Inversion is one of the five principles of widely known and 

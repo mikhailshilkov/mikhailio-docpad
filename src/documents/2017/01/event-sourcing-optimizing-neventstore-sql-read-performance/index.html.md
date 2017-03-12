@@ -2,7 +2,7 @@
 layout: post
 title: Event Sourcing: Optimizing NEventStore SQL read performance
 date: 2017-01-29
-tags: ["event sourcing", "neventstore", "sql server", "performance"]
+tags: ["Event Sourcing", "NEventStore", "SQL Server", "Performance"]
 ---
 
 In [my previous post about Event Store read complexity](http://mikhail.io/2016/11/event-sourcing-and-io-complexity/) 

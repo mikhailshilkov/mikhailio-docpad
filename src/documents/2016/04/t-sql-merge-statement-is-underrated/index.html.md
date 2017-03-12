@@ -2,7 +2,7 @@
 layout: post
 title: T-SQL MERGE statement is underrated
 date: 2016-04-15
-tags: ["T-SQL", "SQL Server", "dapper"]
+tags: ["T-SQL", "SQL Server", "Dapper"]
 ---
 
 How many times did you write a SQL to **save** a row without knowing whether the same

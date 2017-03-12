@@ -2,7 +2,7 @@
 layout: post
 title: Leaflet plugin to render geographic corridors
 date: 2016-10-17
-tags: ["leaflet", "maps"]
+tags: ["Leaflet", "Maps"]
 ---
 
 Yesterday I've published a simple [Leaflet](http://leafletjs.com/) plugin called

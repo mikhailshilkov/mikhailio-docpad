@@ -2,7 +2,7 @@
 layout: post
 title: Building a Poker Bot with Akka.NET Actors
 date: 2016-04-09
-tags: ["poker bot", "F#", "akka.net", "actor model", "functional programming"]
+tags: ["Poker Bot", "F#", "Akka.NET", "Actor Model", "Functional Programming"]
 teaser: This post lays out the most exciting part of the bot. I'll compose the recognition, flow, decision and mouse clicking parts together into the bot application. The application is a console executable interacting with multiple windows of poker room software.
 
 ---

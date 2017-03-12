@@ -2,7 +2,7 @@
 layout: post
 title: Unit testing Dapper repositories
 date: 2016-02-23
-tags: ["unit testing", "dapper", "ORM", "TDD"]
+tags: ["Unit Testing", "Dapper", "ORM", "TDD"]
 teaser: Dapper is a micro-ORM library which is very simple and super fast. In our projects we use Dapper for the tasks where something like EntityFramework or NHibernate would be an overkill. Quite often the data access code is difficult to be unit tested. Objects like database connections, commands, transactions and contexts are hard to mock, and thus the data access code is not easily isolated. Dapper relies heavily on SQL statements inside C# code, which gives an extra complication. Some people would argue that unit tests are not warranted for data access layer, and integration tests should be used instead. Let's have a look at another possibility.
 ---
 

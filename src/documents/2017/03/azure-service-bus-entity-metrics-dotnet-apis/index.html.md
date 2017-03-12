@@ -2,7 +2,7 @@
 layout: post
 title: Azure Service Bus Entity Metrics .NET APIs
 date: 2017-03-02
-tags: ["azure", "azure service bus", "metrics", "monitoring"]
+tags: ["Azure", "Azure Service Bus", "Metrics", "Monitoring"]
 ---
 
 Azure Service Bus is a key component of many background processing applications

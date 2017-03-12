@@ -1,7 +1,9 @@
 ---
 layout: page
-title: About
-date: 2016-06-08
+title: About me
+priority: 0.3
+menu: About
+menuOrder: 3
 ---
 
 Hi!

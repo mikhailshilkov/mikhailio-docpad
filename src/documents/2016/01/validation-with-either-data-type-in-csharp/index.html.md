@@ -2,7 +2,7 @@
 layout: post
 title: Validation with Either data type in C#
 date: 2016-01-06
-tags: ["functional programming", "clean code"]
+tags: ["Functional Programming", "Clean Code"]
 teaser: In this article we will employ a functional monadic concept Either to make validation code more expressive and easier to maintain.
 ---
 

@@ -2,7 +2,7 @@
 layout: post
 title: Coding Puzzle in F#: Find the Number of Islands
 date: 2017-02-01
-tags: ["F#", "programming puzzles"]
+tags: ["F#", "Programming Puzzles"]
 ---
 
 Here's a programming puzzle. Given 2D matrix of 0's and 1's, find the number of islands. 

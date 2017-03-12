@@ -2,7 +2,7 @@
 layout: post
 title: Unit testing null parameter checks
 date: 2015-04-08
-tags: ["unit testing","dependency injection","guard","clean code","best practices","reflection","C#","code samples","TDD"]
+tags: ["Unit Testing","Dependency Injection","Guard","Clean Code","Best Practices","Reflection","C#","TDD"]
 teaser: We use constructor dependency injection throughout our application. This means that most service classes have constructors, which accept all dependencies in form of interfaces. They are then saved to private fields to be used while class methods are executed. We also use TDD, which means we must write unit tests for every aspect of our code. So I want to discuss one specific aspect: guarding the constructor parameters from null values and testing this guard. 
 ---
 We use constructor dependency injection throughout our application. This means that most service classes have constructors, which accept all dependencies in form of interfaces. They are then saved to private fields to be used while class methods are executed. Here is an example (all examples below are in C#):

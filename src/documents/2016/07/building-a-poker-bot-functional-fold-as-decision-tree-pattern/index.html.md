@@ -2,7 +2,7 @@
 layout: post
 title: Building a Poker Bot: Functional Fold as Decision Tree Pattern
 date: 2016-07-22
-tags: ["F#", "poker bot", "functional programming"]
+tags: ["F#", "Poker Bot", "Functional Programming"]
 ---
 
 *This is the fifth part of **Building a Poker Bot** series where I describe my experience developing bot software 

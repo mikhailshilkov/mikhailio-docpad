@@ -1,0 +1,23 @@
+---
+layout: page
+title: Topics
+priority: 0.3
+menu: Topics
+menuOrder: 1
+---
+
+<% for topic in ['Azure', 'F#', 'Actor Model', 'Event Sourcing', 'Functional Programming', 'Poker Bot', 'Aurelia', 'Clean Code']: %>
+  <h1 class="abstract2-section"><a href="/tags/<%= @getTagUrl(topic) %>"><%= topic %></a></h1>
+  <% for document in @getFiles(tags: $has: topic, { date: -1 }).toJSON(): %>
+    <% date = @moment(document.date) %>
+    <div class="abstract">
+        <div class="abstract2-title"><a href="<%= document.url %>"><%= document.title %></a></div>
+        <% if document.tags?: %>
+        <div class="abstract2-date"><%= date.format("D MMM YYYY") %></div>
+        <div class="abstract2-tags">
+            Posted In: <%- ("<a href='/tags/#{@getTagUrl(tag)}'>#{tag}</a>" for tag in document.tags).join(', ') %>
+        </div>
+        <% end %>
+    </div>
+  <% end %>
+<% end %>

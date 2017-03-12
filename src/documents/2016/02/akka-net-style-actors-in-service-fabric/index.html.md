@@ -2,7 +2,7 @@
 layout: post
 title: Akka.NET-style actors in Service Fabric
 date: 2016-02-08
-tags: ["service fabric", "akka.net", "actor model"]
+tags: ["Service Fabric", "Akka.NET", "Actor Model"]
 teaser: Akka.NET and Service Fabric are the two actor frameworks that emerged in .NET world in the last year. The two implementations of actor models are quite different. These differences are multi-faceted but today I want to focus on API to define an actor and to communicate to it.
 ---
 

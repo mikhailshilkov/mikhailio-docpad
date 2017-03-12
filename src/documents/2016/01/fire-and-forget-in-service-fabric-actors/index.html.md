@@ -2,7 +2,7 @@
 layout: post
 title: Fire-and-forget in Service Fabric actors
 date: 2016-01-13
-tags: ["actor model", "azure", "akka.net", "service fabric"]
+tags: ["Actor Model", "Azure", "Akka.NET", "Service Fabric"]
 teaser: At the [recent Webscale Architecture meetup](http://www.meetup.com/Webscale-Architecture-NL/events/225979118/) we discussed two implementations of the Actor model in the .NET ecosystem: [Akka.NET](http://akka.net) and [Azure Service Fabric Actors](https://azure.microsoft.com/en-us/documentation/articles/service-fabric-reliable-actors-introduction/). One important discussion was around **Ask** vs **Tell** call model. With **Tell** model, the Sender just sends the message to the Recipient without waiting for a result to come back. **Ask** model means the Sender will at some point get a response back from the Receiver, potencially blocking its own execution.
 ---
 

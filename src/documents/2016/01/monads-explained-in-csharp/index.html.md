@@ -2,7 +2,7 @@
 layout: post
 title: Monads explained in C#
 date: 2016-01-25
-tags: ["functional programming", "monads", "maybe", "LINQ"]
+tags: ["Functional Programming", "Monads", "Maybe", "LINQ"]
 teaser: It looks like there is a mandatory post that every blogger who learns functional programming should write: what a Monad is. Monads have the reputation of being something very abstract and very confusing for every developer who is not a hipster Haskell programmer. They say that once you understand what a monad is, you loose the ability to explain it in simple language. Doug Crockford was the first one to lay this rule down, but it becomes kind of obvious once you read 3 or 5 "explanations" on the web. Here is my attempt.
 ---
 
