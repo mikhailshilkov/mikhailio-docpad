@@ -109,7 +109,7 @@ public static Distance FromKilometers(double kilometers)
 
 public static Distance FromMeters(double meters)
 {
-    return new Distance(kilometers / 1000.0);
+    return new Distance(meters / 1000.0);
 }
 ```
 

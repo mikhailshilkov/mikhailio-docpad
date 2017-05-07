@@ -114,12 +114,12 @@ it's called `option` type. Here is a sample implementation in C#:
 ``` cs
 public class Maybe<T> where T : class
 {
-    private T value;
+    private readonly T value;
 
     public Maybe(T someValue)
     {
         if (someValue == null)
-            throw new AgrumentNullException(nameof(someValue));
+            throw new ArgumentNullException(nameof(someValue));
         this.value = someValue;
     }
 
@@ -127,7 +127,7 @@ public class Maybe<T> where T : class
     {
     }
 
-    public Maybe<TO> Bind<TO>(Func<T, Maybe<TO>> func)
+    public Maybe<TO> Bind<TO>(Func<T, Maybe<TO>> func) where TO : class
     {
         return value != null ? func(value) : Maybe<TO>.None();
     }
@@ -139,7 +139,7 @@ public class Maybe<T> where T : class
 ``` cs
 public static class MaybeExtensions
 {
-    public static Maybe<T> Return<T>(T value)
+    public static Maybe<T> Return<T>(this T value) where T : class
     {
         return value != null ? new Maybe<T>(value) : Maybe<T>.None();
     }
