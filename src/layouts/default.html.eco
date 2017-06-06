@@ -51,11 +51,11 @@
                 <li class="hidden-xs">
                     <a href="/feed/" class="rss"><span class="icon icon-feed"></span></a>
                     <a href="https://www.linkedin.com/in/mikhailshilkov" class="linkedin"><span class="icon icon-linkedin"></span></a>
-                    <a href="http://twitter.com/mikhailshilkov" class="twitter"><span class="icon icon-twitter"></span></a>
+                    <a href="https://twitter.com/mikhailshilkov" class="twitter"><span class="icon icon-twitter"></span></a>
                     <a href="https://github.com/mikhailshilkov" class="github"><span class="icon icon-github"></span></a>
                 </li>
             </ul>
-            <form class="navbar-form navbar-right hidden-xs" role="search" action="http://google.com/search"
+            <form class="navbar-form navbar-right hidden-xs" role="search" action="https://google.com/search"
                   method="get">
                 <div class="form-group">
                     <input type="search" name="q" class="form-control" placeholder="Search">

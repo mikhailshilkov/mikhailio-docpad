@@ -34,8 +34,8 @@ Currently, I work at [Astrata Europe](http://astrata.eu) as a Senior engineer.
 
 You can contact me at:
 <p>
-<a href="http://twitter.com/mikhailshilkov">Twitter</a> &#8226;
+<a href="https://twitter.com/mikhailshilkov">Twitter</a> &#8226;
 <a href="https://www.linkedin.com/in/mikhailshilkov/">LinkedIn</a> &#8226;
 <a href="https://github.com/mikhailshilkov">GitHub</a> &#8226;
-<a href="http://stackoverflow.com/users/1171619/mikhail">Stack Overflow</a>
+<a href="https://stackoverflow.com/users/1171619/mikhail">Stack Overflow</a>
 </p>

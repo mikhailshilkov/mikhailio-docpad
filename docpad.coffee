@@ -16,7 +16,7 @@ docpadConfig = {
 		site:
 			# The production url of our website
 			# If not set, will default to the calculated site URL (e.g. http://localhost:9778)
-			url: "http://mikhail.io"
+			url: "https://mikhail.io"
 
 			# Here are some old site urls that you would like to redirect from
 			oldUrls: [
@@ -151,6 +151,8 @@ docpadConfig = {
 
 
 	plugins:
+		cleanurls:
+                       trailingSlashes: true
                 tags:
                        extension: '/index.html.eco'
                        injectDocumentHelper: (document) ->
@@ -161,12 +163,10 @@ docpadConfig = {
                                    """
                               )
                 ghpages:
-                        deployRemote: 'target'
-                        deployBranch: 'master'
+                       deployRemote: 'target'
+                       deployBranch: 'master'
 		paged:
-                        startingPageNumber: 2
-		cleanurls:
-			trailingSlashes: true
+                       startingPageNumber: 2
 
 	# =================================
 	# DocPad Events
