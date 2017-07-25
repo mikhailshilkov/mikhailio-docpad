@@ -337,6 +337,97 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req)
 }
 ```
 
+Combine Several Metrics in One Sensor
+-------------------------------------
+
+Thanks to suggestion from Luciano Lingnau, we have migrated our PRTG
+sensors to `HTTP Data Advanced`. This sensor type allows bundling several 
+related metrics into one sensor with multiple channels. PRTG is then
+able to display all those channels on the single chart.
+
+For instance, we use the following channels for Service Bus related
+sensors:
+
+- Active message count
+- Age of the oldest message sitting inside the queue
+- Dead letter message count
+- Incoming messages per 5 minutes
+- Outgoing messages per 5 minutes
+- Scheduled message count
+
+For each channel, we define units of measure, warning and error thresholds.
+
+`HTTP Data Advanced` expects a URL which returns JSON of the predefined format.
+Here is a sample C# code to create a `dynamic` object which is then converted
+to the proper JSON:
+
+``` cs
+return new
+{
+    prtg = new
+    {
+        result = new[]
+        {
+            new
+            {
+                channel = "ActiveMessageCount",
+                value = messageCountDetails.ActiveMessageCount,
+                unit = "Count",
+                customunit = (string)null,
+                limitmaxwarning = (int?)null,
+                limitmode = 0
+            },
+            new
+            {
+                channel = "DeadLetterMessageCount",
+                value = messageCountDetails.DeadLetterMessageCount,
+                unit = "Count",
+                customunit = (string)null,
+                limitmaxwarning = (int?)0,
+                limitmode = 1
+            },
+            new
+            {
+                channel = "OutgoingMessageCount",
+                value = outgoing,
+                unit = "custom",
+                customunit = "#/5min",
+                limitmaxwarning = (int?)null,
+                limitmode = 0
+            },
+            new
+            {
+                channel = "IncommingMessageCount",
+                value = incoming,
+                unit = "custom",
+                customunit = "#/5min",
+                limitmaxwarning = (int?)null,
+                limitmode = 0
+            },
+            new
+            {
+                channel = "ScheduledMessageCount",
+                value = messageCountDetails.ScheduledMessageCount,
+                unit = "Count",
+                customunit = (string)null,
+                limitmaxwarning = (int?)null,
+                limitmode = 0
+            },
+            new
+            {
+                channel = "Age",
+                value = age,
+                unit = "TimeSeconds",
+                customunit = (string)null,
+                limitmaxwarning = (int?)null,
+                limitmode = 0
+            } 
+        }
+    }
+};
+
+```
+
 Conclusion
 ----------
 
