@@ -284,6 +284,10 @@ public static async Task<HttpResponseMessage> Run(HttpRequestMessage req)
 }
 ```
 
+Please follow [this walkthrough](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal#create-an-active-directory-application)
+to setup your application in Active Directory, assign required permissions and
+get the proper keys.
+
 Users Online
 ------------
 

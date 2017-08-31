@@ -173,10 +173,10 @@ Shipper shipperOfLastOrderOnCurrentAddress = null;
 var customer = repo.GetCustomer(customerId);
 if (customer?.Address != null)
 {
-    var address = repo.GetAddress(c.Address.Id);
+    var address = repo.GetAddress(customer.Address.Id);
     if (address?.LastOrder != null)
     {
-        var order = repo.GetOrder(a.LastOrder.Id);
+        var order = repo.GetOrder(address.LastOrder.Id);
         shipperOfLastOrderOnCurrentAddress = order?.Shipper;
     }
 }
