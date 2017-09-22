@@ -1,9 +1,9 @@
 ---
 layout: page
 title: About me
-priority: 0.3
+priority: 0.4
 menu: About
-menuOrder: 3
+menuOrder: 4
 ---
 
 Hi!

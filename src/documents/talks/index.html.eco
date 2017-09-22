@@ -1,0 +1,44 @@
+---
+layout: page
+title: Talks
+priority: 0.3
+menu: Talks
+menuOrder: 3
+---
+<div class="abstract">
+    <div class="abstract-year">2017</div>
+    <div class="abstract-date">Oct 13</div>
+    <div class="abstract-title">(Upcoming) Event-Driven Applications in F#
+    </div>
+    <div class="abstract-tags">
+        at 
+        <a href="http://techdays.nl" target="_blank">Tech Days NL</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-date">Aug 25</div>
+    <div class="abstract-title">Built with Aurelia: Trip Monitor
+    </div>
+    <div class="abstract-tags">
+        <a href='https://youtu.be/GVjTCqSjQwo' target="_blank">Video</a> at 
+        <a href="https://www.meetup.com/Aurelia-Amsterdam-meetup/events/240956823/" target="_blank">Aurelia Amsterdam Meetup</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-date">May 8</div>
+    <div class="abstract-title">Why Learn F# and Functional Programming</a>
+    </div>
+    <div class="abstract-tags">
+        <a href='https://www.slideshare.net/MikhailShilkov/why-learn-f-and-functional-programming' target="_blank">Slides</a> at 
+        <a href="https://www.meetup.com/dotNET-Development-Nederland/events/239327172/" target="_blank">.NET Development Nederland</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-date">Jan 12</div>
+    <div class="abstract-title">Introduction of Functional Programming & Taste of F#</div>
+    <div class="abstract-tags">
+        <a href='https://www.slideshare.net/MikhailShilkov/why-learn-f-and-functional-programming' target="_blank">Slides 1 (Why FP)</a>, 
+        <a href='https://www.slideshare.net/MikhailShilkov/the-taste-of-f' target="_blank">Slides 2 (Taste of F#)</a> at
+        <a href='https://www.meetup.com/Webscale-Architecture-NL/events/235727572/' target="_blank">Webscale Architecture Meetup</a>
+    </div>
+</div>
