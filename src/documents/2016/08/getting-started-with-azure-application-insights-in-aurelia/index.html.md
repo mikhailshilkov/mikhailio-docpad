@@ -2,7 +2,7 @@
 layout: post
 title: Getting started with Azure Application Insights in Aurelia
 date: 2016-08-21
-tags: ["Azure", "Appliction Insights", "Aurelia", "Javascript", "Typescript"]
+tags: ["Azure", "Application Insights", "Aurelia", "Javascript", "Typescript"]
 ---
 
 [Azure Application Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-overview/)
