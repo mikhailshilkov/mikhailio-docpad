@@ -5,11 +5,17 @@ date: 2017-10-05
 tags: ["Azure", "Azure Functions", "Azure Event Grid"]
 ---
 
-As of today, I wasn't able to find any walkthrough of how to trigger an
-Azure Function from [Azure Event Grid](https://azure.microsoft.com/en-us/services/event-grid/) 
-events.
+*Update: I missed the elephant in the room. There actually exists a specialized
+trigger for Event Grid binding. In the portal, just select `Experimental`
+in `Scenario` drop down while creating the function. In precompiled 
+functions, reference `Microsoft.Azure.WebJobs.Extensions.EventGrid` NuGet
+package.*
 
-So, I decided to come up with my own. Here are the steps to follow:
+*The rest of the article describes my original approach to trigger an
+Azure Function from [Azure Event Grid](https://azure.microsoft.com/en-us/services/event-grid/) 
+with generic Web Hook trigger.*
+
+Here are the steps to follow:
 
 Create a Function with Webhook Trigger
 --------------------------------------
