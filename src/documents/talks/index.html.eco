@@ -7,10 +7,20 @@ menuOrder: 3
 ---
 <div class="abstract">
     <div class="abstract-year">2017</div>
-    <div class="abstract-date">Oct 13</div>
-    <div class="abstract-title">(Upcoming) Event-Driven Applications in F#
+    <div class="abstract-date">Nov 8</div>
+    <div class="abstract-title">(Upcoming) Azure F#unctions
     </div>
     <div class="abstract-tags">
+        at 
+        <a href="https://www.meetup.com/FSharping/events/244137693/" target="_blank">FSharping</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-date">Oct 13</div>
+    <div class="abstract-title">Event Driven Applications in F#
+    </div>
+    <div class="abstract-tags">
+        <a href="https://www.slideshare.net/MikhailShilkov/event-driven-applications-in-f" target="_blank">Slides</a> at 
         at 
         <a href="http://techdays.nl" target="_blank">Tech Days NL</a>
     </div>
