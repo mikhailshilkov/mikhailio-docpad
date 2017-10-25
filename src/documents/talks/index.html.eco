@@ -20,6 +20,7 @@ menuOrder: 3
     <div class="abstract-title">Event Driven Applications in F#
     </div>
     <div class="abstract-tags">
+        <a href='https://www.youtube.com/watch?v=iTL9QQ_VQj8' target="_blank">Video</a>
         <a href="https://www.slideshare.net/MikhailShilkov/event-driven-applications-in-f" target="_blank">Slides</a>
         at 
         <a href="http://techdays.nl" target="_blank">Tech Days NL</a>
