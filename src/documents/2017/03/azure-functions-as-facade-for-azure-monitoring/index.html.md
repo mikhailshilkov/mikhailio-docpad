@@ -288,6 +288,68 @@ Please follow [this walkthrough](https://docs.microsoft.com/en-us/azure/azure-re
 to setup your application in Active Directory, assign required permissions and
 get the proper keys.
 
+Azure Health
+------------
+
+Azure has a service which reports the health of different services at any
+given moment, as acknowledged by Microsoft.
+
+The handy part is that you can provide your subscription ID and then only
+services used by that subscription will be reported.
+
+The exact usage of health service may depend on your use case, but the
+following example shows how to retrieve the basic counts of services per
+reported status.
+
+
+``` cs
+public class ResourceProperties
+{
+    public string availabilityState { get; set; }
+    public string summary { get; set; }
+    public string detailedStatus { get; set; }
+    public string reasonType { get; set; }
+    public string occuredTime { get; set; }
+    public string reasonChronicity { get; set; }
+    public string reportedTime { get; set; }
+}
+public class Resource
+{
+    public string id { get; set; }
+    public ResourceProperties properties { get; set; }
+}
+
+public class Response
+{
+    public Resource[] value { get; set; }
+}
+
+public static async Task<HttpResponseMessage> Run(HttpRequestMessage req)
+{
+    var subscription = Environment.GetEnvironmentVariable("SubscriptionID");
+
+    var url = $"https://management.azure.com/subscriptions/{subscription}/providers/Microsoft.ResourceHealth/availabilityStatuses?api-version=2015-01-01";
+    var r = await RestClient.Query<Response>(url);
+    var available = r.value
+        .Where(v => v.properties.availabilityState == "Available")
+        .Count();
+
+    var unknown = r.value
+        .Where(v => v.properties.availabilityState == "Unknown")
+        .Count();
+
+    var other = r.value.Length - available - unknown;
+
+    return req.CreateResponse(HttpStatusCode.OK, new
+    {
+        available = available,
+        unknown = unknown,
+        other = other,
+        details = r.value
+    });
+}
+```
+
 Users Online
 ------------
 
