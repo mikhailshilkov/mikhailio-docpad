@@ -1,5 +1,5 @@
 ---
-layout: 'post'
+layout: post
 title: SQL: produce resultset with N rows
 date: 2014-06-03
 tags: ["Performance","SQL Server","T-SQL"]

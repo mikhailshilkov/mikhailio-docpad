@@ -8,11 +8,12 @@ menuOrder: 3
 <div class="abstract">
     <div class="abstract-year">2017</div>
     <div class="abstract-date">Nov 8</div>
-    <div class="abstract-title">(Upcoming) Azure F#unctions
+    <div class="abstract-title">Azure F#unctions
     </div>
     <div class="abstract-tags">
-        at 
-        <a href="https://www.meetup.com/FSharping/events/244137693/" target="_blank">FSharping</a>
+        <a href='https://www.slideshare.net/MikhailShilkov/azure-functions-81817017' target="_blank">Slides</a>
+        , <a href='https://github.com/mikhailshilkov/azure-functions-fsharp-examples' target="_blank">Code samples</a>
+        at <a href="https://www.meetup.com/FSharping/events/244137693/" target="_blank">FSharping</a>
     </div>
 </div>
 <div class="abstract">
