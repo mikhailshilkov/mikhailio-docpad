@@ -2,7 +2,7 @@
 layout: post
 title: Introducing Stream Processing in F#
 date: 2016-11-29
-tags: ["Stream Processing", "F#", "F# Advent", "Data Processing"]
+tags: ["Stream Processing", "F#", "F# Advent Calendar", "Data Processing"]
 ---
 
 *The post was published for 
