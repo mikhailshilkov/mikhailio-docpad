@@ -5,6 +5,9 @@ date: 2017-08-31
 tags: ["Azure", "Azure Functions", "Scaling"]
 ---
 
+*Updated results are available at 
+[Azure Functions Get More Scalable and Elastic](https://mikhail.io/2017/12/azure-functions-get-more-scalable-and-elastic/).*
+
 Automatic elastic scaling is a built-in feature of Serverless computing
 paradigm. One doesn't have to provision servers anymore, they just need to
 write code that will be provisioned on as many servers as needed based on the
