@@ -16,7 +16,7 @@ Why Learn F# and Functional Programming
 ---------------------------------------
 
 Link to full-screen HTML slides: 
-[Why Learn F# and Functional Programming](http://mikhail.io/talks/why-fsharp/)
+[Why Learn F# and Functional Programming](https://mikhail.io/talks/why-fsharp/)
 
 Slides on SlideShare:
 <iframe src="//www.slideshare.net/slideshow/embed_code/key/iG9omDKb42ogTk" 

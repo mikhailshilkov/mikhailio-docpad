@@ -5,7 +5,7 @@ date: 2017-01-29
 tags: ["Event Sourcing", "NEventStore", "SQL Server", "Performance"]
 ---
 
-In [my previous post about Event Store read complexity](http://mikhail.io/2016/11/event-sourcing-and-io-complexity/) 
+In [my previous post about Event Store read complexity](https://mikhail.io/2016/11/event-sourcing-and-io-complexity/) 
 I described how the growth of reads from the event database might be 
 quadratic in respect to amount of events per aggregate.
 

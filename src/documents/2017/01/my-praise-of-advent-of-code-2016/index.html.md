@@ -66,7 +66,7 @@ Full sets of F# solutions are available from
 [Yan Cui](https://github.com/theburningmonk/AdventOfCodeFs).
 
 I included one of the solutions into 
-[The Taste of F# talk](http://mikhail.io/2017/01/functional-programming-fsharp-talks/) that I did
+[The Taste of F# talk](https://mikhail.io/2017/01/functional-programming-fsharp-talks/) that I did
 at a user group earlier this month.
 
 Next year I'll pick another language and will start on December 1st. I invite

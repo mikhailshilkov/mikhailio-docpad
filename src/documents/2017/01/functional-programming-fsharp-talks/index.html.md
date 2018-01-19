@@ -15,7 +15,7 @@ Introduction of Functional Programming
 --------------------------------------
 
 Link to full-screen HTML slides: 
-[Introduction of Functional Programming](http://mikhail.io/talks/webscale-fp/)
+[Introduction of Functional Programming](https://mikhail.io/talks/webscale-fp/)
 
 Slides on SlideShare:
 <iframe src="//www.slideshare.net/slideshow/embed_code/key/1L3y6bQDoibPrN" 
@@ -27,7 +27,7 @@ The Taste of F#
 ---------------
 
 Link to full-screen HTML slides: 
-[The Taste of F#](http://mikhail.io/talks/webscale-fsharp/)
+[The Taste of F#](https://mikhail.io/talks/webscale-fsharp/)
 
 Example problem that I was solving: 
 [Advent of Code](http://adventofcode.com) and 

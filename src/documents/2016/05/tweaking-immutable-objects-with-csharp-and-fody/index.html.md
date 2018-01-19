@@ -133,7 +133,7 @@ One way to avoid repetitive code is to generate it.
 With.Fody Plugin
 ----------------
 
-In [one of my previous posts](http://mikhail.io/2015/12/weaving-your-domain-classes-with-fody/)
+In [one of my previous posts](https://mikhail.io/2015/12/weaving-your-domain-classes-with-fody/)
 I described how C# value objects can be made less painful with 
 [Fody](https://github.com/Fody/Fody) - a tool which changes your assembly at
 compilation time to provide some desired properties in automated and reliable
@@ -172,7 +172,7 @@ IntelliSense and Resharper, otherwise we could skip them altogether.
 Single With() for Multiple Properties
 -------------------------------------
 
-In case you avoid [Primitive Obsession](http://mikhail.io/2015/08/units-of-measurement-in-domain-design/)
+In case you avoid [Primitive Obsession](https://mikhail.io/2015/08/units-of-measurement-in-domain-design/)
 antipattern, you will often end up with classes which have unique types of 
 properties, e.g.
 

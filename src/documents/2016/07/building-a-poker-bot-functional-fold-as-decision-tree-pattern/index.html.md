@@ -9,10 +9,10 @@ tags: ["F#", "Poker Bot", "Functional Programming"]
 to play in online poker rooms. I'm building the bot with .NET framework and F# language which makes the task relatively 
 easy and very enjoyable. Here are the previous parts:*
 
-- [*Building a Poker Bot: Card Recognition*](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/)
-- [*Building a Poker Bot: String and Number Recognition*](http://mikhail.io/2016/02/building-a-poker-bot-string-recognition/)
-- [*Building a Poker Bot: Mouse Movements*](http://mikhail.io/2016/03/building-a-poker-bot-mouse-movements/)
-- [*Building a Poker Bot with Akka.NET Actors*](http://mikhail.io/2016/04/building-a-poker-bot-with-akka-net-actors/)
+- [*Building a Poker Bot: Card Recognition*](https://mikhail.io/2016/02/building-a-poker-bot-card-recognition/)
+- [*Building a Poker Bot: String and Number Recognition*](https://mikhail.io/2016/02/building-a-poker-bot-string-recognition/)
+- [*Building a Poker Bot: Mouse Movements*](https://mikhail.io/2016/03/building-a-poker-bot-mouse-movements/)
+- [*Building a Poker Bot with Akka.NET Actors*](https://mikhail.io/2016/04/building-a-poker-bot-with-akka-net-actors/)
 
 In this post I describe a simple pattern to structure the complex decision making
 code using partial function application and fold operation applied to a list of functions.
@@ -79,7 +79,7 @@ all the parameters that are required for this sub-graph. Do not accept any param
 which are not related. 
 
 The last parameter of each function should be a 
-[Maybe](http://mikhail.io/2016/01/monads-explained-in-csharp/#maybe) of Decision,
+[Maybe](https://mikhail.io/2016/01/monads-explained-in-csharp/#maybe) of Decision,
 so should be the function's return type.
 
 **Produce a flat list** of all the sub-graph functions. Partially apply the parameters

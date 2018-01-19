@@ -24,5 +24,5 @@ is recorded and shown on the map.
 Here are all the links for the corridor plugin:
 
 - [Github repository](https://github.com/mikhailshilkov/leaflet-corridor) with source code, documentation and usage example
-- [Demo page](http://mikhail.io/demos/leaflet-corridor/) to try it out
+- [Demo page](https://mikhail.io/demos/leaflet-corridor/) to try it out
 - [Stackoverflow question](http://stackoverflow.com/questions/26206636/is-there-any-method-to-draw-path-polyline-on-leaflet-with-constant-width-strok/40064379) which inspired me to open-source the implementation

@@ -27,4 +27,4 @@ Also, I'm still not sure whether I can change the language of route directions.
 
 **Update**: language is specified with "hl" request parameter.
 
-**Update 2**: [Google Transit API is now available](http://mikhail.io/2012/08/14/google-adds-public-transit-into-api/)!
+**Update 2**: [Google Transit API is now available](https://mikhail.io/2012/08/14/google-adds-public-transit-into-api/)!

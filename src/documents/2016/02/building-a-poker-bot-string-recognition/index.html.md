@@ -9,7 +9,7 @@ teaser: This is the second part of Building a Poker Bot series where I describe 
 *This is the second part of **Building a Poker Bot** series where I describe my experience developing bot software 
 to play in online poker rooms. I'm building the bot with .NET framework and F# language which makes the task relatively 
 easy and very enjoyable. Here is the first part:
-[Building a Poker Bot: Card Recognition](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/)
+[Building a Poker Bot: Card Recognition](https://mikhail.io/2016/02/building-a-poker-bot-card-recognition/)
 *
 
 Why string recognition
@@ -148,7 +148,7 @@ columns, which are lists of pixels.
 Match the symbols vs the known patterns
 -----------------------------------
 
-This part was already described in [my first article](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/).
+This part was already described in [my first article](https://mikhail.io/2016/02/building-a-poker-bot-card-recognition/).
 Basically we compare the list of black or white points to the patterns of
 the known symbols:
 
@@ -202,7 +202,7 @@ let recognizeNumber x =
   recognizeString (getChar numberPatterns) x
 ```
 
-A way to produce these patterns is discussed in [the previous part](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/).
+A way to produce these patterns is discussed in [the previous part](https://mikhail.io/2016/02/building-a-poker-bot-card-recognition/).
 
 Conclusion
 ----------

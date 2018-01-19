@@ -199,4 +199,4 @@ much less that one could imagine for a task of image recognition. Similar code c
 fixed objects at poker table: dealer button location, action buttons, checkboxes etc. In the next part of this
 series I will show how to recognize non-fixed parts: text and numbers.
 
-*Proceed to [Part 2 of Building a Poker Bot: String and Number Recognition](http://mikhail.io/2016/02/building-a-poker-bot-string-number-recognition/).*
+*Proceed to [Part 2 of Building a Poker Bot: String and Number Recognition](https://mikhail.io/2016/02/building-a-poker-bot-string-number-recognition/).*

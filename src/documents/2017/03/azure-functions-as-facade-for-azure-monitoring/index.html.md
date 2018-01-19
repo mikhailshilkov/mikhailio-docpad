@@ -158,7 +158,7 @@ In addition to queue backlog and dead letter queue size, we wanted to see
 some queue statistics like amount of incoming and outgoing messages per
 period of time. The corresponding API exists, but it's not that straightforward,
 so I described the whole approach in a separate post: 
-[Azure Service Bus Entity Metrics .NET APIs](http://mikhail.io/2017/03/azure-service-bus-entity-metrics-dotnet-apis/).
+[Azure Service Bus Entity Metrics .NET APIs](https://mikhail.io/2017/03/azure-service-bus-entity-metrics-dotnet-apis/).
 
 In my Azure Function I'm using the NuGet package that I mentioned in the post.
 This is accomplished by adding a `project.json` file:

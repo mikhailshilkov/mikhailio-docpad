@@ -11,9 +11,9 @@ teaser: This post lays out the most exciting part of the bot. I'll compose the r
 to play in online poker rooms. I'm building the bot with .NET framework and F# language which makes the task relatively 
 easy and very enjoyable. Here are the previous parts:*
 
-- [*Building a Poker Bot: Card Recognition*](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/)
-- [*Building a Poker Bot: String and Number Recognition*](http://mikhail.io/2016/02/building-a-poker-bot-string-recognition/)
-- [*Building a Poker Bot: Mouse Movements*](http://mikhail.io/2016/03/building-a-poker-bot-mouse-movements/)
+- [*Building a Poker Bot: Card Recognition*](https://mikhail.io/2016/02/building-a-poker-bot-card-recognition/)
+- [*Building a Poker Bot: String and Number Recognition*](https://mikhail.io/2016/02/building-a-poker-bot-string-recognition/)
+- [*Building a Poker Bot: Mouse Movements*](https://mikhail.io/2016/03/building-a-poker-bot-mouse-movements/)
 
 This post lays out the most exciting part of the bot. I'll compose the recognition, flow, decision and mouse clicking
 parts together into the bot application. The application is a console executable interacting with multiple 
@@ -30,8 +30,8 @@ The following picture shows the outline of the application data flow:
 For each poker table we make a screenshot and send those to recognition.
 
 **Recognize Screen** - Parse the data from the screenshot. Check whether it's our turn to make a play now, what
-the [hole cards](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/) and 
-[stacks](http://mikhail.io/2016/02/building-a-poker-bot-string-recognition/) are, produce the detailed
+the [hole cards](https://mikhail.io/2016/02/building-a-poker-bot-card-recognition/) and 
+[stacks](https://mikhail.io/2016/02/building-a-poker-bot-string-recognition/) are, produce the detailed
 screen information and send it to decision maker.
 
 **Make Decision** - Understand if that's a new hand or there was a past history before. See
@@ -39,7 +39,7 @@ what the villains did and which new cards we got. Here the secret sauce comes to
 a move to be made. Send the action to the mouse clicker.
 
 **Click Buttons** - Based on the decision made, click the right buttons. It should be done with proper delays
-and [human-like movements](http://mikhail.io/2016/03/building-a-poker-bot-mouse-movements/) so that the villain
+and [human-like movements](https://mikhail.io/2016/03/building-a-poker-bot-mouse-movements/) so that the villain
 and poker room don't understand that it's bot who is playing.
 
 ---
@@ -97,8 +97,8 @@ to click all the tables with proper delays and in order.
 Implementation Patterns
 -----------------------
 
-All actors are implemented with [Functional Actor Patterns](http://mikhail.io/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/)
-which are described in [my previous post](http://mikhail.io/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/).
+All actors are implemented with [Functional Actor Patterns](https://mikhail.io/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/)
+which are described in [my previous post](https://mikhail.io/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/).
 
 The basic idea is that each actor is defined in functional style with these
 building blocks:
@@ -120,7 +120,7 @@ The domain function is called `findWindows` and has the type `unit -> WindowInfo
 It returns the poker window screenshots and titles.
 
 Actor function of type `int -> seq<string * WindowInfo>` is used by the 
-[Router-Supervisor](http://mikhail.test/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/#RouterSupervisor) pattern to 
+[Router-Supervisor](https://mikhail.io/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/#RouterSupervisor) pattern to 
 define the behavior. The ouput tuple defines an ID of an output actor and a
 message to send to it:
 
@@ -154,12 +154,12 @@ Recognizer
 Recognizer receives the `WindowInfo` produced by the Table Finder.
 
 The domain function has the type of `Bitmap -> Screen`. You can read more about table
-recognition in [Part 1](http://mikhail.io/2016/02/building-a-poker-bot-card-recognition/) and
-[Part 2](http://mikhail.io/2016/02/building-a-poker-bot-string-recognition/)
+recognition in [Part 1](https://mikhail.io/2016/02/building-a-poker-bot-card-recognition/) and
+[Part 2](https://mikhail.io/2016/02/building-a-poker-bot-string-recognition/)
 of these series.
 
 Actor function is an implementation of 
-[Converter-Supervisor](http://mikhail.test/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/#ConverterSupervisor) pattern. 
+[Converter-Supervisor](https://mikhail.io/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/#ConverterSupervisor) pattern. 
 The output is a decision message for Decision Maker actor which is a supervised 
 child of the Recognizer. Here is the actor function:
 
@@ -184,7 +184,7 @@ Decision Maker
 --------------
 
 Decision Maker actor function is an implementation of 
-[Stateful Converter](http://mikhail.test/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/#StatefulConverter) pattern. It receives
+[Stateful Converter](https://mikhail.io/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/#StatefulConverter) pattern. It receives
 a decision message from a Recognizer. The output is a click message for a 
 singleton Clicker actor. It also needs to preserve some state between two calls.
 In the minimalistic implementation this state holds the previous screen that
@@ -230,10 +230,10 @@ type ClickerMessage = {
 
 The domain function has the simple type `ClickerMessage -> unit` with mouse
 clicks as side effect. You can read more about the mouse movements in 
-[Part 3](http://mikhail.io/2016/03/building-a-poker-bot-mouse-movements/)
+[Part 3](https://mikhail.io/2016/03/building-a-poker-bot-mouse-movements/)
 of these series.
 
-[Message Sink](http://mikhail.test/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/#MessageSink)
+[Message Sink](https://mikhail.io/2016/03/functional-actor-patterns-with-akkadotnet-and-fsharp/#MessageSink)
 pattern is used for this actor, so actor function isn't
 really needed. We spawn the singleton instance with the following statement:
 
