@@ -2,7 +2,7 @@
 layout: post
 title: Custom Autoscaling with Durable Functions
 date: 2017-07-24
-tags: ["Azure", "Azure Functions", "Scaling", "Azure App Service", "Azure Service Bus", "Durable Functions"]
+tags: ["Azure", "Azure Functions", "Scalability", "Azure App Service", "Azure Service Bus", "Durable Functions"]
 ---
 
 In my previous post 

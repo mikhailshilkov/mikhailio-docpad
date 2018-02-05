@@ -2,7 +2,7 @@
 layout: post
 title: Azure Functions Get More Scalable and Elastic
 date: 2017-12-13
-tags: ["Azure", "Azure Functions", "Scaling"]
+tags: ["Azure", "Azure Functions", "Scalability"]
 ---
 
 Back in August this year, I've posted 

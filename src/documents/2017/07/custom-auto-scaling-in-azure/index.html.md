@@ -2,7 +2,7 @@
 layout: post
 title: Custom Autoscaling of Azure App Service with a Function App
 date: 2017-07-17
-tags: ["Azure", "Azure Functions", "Scaling", "Azure App Service", "Azure Service Bus"]
+tags: ["Azure", "Azure Functions", "Scalability", "Azure App Service", "Azure Service Bus"]
 ---
 
 The power of cloud computing comes from its elasticity and ability to adapt to changing

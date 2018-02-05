@@ -2,7 +2,7 @@
 layout: post
 title: Azure Functions: Are They Really Infinitely Scalable and Elastic?
 date: 2017-08-31
-tags: ["Azure", "Azure Functions", "Scaling"]
+tags: ["Azure", "Azure Functions", "Scalability"]
 ---
 
 *Updated results are available at 
