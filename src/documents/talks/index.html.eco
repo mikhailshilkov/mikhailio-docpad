@@ -7,7 +7,23 @@ menuOrder: 3
 ---
 <div class="abstract">
     <div class="abstract-year">2018</div>
-    <div class="abstract-date">Apr 5-6</div>
+    <div class="abstract-date">Apr 14</div>
+    <div class="abstract-title">(Upcoming) Monads Explained for OOP Developers
+    </div>
+    <div class="abstract-tags">
+        at <a href='https://rome2018.codemotionworld.com/conference/14-April/' target="_blank">Codemotion Rome 2018</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-date">Apr 13</div>
+    <div class="abstract-title">(Upcoming) Performance Tales of Serverless
+    </div>
+    <div class="abstract-tags">
+        at <a href='https://rome2018.codemotionworld.com/conference/13-April/' target="_blank">Codemotion Rome 2018</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-date">Apr 5</div>
     <div class="abstract-title">(Upcoming) Azure F#unctions
     </div>
     <div class="abstract-tags">
