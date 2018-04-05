@@ -32,9 +32,10 @@ menuOrder: 3
 </div>
 <div class="abstract">
     <div class="abstract-date">Apr 5</div>
-    <div class="abstract-title">(Upcoming) Azure F#unctions
+    <div class="abstract-title">Azure F#unctions
     </div>
     <div class="abstract-tags">
+        <a href='https://www.slideshare.net/MikhailShilkov/azure-functions-92988186' target="_blank">Slides</a>
         at <a href='https://skillsmatter.com/conferences/9419-f-sharp-exchange-2018#program' target="_blank">F# eXchange 2018</a>
     </div>
 </div>
