@@ -35,6 +35,7 @@ menuOrder: 3
     <div class="abstract-title">Azure F#unctions
     </div>
     <div class="abstract-tags">
+        <a href='https://skillsmatter.com/skillscasts/11347-azure-f-sharpunctions' target="_blank">Video (requires free signup)</a>, 
         <a href='https://www.slideshare.net/MikhailShilkov/azure-functions-92988186' target="_blank">Slides</a>
         at <a href='https://skillsmatter.com/conferences/9419-f-sharp-exchange-2018#program' target="_blank">F# eXchange 2018</a>
     </div>
