@@ -16,17 +16,19 @@ menuOrder: 3
 </div>
 <div class="abstract">
     <div class="abstract-date">Apr 14</div>
-    <div class="abstract-title">(Upcoming) Monads Explained for OOP Developers
+    <div class="abstract-title">Monads Explained for OOP Developers
     </div>
     <div class="abstract-tags">
+        <a href='https://www.slideshare.net/MikhailShilkov/monads-explained-for-oop-developers' target="_blank">Slides</a>
         at <a href='https://rome2018.codemotionworld.com/conference/14-April/' target="_blank">Codemotion Rome 2018</a>
     </div>
 </div>
 <div class="abstract">
     <div class="abstract-date">Apr 13</div>
-    <div class="abstract-title">(Upcoming) Performance Tales of Serverless
+    <div class="abstract-title">Performance Tales of Serverless
     </div>
     <div class="abstract-tags">
+        <a href='https://www.slideshare.net/MikhailShilkov/performance-tales-of-serverless' target="_blank">Slides</a>
         at <a href='https://rome2018.codemotionworld.com/conference/13-April/' target="_blank">Codemotion Rome 2018</a>
     </div>
 </div>
