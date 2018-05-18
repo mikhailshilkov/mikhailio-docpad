@@ -12,10 +12,10 @@ pagePathPrefix: page
 
 <div class="page-nav">
     <% if @hasPrevPage(): %>
-    <a class="page-nav-newer" href="<%= @getPrevPage() %>"><span class="icon icon-arrow-left-2"></span> Next page</a>
+    <a class="page-nav-newer" href="<%= @getPrevPage() %>">&lt;&lt; Previous page</a>
     <% end %>
     <% if @hasNextPage(): %>
-    <a class="page-nav-older" href="<%= @getNextPage() %>">Previous page <span class="icon icon-arrow-right-2"></span></a>
+    <a class="page-nav-older" href="<%= @getNextPage() %>">Next page &gt;&gt;</span></a>
     <% end %>
 </div>
 

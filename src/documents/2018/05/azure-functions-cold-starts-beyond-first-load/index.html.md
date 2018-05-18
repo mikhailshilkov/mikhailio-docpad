@@ -1,8 +1,10 @@
 ---
 layout: post
-title: Azure Functions: Cold Starts Beyond First Request
+title: Cold Starts Beyond First Request in Azure Functions
 date: 2018-05-18
 tags: ["Azure", "Azure Functions", "Serverless", "Performance", "Cold Start"]
+teaserImage: teaser.jpg
+description: Can we avoid cold starts by keeping Functions warm, and will cold starts occur on scale out? Let's try!
 ---
 
 In my [previous article](https://mikhail.io/2018/04/azure-functions-cold-starts-in-numbers/)

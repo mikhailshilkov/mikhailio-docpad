@@ -74,6 +74,12 @@ docpadConfig = {
 			else
 				@site.title
 
+		getTeaserImage: ->
+			if @document.teaserImage
+				"#{@site.url}#{@document.url}#{@document.teaserImage}"
+			else
+				""
+
 		getPageUrlWithHostname: ->
 			"#{@site.url}#{@document.url}"
 

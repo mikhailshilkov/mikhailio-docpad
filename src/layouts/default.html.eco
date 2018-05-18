@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
@@ -10,6 +10,20 @@
     <title><%= @getPreparedTitle() %></title>
     <meta name="author" content="<%= @site.author %>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="twitter:card" content="summary"></meta>
+    <meta name="twitter:creator" content="@MikhailShilkov"></meta>
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="<%= @document.title or @site.title %>" />
+    <meta property="og:url" content="<%= @getPageUrlWithHostname() %>" />
+<% if @getTeaserImage(): %>
+    <meta property="og:image" content="<%= @getTeaserImage() %>" />
+<% end %>
+<% if @document.description: %>
+    <meta property="og:description" content="<%= @document.description %>" />
+<% end %>
+
     <link href="/feed/" rel="alternate" title="mikhail.io" type="application/atom+xml">
     <link href="/favicon.ico?v=2" rel="shortcut icon">
 
@@ -39,7 +53,7 @@
             </button>
             <a class="navbar-brand" href="/">
                 <span class="text-primary"><%= @site.title %></span><br />
-                <span class="elevator-pitch">F#, C#, JS, SQL, Azure programmer</span>
+                <span class="elevator-pitch">Serverless, Azure, FP, F# and more</span>
             </a>
         </div>
         <div class="collapse navbar-collapse navbar-right">
@@ -68,7 +82,7 @@
 <%- @content %>
 <div class="container">
     <div class="navbar navbar-footer">
-        <p class="navbar-center navbar-text">Content copyright &copy; 2017 Mikhail Shilkov</p>
+        <p class="navbar-center navbar-text">Content copyright &copy; 2018 Mikhail Shilkov</p>
     </div>
 </div>
 
