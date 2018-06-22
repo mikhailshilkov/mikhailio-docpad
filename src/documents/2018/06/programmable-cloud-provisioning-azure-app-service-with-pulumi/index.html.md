@@ -385,9 +385,10 @@ Should Pulumi provide some workaround for this?
 Conclusion
 ----------
 
-You can find the complete example of provisioning App Service with
-SQL Database and Application Insights in 
-[my github](https://github.com/mikhailshilkov/examples/tree/azure-ts-appservice/azure-ts-appservice).
+My code was kindly merged to 
+[Pulumi examples](https://github.com/pulumi/examples/tree/master/azure-ts-appservice), 
+go there for the complete runnable program that provisions App Service with
+Azure SQL Database and Application Insights.
 
 I really see high potential in Cloud-as-Code approach suggested by Pulumi.
 Today we just scratched the surface of the possibilities. We were working
