@@ -1,61 +1,64 @@
 ---
 layout: post
-title: Monads explained in C#
-date: 2018-06-01
+title: Monads explained in C# (again)
+date: 2018-07-03
 tags: ["Functional Programming", "Monads", "Maybe", "LINQ"]
+teaserImage: functional-programming-word-cloud.png
+description: Yet another Monad tutorial, this time for C# OOP developers
 ---
 
-I enjoy functional programming. I'm sure FP is a very useful tool in any software developer's toolbox.
+I enjoy functional programming, and I find it to be a very useful tool in software developer's toolbox.
 
-But at the same time I do realize that learning FP might be challenging. It comes with a baggage of
-unfamiliar vocabulary which can be daunting for somebody coming from an object-oriented language like C#.
+But at the same time, learning functional programming is a challenging process. FP comes with a baggage of
+unfamiliar vocabulary that can be daunting for somebody coming from an object-oriented language like C#.
 
-[TODO image of terms]
+![Functional Programming Word Cloud](/functional-programming-word-cloud.png)
+
+*Some of functional lingo*
 
 The Fallacy of Monad Tutorials
 ------------------------------
 
-Monads are probably the most infamous term. Monads have the reputation of being something very abstract
-and very confusing. 
+"Monad" is probably the most infamous term from the list above. Monads have the reputation of being 
+something very abstract and very confusing. 
 
-Numerous attempt were made to explain monads in simple definitions, and monad tutorials have become a
+Numerous attempt were made to explain monads in simple definitions; and monad tutorials have become a
 genre of its own. And yet, times and times again, they fail to enlighten the readers.
 
 The shortest explanation of monads looks like this:
 
-[TODO A Monad is just a monoid in the category of endofunctors]
+![A Monad is just a monoid in the category of endofunctors](/monoid-endofunctors.png)
 
 It's both mathematically correct and totally useless to anybody learning functional programming. To
-understand this statement, one has to know terms "monoid", "category" and "endofunctors" and be able
+understand this statement, one has to know the terms "monoid", "category" and "endofunctors" and be able
 to mentally compose them into something meaningful.
 
 The same problem is apparent in most monad tutorials. They assume some pre-existing knowledge in
 heads of their readers, and if that assumption fails, the tutorial doesn't click.
 
 Focusing too much on mechanics of monads instead of explaining why they are important at all is another
-common problem. But motivation is probably more important than monadic laws...
+common problem.
 
 Douglas Crockford grasped this fallacy very well:
 
-> Monads are cursed - once you understand monads for yourself you lose the ability to explain them to others
+> The monadic curse is that once someone learns what monads are and how to use them, they lose the ability to explain them to other people
 
-[TODO quote]
-
-The problem here is likely the following. Every person who understands monads had their own way to
+The problem here is likely the following. Every person who understands monads had their own path to
 this knowledge. It haven't come all at once, instead there was a series of steps, each giving an insight,
-until the last final step which made monads "click".
+until the last final step made monads "click".
 
 But they don't remember the whole path anymore. They go online and blog about that very last step as
 the key to understanding, joining the club of flawed explanations.
 
-There is a whole scientific paper from Tomas Petricek which studies monad tutorials.
+There is an actual [academic paper from Tomas Petricek](http://tomasp.net/academic/papers/monads/monads-programming.pdf) 
+that studies monad tutorials.
 
-I read that paper and a dozen of monad tutorials out there. And of course, now I came up with my own.
+I've read that paper and a dozen of monad tutorials out there. And of course, now I came up with my own.
 
-I'm probably doomed to fail too, at least for some readers. Yet, I know that some people found the
-previous verion of this article useful.
+I'm probably doomed to fail too, at least for some readers. Yet, I know that many people found the
+previous verSion of this article useful.
 
-I based my explanation on examples from C# which should be familiar to most .NET developers.
+I based my explanation on examples from C# - the object-oriented language familiar to .NET developers.
 
 Story of Composition
 --------------------
@@ -64,8 +67,10 @@ The base element of each functional program is Function. In typed languages func
 and each function is just a mapping between the type of its input parameter and output parameter.
 Such type can be annotated as `func: TypeA -> TypeB`.
 
-C# is object-oriented language, so we use methods to declare functions. There are two ways to
+C# is object-oriented language, so we use methods to declare functions. There are two ways to 
 define a method comparable to `func` functions above: using static method or instance method:
+
+<gist>398082f93bf4d51eb7b928c4c397b707?file=static-or-instance-method.cs</gist>
 
 ```
 // Static methods
@@ -81,13 +86,13 @@ class ClassA
 }
 ```
 
-Static form looks more similar to the function annotation, but they are actually equivalent
-for the purpose of our discussion. I will use instance methods in my examples, but all of
+Static form looks more similar to the function annotation, but both ways are actually equivalent
+for the purpose of our discussion. I will use instance methods in my examples, however all of
 them could be written as static extension methods too.
 
 How do we compose more complex workflows, programs and applications out of such simple
 building blocks? A lot of patterns both in OOP and FP worlds revolve around this question.
-And Monads are one of the answers.
+And monads are one of the answers.
 
 My sample code is going to be about conferences and speakers. The method implementations 
 aren't really important, just watch the types carefully. There are 4 classes (types) and 
@@ -139,15 +144,15 @@ static City NextTalkCity(Speaker speaker)
 ```
 
 This code looks quite readable. It's concise and it flows from top to bottom, from left to right, 
-similar to how we are used to read any text. There is no much noise too.
+similar to how we are used to read any text. There is not much noise too.
 
-Such code doesn't happen that often in real codebases though, because there are multiple complication
+That's not what real codebases look like though, because there are multiple complications
 along the happy composition path. Let's look at some of them.
 
 NULLs
 -----
 
-Any class instance in C# can be `null`. So, in the example above I might get runtime errors if
+Any class instance in C# can be `null`. In the example above I might get runtime errors if
 one of the methods ever returns `null` back.
 
 Typed functional programming always tries to be explicit about types, so I'll re-write the signatures
@@ -173,7 +178,7 @@ class City { ... }
 ```
 
 This is actually not a valid syntax in current C# version, because `Nullable<T>` and its short form
-`T?` is not applicable to reference types. This [might change in C# 8](https://blogs.msdn.microsoft.com/dotnet/2017/11/15/nullable-reference-types-in-csharp/)
+`T?` are not applicable to reference types. This [might change in C# 8](https://blogs.msdn.microsoft.com/dotnet/2017/11/15/nullable-reference-types-in-csharp/)
 though, so bear with me.
 
 Now, when composing our workflow, we need to take care of `null` results:
@@ -195,7 +200,7 @@ static City? NextTalkCity(Speaker speaker)
 It's still the same method, but it got more noise now. Even though I used short-circuit returns
 and one-liners, it still got harder to read.
 
-To fight that problem, smart language designed came up with Null Propagation Operator:
+To fight that problem, smart language designers came up with Null Propagation Operator:
 
 ```
 static City NextTalkCity(Speaker speaker) 
@@ -218,7 +223,7 @@ Collections
 
 Quite often a function returns a collection of items, not just a single item. To some extent,
 that's a generalization of `null` case: with `Nullable<T>` we might get 0 or 1 results back,
-while with a collection we can get `0` to any `N` results.
+while with a collection we can get `0` to any `n` results.
 
 Our sample API could look like this:
 
@@ -239,9 +244,9 @@ class Conference
 }
 ```
 
-I used `List<T>` but it could be any class or plain `IEnumerable<T>`.
+I used `List<T>` but it could be any class or plain `IEnumerable<T>` interface.
 
-Who would we combine the methods into one workflow? Traditional version would look like this:
+How would we combine the methods into one workflow? Traditional version would look like this:
 
 
 ```
@@ -287,10 +292,10 @@ static List<City> AllCitiesToVisit(Speaker speaker) {
 }
 ```
 
-Now you can see the code the same original way on the left, and got just a bit of technical repeatable
+Now you can see the same original code on the left, combined with just a bit of technical repeatable
 clutter on the right. Hold on, I'll show you where I'm going.
 
-Let's take another possible complication.
+Let's discuss another possible complication.
 
 Asynchronous Calls
 ------------------
@@ -347,16 +352,16 @@ static Task<City> NextTalkCity(Speaker speaker)
 ```
 
 You can see that, once again, it's our nice readable workflow on the left + some mechanical repeatable
-connecting code on the right.
+junction code on the right.
 
 Pattern
 -------
 
 Can you see a pattern yet?
 
-I'll repeat the `null`, `List` and `Task` based workflows again:
+I'll repeat the `Nullable`-, `List`- and `Task`-based workflows again:
 
-```
+``` cs
 static City NextTalkCity(Speaker speaker) 
 {
   return 
@@ -384,8 +389,8 @@ static Task<City> NextTalkCity(Speaker speaker)
 }
 ```
 
-In all 3 cases, there was a complication which prevented us from sequencing method
-calls fluently. In all 3 cases, we found a gluing code to get back to fluent composition.
+In all 3 cases there was a complication which prevented us from sequencing method
+calls fluently. In all 3 cases we found a gluing code to get back to fluent composition.
 
 Let's try to generalize this approach. Given some generic container type 
 `WorkflowThatReturns<T>`, we have a method to combine an instance of such workflow with
@@ -400,11 +405,11 @@ class WorkflowThatReturns<T>
 
 In case this is hard to grasp, have a look at the picture of what is going on:
 
-TODO
+![Monad Bind Internals](/monad-bind.png)
 
 1. An instance of type `T` sits in a generic container.
 
-2. We call `addStep` with a function, which converts `T` to `U` sitting inside yet another
+2. We call `AddStep` with a function, which maps `T` to `U` sitting inside yet another
 container. 
 
 3. We get an instance of `U` but inside two containers.
@@ -421,15 +426,15 @@ WorkflowThatReturns<Phone> workflow(Speaker speaker) {
   return 
     speaker
     .NextTalk()         
-    .addStep(x => x.GetConference())
-    .addStep(x => x.GetCity()); 
+    .AddStep(x => x.GetConference())
+    .AddStep(x => x.GetCity()); 
 }
 ```
 
-Subsequently, `addStep` is called two times to transfer to `Conference` and then
+Subsequently, `AddStep` is called two times to transfer to `Conference` and then
 `City` inside the same container:
 
-TODO image with two steps
+![Monad Bind Chaining](/monad-two-binds.png)
 
 Finally, Monads
 ---------------
@@ -465,7 +470,7 @@ at this point. That's ok.
 Keep going and let's have a look at several sample implementations of Monad pattern.
 
 <a name="maybe"></a>
-Example: Maybe (Option) type
+Maybe (Option) type
 ----------------------------
 
 My first motivational example was with `Nullable<T>` and `?.`. The full pattern
@@ -495,9 +500,9 @@ public class Maybe<T> where T : class
     {
     }
 
-    public Maybe<TO> Bind<TO>(Func<T, Maybe<TO>> func) where TO : class
+    public Maybe<U> Bind<U>(Func<T, Maybe<U>> func) where U : class
     {
-        return value != null ? func(value) : Maybe<TO>.None();
+        return value != null ? func(value) : Maybe<U>.None();
     }
 
     public static Maybe<T> None() => new Maybe<T>();
@@ -513,7 +518,7 @@ Given an imaginary repository contract (which does something with customers and
 orders):
 
 ``` cs
-public interface IMonadicRepository
+public interface IMaybeAwareRepository
 {
     Maybe<Customer> GetCustomer(int id);
     Maybe<Address> GetAddress(int id);
@@ -539,8 +544,8 @@ of `SelectMany` statements. One of the common
 implementations of `Maybe` implements `IEnumerable` interface which allows 
 a more C#-idiomatic binding composition. Actually:
 
-IEnumerable + SelectMany is a Monad 
------------------------------------
+Enumerable + SelectMany is a Monad 
+----------------------------------
 
 `IEnumerable` is an interface for enumerable containers.
 
@@ -550,9 +555,9 @@ The `Bind` operation is defined by the standard LINQ extension method, here
 is its signature:
 
 ``` cs
-public static IEnumerable<B> SelectMany<A, B>(
-    this IEnumerable<A> first, 
-    Func<A, IEnumerable<B>> selector)
+public static IEnumerable<U> SelectMany<T, U>(
+    this IEnumerable<T> first, 
+    Func<T, IEnumerable<U>> selector)
 ```
 
 Direct implementation is quite straitforward:
@@ -582,28 +587,210 @@ IEnumerable<Shipper> someWeirdListOfShippers =
 ```
 
 The query has no idea about how the collections are stored (encapsulated in
-containers). We use functions `A -> IEnumerable<B>` to produce new enumerables
+containers). We use functions `T -> IEnumerable<U>` to produce new enumerables
 (`Bind` operation).
 
 Task Monad (Future)
 -------------------
 
-Monad laws
+In C# `Task<T>` type is used to denote asynchronous computation which will eventually
+return an instance of `T`. The other names for a similar concept in other languages
+are `Promise` and `Future`.
+
+While the typical usage of `Task` in C# is different from the Monad pattern we
+discussed, I can still come up with a `Future` class with the familiar structure:
+
+``` cs
+public class Future<T>
+{
+    private readonly Task<T> instance;
+
+    public Future(T instance)
+    {
+        this.instance = Task.FromResult(instance);
+    }
+
+    private Future(Task<T> instance)
+    {
+        this.instance = instance;
+    }
+
+    public Future<U> Bind<U>(Func<T, Future<U>> func)
+    {
+        var a = this.instance.ContinueWith(t => func(t.Result).instance).Unwrap();
+        return new Future<U>(a);
+    }
+
+    public void OnComplete(Action<T> action)
+    {
+        this.instance.ContinueWith(t => action(t.Result));
+    }
+}
+```
+
+Effectively, it's just a wrapper around the `Task` which doesn't add too much value,
+but it's a useful illustration because now we can do:
+
+``` cs
+repository
+    .LoadSpeaker()
+    .Bind(speaker => speaker.NextTalk())
+    .Bind(talk => talk.GetConference())
+    .Bind(conference => conference.GetCity())
+    .OnComplete(city => reservations.BookFlight(city));
+```
+
+We are back to the familiar structure. Time for some more complications.
+
+Non-Sequential Workflows
+------------------------
+
+Up until now, all the workflows that I was composing had very liniar, sequential
+structure: the output of a previous step was always the input of the next step.
+That piece of data could be discarded after the first use because it was never needed 
+for later steps:
+
+![Linear Workflow](/linear-workflow.png)
+
+Quite often though, this might not be the case. A workflow step might need data
+from two or more previous steps combined.
+
+In the example above, `BookFlight` method might actually need both `Speaker` and
+`City` objects:
+
+![Non Linear Workflow](/non-linear-workflow.png)
+
+In this case, we would have to use closure to save `speaker` object until we get
+a `talk` too:
+
+``` cs
+repository
+    .LoadSpeaker()
+    .OnComplete(speaker =>
+        speaker
+            .NextTalk()
+            .Bind(talk => talk.GetConference())
+            .Bind(conference => conference.GetCity())
+            .OnComplete(city => reservations.BookFlight(speaker, city))
+        );
+```
+
+Obviously, this gets ugly very soon.
+
+To solve this structural problem, C# language got its `async`-`await` feature,
+which is now being reused in more languages including Javascript.
+
+If we move back to using `Task` instead of our custom `Future`, we are able to
+write
+
+``` cs
+var speaker = await repository.LoadSpeaker();
+var talk = await speaker.NextTalk();
+var conference = await talk.GetConference();
+var city = await conference.GetCity();
+await reservations.BookFlight(speaker, city);
+```
+
+Even though we lost the fluent syntax, at least the block has just one level,
+which makes it easier to navigate.
+
+Monads in Functional Languages
+------------------------------
+
+So far we learned that
+
+- Monad is a workflow composition pattern
+- This pattern is used in functional programming
+- Special syntax helps simplify the usage
+
+It should come at no surprise that functional languages support monads on syntactic
+level.
+
+F# is a functional-first language running on .NET framework. F# had its own way of
+doing workflows comparable to `async`-`await` before C# got it. In F#, the above
+code would look like this:
+
+``` fs
+let sendReservation () = async {
+  let! speaker = repository.LoadSpeaker()
+  let! talk = speaker.nextTalk()
+  let! conf = talk.getConference()
+  let! city = conf.getCity()
+  do! bookFlight(speaker, city)
+}
+```
+
+Apart from syntax (`!` instead of `await`), the major difference to C# is that
+`async` is just one possible Monad type to be used this way. There are many
+other monads in F# standard library (they are called Computation Expressions).
+
+The best part is that any developer can create their own monads, and then use
+all the power of language features.
+
+Say, we want a hand-made `Maybe` Monad in F#:
+
+``` fs
+let nextTalkCity (speaker: Speaker) = maybe {
+  let! talk = speaker.nextTalk()
+  let! conf = talk.getConference()
+  let! city = conf.getCity(talk)
+  return city
+}
+```
+
+To make this code runnable, we need to define Maybe computation expression:
+
+``` fs
+type MaybeBuilder() =
+
+    member this.Bind(x, f) = 
+        match x with
+        | None -> None
+        | Some a -> f a
+
+    member this.Return(x) = 
+        Some x
+   
+let maybe = new MaybeBuilder()
+```
+
+I won't explain the details of what happens here, but you can see that the code
+quite trivial. Note the presence of `Bind` operation (and `Return` operation being
+the monad constructor).
+
+The feature is widely used by third-party F# libraries. Here is an actor definition
+in Akka.NET F# API:
+
+``` fs
+let loop () = actor {
+  let! message = mailbox.Receive()
+  match message with
+  | Greet(name) -> printfn "Hello %s" name
+  | Hi -> printfn "Hello from F#!"
+  return! loop ()
+}
+```
+
+Monad Laws
 ----------
 
-There are a couple of laws that `Return` and `Bind` need to adhere to, so
+There are a couple of laws that constructor and `Bind` need to adhere to, so
 that they produce a proper monad.
 
-**Identity law** says that that `Return` is a neutral operation: you can safely
+A typical monad tutorial will make a lot of emphasis on the laws, but I find them
+less important to explain to a beginner. Nonetheles, here they are for the sake
+of completeness.
+
+**Identity law** says that that Monad constructor is a neutral operation: you can safely
 run it before `Bind`, and it won't change the result of the function call:
 
 ``` cs
 // Given
 T value;
-Func<T, M<U>> f;
+Func<T, Monad<U>> f;
 
 // == means both parts are equivalent
-value.Return().Bind(f) == f(value) 
+new Monad<T>(value).Bind(f) == f(value) 
 ```
 
 **Associativity law** means that the order in which `Bind` operations
@@ -611,9 +798,9 @@ are composed does not matter:
 
 ``` cs
 // Given
-M<T> m;
-Func<T, M<U>> f;
-Func<U, M<V>> g;
+Monad<T> m;
+Func<T, Monad<U>> f;
+Func<U, Monad<V>> g;
 
 // == means both parts are equivalent
 m.Bind(f).Bind(g) == m.Bind(a => f(a).Bind(g))
@@ -628,7 +815,7 @@ Conclusion
 
 You should not be afraid of the "M-word" just because you are a C# programmer. 
 C# does not have a notion of monads as predefined language constructs, but 
-it doesn't mean we can't borrow some ideas from the functional world. Having 
+that doesn't mean we can't borrow some ideas from the functional world. Having 
 said that, it's also true that C# is lacking some powerful ways to combine 
-and generalize monads which are possible in Haskell and other functional 
+and generalize monads which are possible functional programming
 languages.
