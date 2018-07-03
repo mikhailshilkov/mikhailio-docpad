@@ -18,7 +18,7 @@ for each Service Bus queue/topic in our application:
 The first two are easily retrieved from `QueueDescription` object (see 
 [MSDN](https://msdn.microsoft.com/library/azure/hh780773.aspx)):
 
-``` cs
+``` csharp
 var nsmgr = NamespaceManager.CreateFromConnectionString(connectionString);
 var queue = nsmgr.GetQueue(name);
 var backlog = queue.MessageCountDetails.ActiveMessageCount;
@@ -58,7 +58,7 @@ have access to the old portal, ask your system administrator to grant it.
 
 Finally, here is a code sample to load the certificate in C# code:
 
-``` cs
+``` csharp
 X509Store store = new X509Store("My", StoreLocation.CurrentUser);
 store.Open(OpenFlags.ReadOnly);
 var cert = store.Certificates.Find(
@@ -73,7 +73,7 @@ Request Headers
 Here is a helper class which adds the specified certificate to each request 
 and sets the appropriate headers too:
 
-``` cs
+``` csharp
 internal class AzureManagementClient : WebClient
 {
     private readonly X509Certificate2 certificate;
@@ -114,7 +114,7 @@ The following picture shows all of them on Azure Portal screen:
 
 Now, format the following request URL and query it using our azure client:
 
-``` cs
+``` csharp
 var client = new AzureManagementClient(cert);
 var url = $"https://management.core.windows.net/{subscriptionId}" +
           $"/services/servicebus/namespaces/{serviceBusNamespace}" +
@@ -127,7 +127,7 @@ in JSON. Congratulations, that's a major accomplishment :)
 
 And here is a quick way to convert JSON to C# array:
 
-``` cs
+``` csharp
 public class Metric
 {
     public string Name { get; set; }
@@ -137,7 +137,7 @@ public class Metric
 }
 ```
 
-``` cs
+``` csharp
 var metrics = JsonConvert.DeserializeObject<Metric[]>(result);
 ```
 
@@ -154,7 +154,7 @@ take the `Pxxx` code from [here](https://docs.microsoft.com/en-us/rest/api/servi
 
 Here is the sample code:
 
-``` cs
+``` csharp
 var time = DateTime.UtcNow.AddHours(-1).ToString("s");
 
 var client = new AzureManagementClient(cert);
@@ -171,7 +171,7 @@ and `outgoing` metric to get the amount of dequeued messages.
 
 The strongly typed version is simple:
 
-``` cs
+``` csharp
 public class DataPoint
 {
     public string Timestamp { get; set; }
@@ -179,7 +179,7 @@ public class DataPoint
 }
 ```
 
-``` cs
+``` csharp
 var data = JsonConvert.DeserializeObject<DataPoint[]>(result);
 ```
 

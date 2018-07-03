@@ -81,14 +81,14 @@ Because the padding is removed from all 4 sides of the region, I decided to use
 `Array2D` data type to be able to iterate in different order. The whole algorithm operates
 with black or white points defined as a helper type:
 
-``` fs
+``` fsharp
 type BW = B | W
 ```
 
 So the `removePadding` function has type of `BW[,] -> BW[,]` and looks
 like this:
 
-``` fs
+``` fsharp
 let removePadding pixels =
   let allBlack s = Seq.exists ((=) W) s
   let maxWidth = Array2D.length1 pixels - 1
@@ -117,7 +117,7 @@ Split the text into characters
 First, we convert our 2D array into the list of lists, where each item in the
 top-level list represents a single column of pixels:
 
-``` fs
+``` fsharp
 let pixelColumns =
   [0..Array2D.length1 pixels - 1] 
   |> Seq.map (fun x -> pixels.[x, 0..Array2D.length2 pixels - 1] |> List.ofArray)
@@ -126,7 +126,7 @@ let pixelColumns =
 Then we can fold this list of columns into the symbols, where each symbol itself
 is the list of columns:
 
-``` fs
+``` fsharp
 let splitIntoSymbols (e : BW list) (state: BW list list list) = 
   match state with
   | cur::rest ->
@@ -152,7 +152,7 @@ This part was already described in [my first article](https://mikhail.io/2016/02
 Basically we compare the list of black or white points to the patterns of
 the known symbols:
 
-``` fs
+``` fsharp
 let getChar patterns bws =
   let samePatterns h p =
     Seq.zip h p
@@ -171,13 +171,13 @@ Putting it all together
 The `recognizeString` function accepts lower-order functions to match 
 symbols and get pixels together with width and height of the region:
 
-``` fs
+``` fsharp
 recognizeString: (BW list list -> char) -> (int -> int -> color) -> int -> int -> string
 ```
 
 It builds an array of pixels, removes padding and folds with recognition.
 
-``` fs
+``` fsharp
 let recognizeString matchSymbol getPixel width height =
 
   let pixels = 
@@ -197,7 +197,7 @@ let recognizeString matchSymbol getPixel width height =
 Then we use it with a specific recognition patterns, e.g. known digits in case
 of numbers recognition:
 
-``` fs
+``` fsharp
 let recognizeNumber x =
   recognizeString (getChar numberPatterns) x
 ```

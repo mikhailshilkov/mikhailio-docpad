@@ -78,7 +78,7 @@ So, we don't need the majority of actor features in this case. The whole actor
 processing could be represented by a function of type `'a -> unit`. Here 
 is an example of a core function:
 
-``` fs
+``` fsharp
 let print msg =
   printn "Message received: %A" msg
 ```
@@ -86,13 +86,13 @@ let print msg =
 So how do we make an actor out of this function? Well, it's already implemented
 as `actorOf` helper function in Akka.NET F# extensions:
 
-``` fs
+``` fsharp
 let actorOfSink (f : 'a -> unit) = actorOf f
 ```
 
 And here is how we spawn an actor instance:
 
-``` fs
+``` fsharp
 let printActorRef = 
   actorOfSink print 
   |> spawn system "print-actor"
@@ -118,7 +118,7 @@ it to another predefined actor.
 The core of this actor is a classic function with one input and one output
 parameter (type `'a - 'b`):
 
-``` fs
+``` fsharp
 let square msg =
   msg * msg
 ```
@@ -126,7 +126,7 @@ let square msg =
 The actor function is similar to the one of Message Sink, but it also accepts
 a reference to the output actor and knows how to send messages to it:
 
-``` fs
+``` fsharp
 let actorOfConvert f outputRef =
   actorOf2 (fun _ msg -> outputRef <! f msg)
 ```
@@ -134,7 +134,7 @@ let actorOfConvert f outputRef =
 Here is how we spawn an instance of a Converter using our `print-actor` as the
 output:
 
-``` fs
+``` fsharp
 let squareActorRef = 
   actorOfConvert square printActorRef 
   |> spawn system "square-actor"
@@ -168,7 +168,7 @@ first message becomes the input state of the second message:
 Here is an example of a function which prints out the index of a message together
 with the message contents:
 
-``` fs
+``` fsharp
 let printIndex index msg =
   printn "Message [%i] received: %A" index msg
   index + 1
@@ -177,7 +177,7 @@ let printIndex index msg =
 For the actor implementation we need a recursive function so we can't use 
 `actorOf2` anymore. Actor workflow is a bit more lines but still very simple:
 
-``` fs
+``` fsharp
 let actorOfStatefulSink f initialState (mailbox : Actor<'a>) =
 
   let rec imp lastState =
@@ -192,7 +192,7 @@ let actorOfStatefulSink f initialState (mailbox : Actor<'a>) =
 
 And here is a usage example:
 
-``` fs
+``` fsharp
 let printIndexActorRef = 
   actorOfSink printIndex 1
   |> spawn system "print-ix-actor"
@@ -220,7 +220,7 @@ next actor:
 Here is a function which squares the messaged number, then calculates the running total
 and sends it forward:
 
-``` fs
+``` fsharp
 let squareAndSum sum msg =
   let result = sum + msg*msg
   (result, result)
@@ -230,7 +230,7 @@ let squareAndSum sum msg =
 In this particular case the output message and state are equal, but they don't
 have to be. Here is the actor implementation:
 
-``` fs
+``` fsharp
 let actorOfStatefulConvert f initialState outputRef (mailbox : Actor<'a>) =
 
   let rec imp lastState =
@@ -246,7 +246,7 @@ let actorOfStatefulConvert f initialState outputRef (mailbox : Actor<'a>) =
 
 And a usage example:
 
-``` fs
+``` fsharp
 let squareAndSumActorRef = 
   actorOfConvert square 0 printIndexActorRef 
   |> spawn system "square-sum-actor"
@@ -280,7 +280,7 @@ reference that we store in the state, something like this:
 
 Here is the generic actor implementation:
 
-``` fs
+``` fsharp
 let actorOfConvertToChild f spawnChild (mailbox : Actor<'a>) =
 
   let rec imp state =
@@ -302,7 +302,7 @@ The only difference is that we accept a `spawnChild` function instead of
 pre-baked actor reference. Here is the first calculator example refactored
 to Print actor being a child of Square actor.
 
-``` fs
+``` fsharp
 let squareWithChildRef = 
   actorOfConvertToChild print (spawnChild square "print-actor")
   |> spawn system "square-with-child-actor"
@@ -337,7 +337,7 @@ of type `'a -> seq<string * 'b>`, where `'a` is the type of incoming messages,
 `'b` is the type of outgoing messages, and `string` represents the identifier of the 
 actor to get the message. Here is a sample implementation:
 
-``` fs
+``` fsharp
 let routeSensorData msg = 
   msg |> Seq.map (fun x -> ("sensor-actor-" + x.SensorId, x.Temperature))
 ```
@@ -369,7 +369,7 @@ let actorOfRouteToChildren f spawnChild (mailbox : Actor<'a>) =
 
 And a usage example:
 
-``` fs
+``` fsharp
 let sensorRouterRef = 
   actorOfRouteToChildren routeSensorData (spawnChild square)
   |> spawn system "route-sensor-actor"

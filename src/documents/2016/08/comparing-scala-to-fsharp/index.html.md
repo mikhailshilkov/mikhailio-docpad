@@ -69,7 +69,7 @@ This looks a bit hairy and should probably be used only when the meaning is obvi
 In F# underscore is used in a different sense - as "something to ignore". That makes
 sense, but I would love to have a shorter way of writing lambda in
 
-``` fs
+``` fsharp
 empoyees |> List.sort (fun e -> e.dateOfBirth)
 ```
 
@@ -128,14 +128,14 @@ by name.
 The F# alternative `defaultArg` doesn't work this way, so the following code
 will blow up:
 
-``` fs
+``` fsharp
 let a = Some(1)
 let b = defaultArg b (2/0) // boom
 ```
 
 You can get deferred evaluation by passing a function:
 
-``` fs
+``` fsharp
 let defaultArgFunc o (f: unit -> 'a) = 
   match o with | Some v -> v | None -> f()
 
@@ -164,7 +164,7 @@ for that matter).
 Type inference in F# plays another significant role: automatic type generalization.
 F# compiler would make types as generic as possible, based on implementation.
 
-``` fs
+``` fsharp
 let max a b = if a > b then a else b
 ```
 
@@ -234,7 +234,7 @@ Partial Application
 Not a huge difference, but F# functions are curried by default, while Scala
 functions aren't. Thus, in F# partial application just works, all the time
 
-``` fs
+``` fsharp
 let add a b = a + b
 let add3 = add 3
 let sum = add3 5 // 8

@@ -130,7 +130,7 @@ The C# implementation uses standard Service Bus API and a connection string
 from App Service configuration to retrieve the required data. And then returns
 a dynamic object, which will be converted to JSON by Function App runtime.
 
-``` cs
+``` csharp
 #r "Microsoft.ServiceBus"
 
 using System.Net;
@@ -181,7 +181,7 @@ parameter called `metric`. I won't repeat the whole file here.
 The Function implementation loads a certificate from the store, calls 
 metric API and returns the last metric value available:
 
-``` cs
+``` csharp
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using MikhailIo.ServiceBusEntityMetrics;
@@ -222,7 +222,7 @@ There is a REST endpoint to retrieve this information, but this time
 authentication and authorization are implemented with Active Directory. I
 created a helper class to wrap the authentication logic:
 
-``` cs
+``` csharp
 public static class RestClient
 {
     public static async Task<T> Query<T>(string url)
@@ -255,7 +255,7 @@ The function then uses this REST client to query Web App management API,
 converts JSON to strongly typed C# objects and extracts the amount of
 instances into HTTP response:
 
-``` cs
+``` csharp
 public class Instance
 {
     public string id { get; set; }
@@ -302,7 +302,7 @@ following example shows how to retrieve the basic counts of services per
 reported status.
 
 
-``` cs
+``` csharp
 public class ResourceProperties
 {
     public string availabilityState { get; set; }
@@ -366,7 +366,7 @@ to check out [API Explorer](https://dev.applicationinsights.io/apiexplorer/metri
 
 The following sample function returns the amount of users online:
 
-``` cs
+``` csharp
 public class UsersCount
 {
     public long unique { get; set; }
@@ -427,7 +427,7 @@ For each channel, we define units of measure, warning and error thresholds.
 Here is a sample C# code to create a `dynamic` object which is then converted
 to the proper JSON:
 
-``` cs
+``` csharp
 return new
 {
     prtg = new

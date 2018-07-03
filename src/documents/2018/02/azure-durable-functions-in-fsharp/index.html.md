@@ -53,7 +53,7 @@ The stateful workflows are Azure Functions with a special `OrchestrationTrigger`
 Since they are asynchronous, C# code is always based on `Task` and `async`-`await`.
 Here is a simple example of orchestrator in C#:
 
-``` cs
+``` csharp
 public static async Task<List<string>> Run([OrchestrationTrigger] DurableOrchestrationContext context)
 {
     var outputs = new List<string>();
@@ -70,7 +70,7 @@ public static async Task<List<string>> Run([OrchestrationTrigger] DurableOrchest
 F# has its own preferred way of doing asynchronous code based on `async`
 computation expression. The direct refactoring could look something like
 
-``` fs
+``` fsharp
 let Run([<OrchestrationTrigger>] context: DurableOrchestrationContext) = async {
   let! hello1 = context.CallActivityAsync<string>("E1_SayHello", "Tokyo")   |> Async.AwaitTask
   let! hello2 = context.CallActivityAsync<string>("E1_SayHello", "Seattle") |> Async.AwaitTask
@@ -93,7 +93,7 @@ package `TaskBuilder.fs` which provides a `task` computation expression.
 
 The above function now looks very simple:
 
-``` fs 
+``` fsharp
 let Run([<OrchestrationTrigger>] context: DurableOrchestrationContext) = task {
   let! hello1 = context.CallActivityAsync<string>("E1_SayHello", "Tokyo")
   let! hello2 = context.CallActivityAsync<string>("E1_SayHello", "Seattle")
@@ -107,7 +107,7 @@ And the best part is that it works just fine.
 `SayHello` function is Activity trigger based, and no special effort is required
 to implement it in F#:
 
-``` fs
+``` fsharp
 [<FunctionName("E1_SayHello")>]
 let SayHello([<ActivityTrigger>] name) =
   sprintf "Hello %s!" name
@@ -131,7 +131,7 @@ a potentially slow workflow of copying all files from a given directory to
 a backup location. It shows how multiple activities can be executed in
 parallel:
 
-``` fs
+``` fsharp
 let tasks = Array.map (fun f -> backupContext.CallActivityAsync<int64>("E2_CopyFileToBlob", f)) files
 let! results = Task.WhenAll tasks
 ```
@@ -141,7 +141,7 @@ demos a potentially infinite actor-like workflow, where state can exist and
 evolve for indefinite period of time. The key API calls are based on
 `OrchestrationContext`:
 
-``` fs
+``` fsharp
 let counterState = counterContext.GetInput<int>()
 let! command = counterContext.WaitForExternalEvent<string>("operation")
 ```

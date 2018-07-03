@@ -195,7 +195,7 @@ versions.
 Now we can implement our trace server as a console application. The main
 method looks like this:
 
-``` cs
+``` csharp
 static void Main(string[] args) // args: <db server name> <db name> <trace file>
 {
     // 1. Run trace server
@@ -226,7 +226,7 @@ security, and then starts the Trace Server.
 Because of the large volume, I made trace reader and event sender to work on separate
 threads. They talk to each other via a concurrent queue:
 
-``` cs
+``` csharp
 private static readonly ConcurrentQueue<string> eventQueue = new ConcurrentQueue<string>();
 ```
 
@@ -236,7 +236,7 @@ sender get shut down.
 Trace Reader task is a loop crunching though trace data and sending the SQL statements
 (with some exclusions) to the concurrent in-memory queue:
 
-``` cs
+``` csharp
 private static void ReadTrace(TraceServer trace, CancellationToken token)
 { 
     while (trace.Read() && !token.IsCancellationRequested)
@@ -262,7 +262,7 @@ private static void ReadTrace(TraceServer trace, CancellationToken token)
 Event Sender is dequeueing SQL commands from in-memory queue to collect batches of
 events. As soon as a batch fills up, it gets dispatched to Event Hub:
 
-``` cs
+``` csharp
 private static void SendToEventHubs(CancellationToken token)
 {
     var client = EventHubClient.CreateFromConnectionString(EventHubsConnectionString);
@@ -293,7 +293,7 @@ even before they get full, just to keep that process closer to real time.
 Note that sender does not await `SendAsync` call. Instead, we only subscribe to failures via `OnAsyncMethodFailed`
 callback to print it to console:
 
-``` cs
+``` csharp
 private static void OnMyAsyncMethodFailed(Task task)
 {
     Console.WriteLine(task.Exception?.ToString() ?? "null error");
@@ -327,7 +327,7 @@ a dime.
 
 Here is the implementation of Trace Replay Azure Function:
 
-``` cs
+``` csharp
 public static class Replay
 {
     [FunctionName("Replay")]

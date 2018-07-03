@@ -65,7 +65,7 @@ Azure comes with a powerful set of tools to manage resources with code.
 You can use PowerShell, CLI scripts or custom code like C# to do with code
 whatever is possible to do via portal.
 
-``` cs
+``` csharp
 var webApp = azure.WebApps.Define(appName)
     .WithRegion(Region.WestEurope)
     .WithNewResourceGroup(rgName)

@@ -20,7 +20,7 @@ Let's say we are making a TODO app. There is a constant flow of requests
 to create a TODO in the system. Each request contains just two fields:
 a title and a project ID which TODO should belong to. Here is the definition:
 
-``` fs
+``` fsharp
 type TodoRequest = {
   ProjectId: int
   Title: string
@@ -31,7 +31,7 @@ Now, we want to process the request and assign each TODO an identifier,
 which should be an auto-incremented integer. Numeration is unique per project,
 so each TODO must have its own combination of `ProjectId` and `Id`:
 
-``` fs
+``` fsharp
 type Todo = {
   ProjectId: int
   Id: int
@@ -44,7 +44,7 @@ transformation as a function. The function has the type `(TodoRequest, int) ->
 (Todo, int)`, i.e. it transforms a tuple of a request and current per-project
 state (last generated ID) to a tuple of a TODO and post-processing state:
 
-``` fs
+``` fsharp
 let create (request: TodoRequest, state: int) =
   let nextId = state + 1
   let todo = {

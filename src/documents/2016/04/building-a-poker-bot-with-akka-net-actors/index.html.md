@@ -124,7 +124,7 @@ Actor function of type `int -> seq<string * WindowInfo>` is used by the
 define the behavior. The ouput tuple defines an ID of an output actor and a
 message to send to it:
 
-``` fs
+``` fsharp
 let findActor msg = 
   findWindows ()
   |> Seq.map (fun x -> ("recognizer-actor-" + x.TableName, x))
@@ -132,7 +132,7 @@ let findActor msg =
 
 Here is how I spawn the singleton instance of this actor:
 
-``` fs
+``` fsharp
 let tableFinderRef = 
   actorOfRouteToChildren findActor (spawnChild recognizer)
   |> spawn system "table-finder-actor"
@@ -141,7 +141,7 @@ let tableFinderRef =
 Where `spawnChild` is a helper function - essentially an adapter of standard
 `spawn` function with proper parameter order:
 
-``` fs
+``` fsharp
 let spawnChild childActor name (mailbox : Actor<'a>) = 
   spawn mailbox.Context name childActor
 ```
@@ -163,7 +163,7 @@ Actor function is an implementation of
 The output is a decision message for Decision Maker actor which is a supervised 
 child of the Recognizer. Here is the actor function:
 
-``` fs
+``` fsharp
 let recognizeActor (window : WindowInfo) =
   let result = recognize window.Bitmap
   { WindowTitle = window.Title 
@@ -174,7 +174,7 @@ let recognizeActor (window : WindowInfo) =
 
 And here is the spawn function:
 
-``` fs
+``` fsharp
 let recognizer = actorOfConvertToChild recognizeActor (spawnChild decider "decider")
 ```
 
@@ -195,7 +195,7 @@ This way the actor function has the type of
 `DecisionMessage -> Screen option -> ClickerMessage * Screen option` 
 and looks like this:
 
-``` fs
+``` fsharp
 let decisionActor msg lastScreen =
   let screen = msg.Screen
   match lastScreen with
@@ -208,7 +208,7 @@ let decisionActor msg lastScreen =
 
 Here is the spawn function:
 
-``` fs
+``` fsharp
 let decider = actorOfStatefulConvert decisionActor None clickerRef
 ```
 
@@ -220,7 +220,7 @@ Button Clicker
 Clicker actor has the simplest implementation because it does not send messages to other actors.
 Here is the message that it receives from Decision Maker:
 
-``` fs
+``` fsharp
 type ClickTarget = (int * int * int * int)
 type ClickerMessage = {
   WindowTitle: string
@@ -237,7 +237,7 @@ of these series.
 pattern is used for this actor, so actor function isn't
 really needed. We spawn the singleton instance with the following statement:
 
-``` fs
+``` fsharp
 let clickerRef = actorOfSink click |> spawn system "clicker-actor"
 ```
 Actor goes under supervision by actor system with `click` as message handler.

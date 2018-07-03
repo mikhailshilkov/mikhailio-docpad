@@ -71,7 +71,7 @@ to keep the function minimal and clean. You can see the full code in
 basically means that it's ready to be called from other functions. Here is
 the code:
 
-``` cs
+``` csharp
 [FunctionName(nameof(Scaler))]
 public static int Scaler([ActivityTrigger] DurableActivityContext context)
 {
@@ -100,7 +100,7 @@ Scaling Logic
 One instance of such actor is created for each scalable resource (I only use
 1 now). Here is the implementation (again, simplified for readability):
 
-``` cs
+``` csharp
 [FunctionName(nameof(ScalingLogic))]
 public static async Task<ScalingState> ScalingLogic(
     [OrchestrationTrigger] DurableOrchestrationContext context, 
@@ -162,7 +162,7 @@ minimal and clean. You can see the full code in
 
 Here is the remaining implementation of **Metric Collector**:
 
-``` cs
+``` csharp
 [FunctionName(nameof(MetricCollector))]
 public static async Task MetricCollector(
     [TimerTrigger("0 */1 * * * *")] TimerInfo myTimer,

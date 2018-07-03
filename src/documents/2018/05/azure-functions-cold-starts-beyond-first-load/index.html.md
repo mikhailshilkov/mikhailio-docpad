@@ -70,7 +70,7 @@ warm instance?
 
 I tested with a very lightweight function, which nevertheless takes some time to complete:
 
-``` cs
+``` csharp
 public static async Task<HttpResponseMessage> Delay500([HttpTrigger] HttpRequestMessage req)
 {
     await Task.Delay(500);

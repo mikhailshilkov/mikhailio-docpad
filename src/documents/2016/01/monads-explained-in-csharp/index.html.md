@@ -35,7 +35,7 @@ functional style.
 Monads are flexible, so in C# we could try to represent a monadic type as 
 a generic class:
 
-``` cs
+``` csharp
 public class Monad<T>
 {
 }
@@ -49,7 +49,7 @@ be a way to create an object of this class out of an instance of type `T`.
 In functional world this operation is known as `Return` function. In C# it 
 can be as simple as a constructor:
 
-``` cs
+``` csharp
 public class Monad<T>
 {
     public Monad(T instance)
@@ -61,7 +61,7 @@ public class Monad<T>
 But usually it makes sense to define an extension method to enable fluent 
 syntax of monad creation:
 
-``` cs
+``` csharp
 public static class MonadExtensions
 {
     public static Monad<T> Return<T>(this T instance) => new Monad<T>(instance);
@@ -75,7 +75,7 @@ This is the property which makes monads so useful, but also a bit confusing.
 In functional world this operation is expressed with the `Bind` function 
 (or `>>=` operator). Here is the signature of `Bind` method in C#:
 
-``` cs
+``` csharp
 public class Monad<T>
 {
     public Monad<TO> Bind<TO>(Func<T, Monad<TO>> func)
@@ -91,7 +91,7 @@ how to bind itself to this function to produce another instance of monad
 of the new type. The full power of monads comes when we compose several of 
 them in one chain:
 
-``` cs
+``` csharp
 initialValue
     .Return()
     .Bind(v1 => produceV2OutOfV1(v1))
@@ -111,7 +111,7 @@ Basically your object should never be null, but it can either have `Some`
 value or be `None`. F# has a maybe implementation built into the language: 
 it's called `option` type. Here is a sample implementation in C#:
 
-``` cs
+``` csharp
 public class Maybe<T> where T : class
 {
     private readonly T value;
@@ -136,7 +136,7 @@ public class Maybe<T> where T : class
 }
 ```
 
-``` cs
+``` csharp
 public static class MaybeExtensions
 {
     public static Maybe<T> Return<T>(this T value) where T : class
@@ -156,7 +156,7 @@ combines both of them in one call.
 Let's have a look at a use case. Imagine we have a traditional repository 
 which loads data from an external storage (no monads yet):
 
-``` cs
+``` csharp
 public interface ITraditionalRepository
 {
     Customer GetCustomer(int id);
@@ -168,7 +168,7 @@ public interface ITraditionalRepository
 Now, we write a client class which loads data one by one and tries to find
 a shipper:
 
-``` cs
+``` csharp
 Shipper shipperOfLastOrderOnCurrentAddress = null;
 var customer = repo.GetCustomer(customerId);
 if (customer?.Address != null)
@@ -190,7 +190,7 @@ a bit cluttered and less linear.
 
 Here is an alternative repository which returns `Maybe` type:
 
-``` cs
+``` csharp
 public interface IMonadicRepository
 {
     Maybe<Customer> GetCustomer(int id);
@@ -205,7 +205,7 @@ will be forced to handle the case of absent value.
 And here is how the above example can be rewritten with `Bind` method 
 composition:
 
-``` cs
+``` csharp
 Maybe<Shipper> shipperOfLastOrderOnCurrentAddress =
     repo.GetCustomer(customerId)
         .Bind(c => c.Address)
@@ -232,7 +232,7 @@ Enumerable containers can be created - thus the `Return` monadic operation.
 The `Bind` operation is defined by the standard LINQ extension method, here 
 is its signature:
 
-``` cs
+``` csharp
 public static IEnumerable<B> SelectMany<A, B>(
     this IEnumerable<A> first, 
     Func<A, IEnumerable<B>> selector)
@@ -240,7 +240,7 @@ public static IEnumerable<B> SelectMany<A, B>(
 
 And here is an example of composition:
 
-``` cs
+``` csharp
 IEnumerable<Shipper> someWeirdListOfShippers =
     customers
         .SelectMany(c => c.Addresses)
@@ -261,7 +261,7 @@ that they produce a proper monad.
 **Identity law** says that that `Return` is a neutral operation: you can safely
 run it before `Bind`, and it won't change the result of the function call:
 
-``` cs
+``` csharp
 // Given
 T value;
 Func<T, M<U>> f;
@@ -273,7 +273,7 @@ value.Return().Bind(f) == f(value)
 **Associativity law** means that the order in which `Bind` operations
 are composed does not matter:
 
-``` cs
+``` csharp
 // Given
 M<T> m;
 Func<T, M<U>> f;

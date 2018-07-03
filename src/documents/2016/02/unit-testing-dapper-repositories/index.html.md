@@ -23,7 +23,7 @@ An Example of a Repository
 Let's say we have a simple class and we want to populate instances of this class
 from the database:
 
-``` cs
+``` csharp
 public class Product
 {
     public int Id { get; set; }
@@ -36,7 +36,7 @@ To be able to use Dapper for data access, we need an instance of `IDbConnection`
 As we want to be able to mock the connection for unit tests, we need to create
 a factory interface to abstract it away:
 
-``` cs
+``` csharp
 public interface IDatabaseConnectionFactory
 {
     IDbConnection GetConnection();
@@ -46,7 +46,7 @@ public interface IDatabaseConnectionFactory
 Now the repository would get a connection from this factory and execute 
 Dapper queries on it:
 
-``` cs
+``` csharp
 public class ProductRepository
 {
     private readonly IDatabaseConnectionFactory connectionFactory;
@@ -77,7 +77,7 @@ Here is my approach to testing the repository:
 Here is a helper class which uses another micro-ORM library [OrmLite](http://ormlite.com/) to talk
 to SQLite database:
 
-``` cs
+``` csharp
 public class InMemoryDatabase
 {
     private readonly OrmLiteConnectionFactory dbFactory = 
@@ -101,7 +101,7 @@ public class InMemoryDatabase
 
 And here is the test for our `ProductRepository` class:
 
-``` cs
+``` csharp
 [Test]
 public async Task QueryTest()
 {

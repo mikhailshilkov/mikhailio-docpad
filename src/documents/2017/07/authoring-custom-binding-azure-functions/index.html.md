@@ -29,7 +29,7 @@ runtime uses `local.settings.json` file for that).
 That means, when you need a configuration value inside your C# code,
 you normally do
 
-``` cs
+``` csharp
 string setting = ConfigurationManager.AppSettings["MySetting"];
 ```
 
@@ -38,7 +38,7 @@ Alternatively, `Environment.GetEnvironmentVariable()` method can be used.
 When I [needed to collect](https://mikhail.io/2017/07/custom-auto-scaling-in-azure/) 
 service bus subscription metrics, I wrote this kind of bulky code:
 
-``` cs
+``` csharp
 var resourceToScale = ConfigurationManager.AppSettings["ResourceToScale"];
 
 var connectionString = ConfigurationManager.AppSettings["ServiceBusConnection"];
@@ -49,7 +49,7 @@ var subscription = ConfigurationManager.AppSettings["Subscription"];
 The code is no rocket science, but it's tedious to write, so instead I came
 up with this idea to define Functions:
 
-``` cs
+``` csharp
 public static void MyFunction(
     [TimerTrigger("0 */1 * * * *")] TimerInfo timer,
     [Configuration(Key = "ResourceToScale")] string resource,
@@ -61,7 +61,7 @@ specific configuration key, and binds its value to a string parameter. The
 other one binds *multiple* configuration values to a POCO parameter. I defined
 the config class as
 
-``` cs
+``` csharp
 public class ServiceBusSubscriptionConfig
 {
     public ServiceBusSubscriptionConfig(string serviceBusConnection, string topic, string subscription)
@@ -116,7 +116,7 @@ packages (at the time of writing I used `2.1.0-beta1` version).
 
 **Define** a class for binding attribute:
 
-``` cs
+``` csharp
 [AttributeUsage(AttributeTargets.Parameter)]
 [Binding]
 public class ConfigurationAttribute : Attribute
@@ -134,7 +134,7 @@ how to use your binding correctly.
 
 The interface has just one method to implement:
 
-``` cs
+``` csharp
 public class ConfigurationExtensionConfigProvider : IExtensionConfigProvider
 {
     public void Initialize(ExtensionConfigContext context)
@@ -149,7 +149,7 @@ The first step of the implementation is to define a rule for our new
 `ConfigurationAttribute` and tell this rule how to get a string value out
 of any attribute instance:
 
-``` cs
+``` csharp
 var rule = context.AddBindingRule<ConfigurationAttribute>();
 rule.BindToInput<string>(a => ConfigurationManager.AppSettings[a.Key]);
 ```
@@ -158,7 +158,7 @@ That's really all that needs to happen to bind `string` parameters.
 
 To make our binding work with any POCO, we need a more elaborate construct:
 
-``` cs
+``` csharp
 rule.BindToInput<Env>(_ => new Env());
 var cm = context.Config.GetService<IConverterManager>();
 cm.AddConverter<Env, OpenType, ConfigurationAttribute>(typeof(PocoConverter<>));
@@ -170,7 +170,7 @@ type argument) with a generic converter called `PocoConverter`.
 
 The `Env` class is a bit dummy (it exists just because I need *some* class):
 
-``` cs
+``` csharp
 private class Env
 {
     public string GetValue(string key) => ConfigurationManager.AppSettings[key];
@@ -181,7 +181,7 @@ And `PocoConverter` is a piece of reflection, that loops through property
 names and reads configuration values out of them. Then it calls a constructor
 which matches the property count:
 
-``` cs
+``` csharp
 private class PocoConverter<T> : IConverter<Env, T>
 {
     public T Convert(Env env)

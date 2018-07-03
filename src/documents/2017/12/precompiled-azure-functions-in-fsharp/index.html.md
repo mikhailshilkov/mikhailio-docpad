@@ -62,7 +62,7 @@ Define a Function
 
 Open `Library.fs` code file and change it to the following code:
 
-``` fs
+``` fsharp
 namespace HelloFunctions
 
 open System
@@ -248,7 +248,7 @@ other triggers too.
 
 F# code for the simplest HTTP Function can look like this:
 
-``` fs
+``` fsharp
 namespace PrecompiledApp
 
 open Microsoft.AspNetCore.Mvc
@@ -325,7 +325,7 @@ for us.
 
 The definition of such routing will look familiar to all Suave users:
 
-``` fs
+``` fsharp
 module App =
   open Suave
   open Suave.Successful
@@ -341,7 +341,7 @@ module App =
 
 Azure Function is just a one-liner wiring Suave app into the pipeline:
 
-``` fs
+``` fsharp
 module Http =
   open Suave.Azure.Functions.Context
 
@@ -396,7 +396,7 @@ This programming model is based on attributes, which are similar to WebJobs
 SDK attributes. With this approach, there's no `function.json` file in 
 the project. Instead, the function declaration is decorated with attributes:
 
-``` fs
+``` fsharp
 [<FunctionName("AttributeBased")>]
 let run([<HttpTrigger>] req: HttpRequest, log: TraceWriter)
 ```

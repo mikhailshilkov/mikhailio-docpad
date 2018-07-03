@@ -18,7 +18,7 @@ I'm going to use a toy example based on weather reports. Our actor will be able 
 and then return the maximum temperature for a given period. An instance of actor will be created
 for each city (geo partitioning). Here is our interface in Service Fabric:
 
-``` cs
+``` csharp
 public interface IWeatherActor : IActor
 {
     Task AddWeatherReport(WeatherReport report);
@@ -30,7 +30,7 @@ public interface IWeatherActor : IActor
 We have two operations: a command and a query. They are both async (return `Task`). The data classes
 are required to be mutable DTOs based on `DataContract`:
 
-``` cs
+``` csharp
 [DataContract]
 public class WeatherReport
 {
@@ -54,7 +54,7 @@ public class Period
 
 And here is the implementation of the weather actor:
 
-``` cs
+``` csharp
 internal class WeatherActor : StatefulActor<List<WeatherReport>>, IWeatherActor
 {
     public Task AddWeatherReport(WeatherReport report)
@@ -78,7 +78,7 @@ Service Fabric provides reliable storage out of the box, so we are using it to
 store our reports. There's no code required to instantiate an actor. Here is the
 code to use it:
 
-``` cs
+``` csharp
 // Submit a new report
 IWeatherActor actor = ActorProxy.Create<IWeatherActor>(new ActorId("Amsterdam"));
 actor.AddWeatherReport(
@@ -95,7 +95,7 @@ Akka.NET Actors
 Actors in Akka.NET are message-based. The messages are immutable POCOs, which 
 is a great design decision. Here are the messages for our scenario:
 
-``` cs
+``` csharp
 public class WeatherReport
 {
     public WeatherReport(DateTime moment, int temperature, int humidity)
@@ -128,7 +128,7 @@ There's no need to define any interfaces. The basic actor implementation derives
 `ReceiveActor` and calls `Receive` generic method to setup a callback which is called
 when a message of specified type is received:
 
-``` cs
+``` csharp
 public class WeatherActor : ReceiveActor
 {
     private List<WeatherReport> state = new List<WeatherReport>();
@@ -172,7 +172,7 @@ based on the name. Note that Akka.NET actor needs to be explicitly created by
 another actor, but lifetime management is a separate discussion, so we'll skip 
 it for now. Here is the report sender:
 
-``` cs
+``` csharp
 // Submit a new report
 var msg = new WeatherReport { Moment = DateTime.Now, Temperature = 22, Humidity = 55 };
 Context.ActorSelection("/user/weather/Amsterdam").Tell(msg);
@@ -182,7 +182,7 @@ Asking `ActorSelection` is not directly possible, we would need to setup an
 inbox and receive callback messages. We'll pretend that we have an `ActorRef`
 for the sake of simplicity:
 
-``` cs
+``` csharp
 // Make a query somewhere else
 ActoRef actor = ... ; // we have it
 var result = await actor.Ask(new Period { From = monthAgo, Until = now });
@@ -204,7 +204,7 @@ cluster management and reliable state
 Here is the third implementation of our Weather Actor (the definitions of messages
 from Akka.NET example are intact):
 
-``` cs
+``` csharp
 [ActorService(Name = "WeatherActor")]
 public class WeatherActor : StetefulReceiveActor<List<WeatherReport>>
 {
@@ -248,7 +248,7 @@ the same interface
 The client code uses our own `MessageActorProxy` class to create non-generic proxies which
 are capable to `Tell` (send a message one way) and `Ask` (do request and wait for response):
 
-``` cs
+``` csharp
 // Submit a new report
 var actor = MessageActorProxy.Create(new ActorId("Amsterdam"), "WeatherActor");
 actor.Tell(new WeatherReport { Moment = DateTime.Now, Temperature = 22, Humidity = 55 });
@@ -263,7 +263,7 @@ Implementation of ReceiveActor
 
 Let's start with the interface definition:
 
-``` cs
+``` csharp
 public interface IReceiveActor : IActor
 {
     Task Tell(string typeName, byte[] message);
@@ -280,7 +280,7 @@ of choice (I used Newtonsoft JSON serializer).
 Actor implementation derives from `StatefulActor` and uses another type/bytes pair to store
 the serialized state:
 
-``` cs
+``` csharp
     public abstract class StatefulReceiveActor : StatefulActor<StateContainer>, 
                                                  IReceiveActor
     {
@@ -301,7 +301,7 @@ the serialized state:
 The simplistic implementation of `Receive` generic methods uses two dictionaries
 to store the handlers:
 
-``` cs
+``` csharp
 private Dictionary<Type, Func<object, object, Task<object>>> handlers;
 private Dictionary<Type, Func<object, object, Task<object>>> askers;
 
@@ -322,7 +322,7 @@ protected void Receive<TI, TO>(Func<object, TI, Task<TO>> asker)
 The `Tell` method deserializes the message and state, then picks a handler based on
 the message type, executes it and serializes the produced state back:
 
-``` cs
+``` csharp
 public async Task Tell(string typeName, byte[] message)
 {
     var type = Type.GetType(typeName);
@@ -350,7 +350,7 @@ public async Task Tell(string typeName, byte[] message)
 The implementation of `Ask` is almost identical, so I'll skip it. `MessageActorProxy` 
 encapsulates the serialization around passing data to normal `ActorProxy` class:
 
-``` cs
+``` csharp
 public class MessageActorProxy
 {
     private readonly IStatefulMessageActor proxy;

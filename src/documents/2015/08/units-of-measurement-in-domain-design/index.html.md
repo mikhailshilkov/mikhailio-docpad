@@ -15,7 +15,7 @@ Problem statement
 
 Our toy example will be about cars and fuel consumption. You receive some data about the trip of your car, e.g. an instance of
 
-``` cs
+``` csharp
 public interface ITrip
 {
     double FuelUsed { get; }
@@ -24,12 +24,12 @@ public interface ITrip
 ```
 
 Now you want to calculate the fuel consumption rate of your trip. You write
-``` cs
+``` csharp
 var fuelRate = trip.FuelUsed / trip.Distance;
 ```
 
 You get the value, but what is it? Let's say you want a value of liters per 100 kilometers. You can assume that `FuelUsed` is in liters, and `Distance` is in kilometers. To be more explicit you refactor your code
-``` cs
+``` csharp
 public interface ITrip
 {
     double FuelUsedInLiters { get; }
@@ -54,7 +54,7 @@ Defining the units
 
 I tried several options like generic classes for units, but I ended up having a struct per measurement. The code is very boring and repetitive, but it provides me with the strongest compile-time checks and nice readability. If you are too bored with typing, you can do some code generation or just use 3rd party that suits you.
 So, my end result looks like
-``` cs
+``` csharp
 public interface ITrip
 {
     Volume FuelUsed { get; }
@@ -63,7 +63,7 @@ public interface ITrip
 ```
 
 Let's see how Distance is defined (Volume will be almost exactly same):
-``` cs
+``` csharp
 public struct Distance
 {
     private Distance(double kilometers)

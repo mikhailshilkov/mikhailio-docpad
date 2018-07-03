@@ -98,7 +98,7 @@ Metric Collector
 
 First, let's define `MetricValue` class, which simply holds time and value:
 
-``` cs
+``` csharp
 public class MetricValue
 {
     public MetricValue(DateTime time, int value)
@@ -116,7 +116,7 @@ public class MetricValue
 and `Metric` class which extends the value with resource name (e.g. App Service
 Plan name) and measured parameter name:
 
-``` cs
+``` csharp
 public class Metric
 {
     public Metric(string resourceName, string name, MetricValue value)
@@ -137,7 +137,7 @@ public class Metric
 The function definition has two associated bindings: timer trigger (runs every
 minute) and return binding to the storage queue:
 
-``` cs
+``` csharp
 [FunctionName("MetricCollector")]
 [return: Queue("Metrics")]
 public static Metric MetricCollector([TimerTrigger("0 */1 * * * *")] TimerInfo myTimer, TraceWriter log)
@@ -183,7 +183,7 @@ The bindings are illustrated on the following picture:
 
 And here is the corresponding Function signature:
 
-``` cs
+``` csharp
 [FunctionName("ScalingLogic")]
 [return: Queue("Actions")]
 public static ScaleAction ScalingLogic(
@@ -200,7 +200,7 @@ The function implementation is relatively complex, so I'll describe it in parts.
 
 `ScaleAction` is a simple message class:
 
-``` cs
+``` csharp
 public enum ScaleActionType
 {
     Up,
@@ -224,7 +224,7 @@ public class ScaleAction
 Table Storage only allows primitive types for its columns, like strings. 
 So I had to create a separate Table Storage entity class:
 
-``` cs
+``` csharp
 public class ScalingStateEntity : TableEntity
 {
     public string SerializedState { get; set; }
@@ -233,7 +233,7 @@ public class ScalingStateEntity : TableEntity
 
 which stores serialized state, from the state class itself:
 
-``` cs
+``` csharp
 public class ScalingState
 {
     public List<MetricValue> History { get; } = new List<MetricValue>();
@@ -246,7 +246,7 @@ Now let's look at the function body. It consists of four blocks.
 
 The first block retrieves the previous values of the metric and logs it too:
 
-``` cs
+``` csharp
 // 1. Deserialize state
 var state = stateEntity?.SerializedState != null 
     ? JsonConvert.DeserializeObject<ScalingState>(stateEntity.SerializedState) 
@@ -258,7 +258,7 @@ log.Info($"Scaling logic: Received {metric.Name}, previous state is {string.Join
 The second block adds the current metric value and removes all metrics which are
 not in the target period of 10 minutes anymore:
 
-``` cs
+``` csharp
 // 2. Add current metric value, remove old values
 history.Add(metric.Value);
 history.RemoveAll(e => e.Time < metric.Value.Time.Substract(period));
@@ -268,7 +268,7 @@ Now, the actual logic finally kicks in and produces the scaling action if averag
 or maximum value is above or below respective thresholds. For my implementation I also
 chose to apply this rule after 5th data point. Cooldown period is also respected:
 
-``` cs
+``` csharp
 // 3. Compare the aggregates to thresholds, produce scaling action if needed
 ScaleAction action = null;
 if (history.Count >= 5
@@ -293,7 +293,7 @@ if (history.Count >= 5
 
 Finally, the state is serialized back to table entity and action is returned: 
 
-``` cs
+``` csharp
 // 4. Serialize the state back and return the action
 newStateEntity = stateEntity != null 
     ? stateEntity 
@@ -311,7 +311,7 @@ Scaler
 The last function of the workflow is called `Scaler`: it listens for scaling commands and executes them.
 I am using Azure Management Fluent SDK to scale the App Service Plan capacity:
 
-``` cs
+``` csharp
 [FunctionName("Scaler")]
 public static void Scaler([QueueTrigger("Actions")] ScaleAction action, TraceWriter log)
 {

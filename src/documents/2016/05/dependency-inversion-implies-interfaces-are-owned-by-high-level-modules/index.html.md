@@ -42,7 +42,7 @@ required for a vehicle to go from A to B:
 
 So the following code **violates** the first part of the Dependency Inversion:
 
-``` cs
+``` csharp
 namespace Mapping
 {
     public class RouteCalculator
@@ -85,7 +85,7 @@ implementations:
 In Trip Planner we accept the interface as constructor parameter, and we'll get the 
 specific implementation at run time:
 
-``` cs
+``` csharp
 namespace Mapping
 {
     public class IRouteCalculator
@@ -176,7 +176,7 @@ level:
 As you can see, I also renamed the interface. The name should reflect the way
 how the domain experts would think of this abstraction. Here is the result:
 
-``` cs
+``` csharp
 namespace Planning
 {
     public class IDurationCalculator

@@ -95,7 +95,7 @@ Code sample
 We define a number of functions, each one of which represents one piece of decision 
 logic. Then we put them all into the list:
 
-``` fs
+``` fsharp
 let rules = [
   overtakeLimpedPot overtakyHand snapshot value history;
   increaseTurnBetEQvsAI snapshot;
@@ -114,7 +114,7 @@ action `history` are used only by some of the functions.
 
 Now, here is the definition of the facade decision making function:
 
-``` fs
+``` fsharp
 rules |> List.fold (fun opt rule -> rule opt) None
 ```
 

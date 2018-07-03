@@ -19,7 +19,7 @@ class called `ThingService`. It's probably doing something with `Thing`'s
 and that's what you need. The signature of the class constructor looks 
 like this:
 
-``` cs
+``` csharp
 public ThingService(
     IGetThings readRepository,
     ISaveThing saveRepository,
@@ -34,7 +34,7 @@ We don't know where those interfaces are implemented, but hey - we've got
 the best tooling in the industry, so right click on `IGetThings`, then 
 `Go To Implementation`.
 
-``` cs
+``` csharp
 public DapperThingRepository(
     ICRUDAdapter adapter,
     IDatabaseConnectionFactory connectionFactory,

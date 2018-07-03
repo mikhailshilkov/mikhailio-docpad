@@ -41,7 +41,7 @@ hard and costly.
 My function is based on [Bcrypt.Net](https://github.com/BcryptNet/bcrypt.net)
 implementation, and it's extremely simple:
 
-``` cs
+``` csharp
 public static void Run([QueueTrigger("bcrypt-password")] string password)
 {
     BCrypt.Net.BCrypt.HashPassword(password, 12);

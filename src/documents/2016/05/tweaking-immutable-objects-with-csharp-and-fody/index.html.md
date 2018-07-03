@@ -23,7 +23,7 @@ Example
 Let's have a look at an illustration of this problem. Let's say we have a value
 type representing poker player statistics:
 
-``` cs
+``` csharp
 public class PlayerStats
 {
     public PlayerStats(
@@ -50,7 +50,7 @@ five times. But the issue I'm discussing today is related to how we create
 a new object based on another object. Let's say we need to make a copy of 
 a given statistics, but with `Hands` property increased by 1:
 
-``` cs
+``` csharp
 var increasedHands = new PlayerStats(
     existing.Hands + 1,
     existing.DaysOnline,
@@ -63,7 +63,7 @@ instance, we could swap `Won` and `ExpectedValue` property calls
 and compiler won't let us know because the types are the same. So we probably
 want to use explicit constructor parameter names:
 
-``` cs
+``` csharp
 var increasedHands = new PlayerStats(
     hands: existing.Hands + 1,
     daysOnline: existing.DaysOnline,
@@ -80,7 +80,7 @@ F# is a functional-first language with immutability as first-class concept.
 In F# value objects are usually modelled with Records, here is our example
 reimplemented:
 
-``` fs
+``` fsharp
 type PlayerStats = {
     Hands: int
     DaysOnline: int
@@ -92,7 +92,7 @@ type PlayerStats = {
 Creation of new objects based on other objects is also solved properly in F#,
 thanks to the **`with`** keyword :
 
-``` fs
+``` fsharp
 let increasedHands = { existing with Hands = existing.Hands + 1 }
 ```
 
@@ -107,7 +107,7 @@ alternative. We can define some fluent methods which would change
 property values one by one (they don't change the original object, but
 return a copy with changed value):
 
-``` cs
+``` csharp
 public PlayerStats WithHands(int hands) 
 {
     return new PlayerStats(
@@ -124,7 +124,7 @@ public PlayerStats WithExpectedValue (Money expectedValue) { ... }
 
 The method implementation is very tedious but the usage gets much cleaner:
 
-``` cs
+``` csharp
 var increasedHands = existing.WithHands(existing.Hands + 1);
 ```
 
@@ -150,7 +150,7 @@ Then, keep the `PlayerStats` class definition, but get rid of the bodies
 of `WithXyz` methods. Keep the signature but return something trivial like
 `null` or `this`:
 
-``` cs
+``` csharp
 public PlayerStats WithHands(int hands) => this;
 public PlayerStats WithDaysOnline(int daysOnline) => this;
 public PlayerStats WithWon(Money won) => this;
@@ -176,7 +176,7 @@ In case you avoid [Primitive Obsession](https://mikhail.io/2015/08/units-of-meas
 antipattern, you will often end up with classes which have unique types of 
 properties, e.g.
 
-``` cs
+``` csharp
 public class TripProfile
 {
     public TripProfile(
@@ -199,7 +199,7 @@ In this case, the plugin can be smart enough to figure out which property
 you want to modify just by looking at the type of the argument. The single stub
 method can look like this:
 
-``` cs
+``` csharp
 public TripProfile With<T>(T value) => this;
 ```
 

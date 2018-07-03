@@ -33,7 +33,7 @@ Cursor Position
 It's really easy to understand where the mouse cursor currently is: just
 use `Control.MousePosition` property from the standard library:
 
-``` fs
+``` fsharp
 let currentPosition () = 
   let mp = System.Windows.Forms.Control.MousePosition
   (mp.X, mp.Y)
@@ -49,7 +49,7 @@ I use the third party [WindowsInput](https://inputsimulator.codeplex.com/)
 library to control the mouse and the keyboard programmatically. It uses some
 weird coordinate system, so the function to move the mouse cursor looks like this:
 
-``` fs
+``` fsharp
 let simulator = new InputSimulator()
 
 let moveTo x y =
@@ -69,7 +69,7 @@ at least it should look decent. For this gradual movement function I used
 a nice F# feature called asynchronous workflows. Effectively, it looks like
 a loop with async sleep statements inside.
 
-``` fs
+``` fsharp
 let moveToWorkflow step (toX, toY) = async {
   let (fromX, fromY) = currentPosition()
   let count = Math.Max(10, (Math.Abs (toX - fromX) + Math.Abs (toY - fromY)) / 20)
@@ -86,7 +86,7 @@ Basically, it calculates a coordinate for n-th step of the movement. We can
 plug different implementations of this function to find the right balance of
 the movement style. Here is the simplest linear implementation:
 
-``` fs
+``` fsharp
 let linearStep from until max i =
   from + (until - from) * i / max
 ```
@@ -94,7 +94,7 @@ let linearStep from until max i =
 The sinus-based implementation is a bit more verbose because of float-int 
 conversions:
 
-``` fs
+``` fsharp
 let sinStep (from:int) (until:int) (max:int) (index:int) =
   let fromf = from |> float
   let untilf = until |> float
@@ -127,7 +127,7 @@ A button is a rectangle and we want to click a random point inside it. So, all
 we need is to pick random coordinates, move the mouse there and send a 
 click event via the simulator:
 
-``` fs
+``` fsharp
 let clickButton (minX, minY, maxX, maxY) =
   let r = new Random()
   let p = (r.Next(minX, maxX), r.Next(minY, maxY))

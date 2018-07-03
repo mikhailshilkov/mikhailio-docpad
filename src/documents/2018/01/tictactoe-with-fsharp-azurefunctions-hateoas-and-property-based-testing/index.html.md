@@ -37,14 +37,14 @@ unions) and pure functions.
 
 We have two players, so we need a type for them:
 
-``` fs
+``` fsharp
 type Player = X | O
 ```
 
 In addition, there is a useful function to return the other player based on the given one.
 Simple pattern-matching will do:
 
-``` fs
+``` fsharp
 module Player =
   let other = function | X -> O | O -> X
 ```
@@ -61,7 +61,7 @@ For `other` function, I came up with two properties:
 
 Here is the code with [Expecto](https://github.com/haf/expecto) and [FsCheck](https://github.com/fscheck/FsCheck):
 
-``` fs
+``` fsharp
 testProperty "Other player is not equal to player" <| fun x ->
   Expect.notEqual x (Player.other x) "Other should be different from original"
 
@@ -72,7 +72,7 @@ testProperty "Other player of other player is the player itself" <| fun x ->
 Let's move on to modelling the game. I decided to define a union type to be used for
 horizontal and vertical positions of the cells:
 
-``` fs
+``` fsharp
 type Position = One | Two | Three
 ```
 
@@ -82,7 +82,7 @@ the ranges all the time.
 My first record type models the move, or action done by a player: it has `X` and `Y`
 positions of the chosen cell, plus the player information:
 
-``` fs
+``` fsharp
 type Move = {
   X: Position
   Y: Position
@@ -93,7 +93,7 @@ type Move = {
 The following type `RunningGame` has just two properties, but its shape defines the
 design of the whole application:
 
-``` fs
+``` fsharp
 type RunningGame = {
   MovesDone: Move list
   PossibleMoves: Move list
@@ -123,7 +123,7 @@ correspond to possible moves, see [REST API](#HATEOAS) below
 
 Now, we can model a game which is already finished:
 
-``` fs
+``` fsharp
 type GameOutcome = Won of Player | Tie
 
 type FinishedGame = {
@@ -137,7 +137,7 @@ was a tie.
 
 Each state of a game can be described by the union of the previous two states:
 
-``` fs
+``` fsharp
 type GameState = 
   | Finished of FinishedGame
   | InProgress of RunningGame
@@ -152,7 +152,7 @@ of transitions between game states, implemented with pure functions.
 First, each game starts at the same state, which is an empty field, and X turn. Here
 is the value which represents this initial state:
 
-``` fs
+``` fsharp
 module Game =
   let initialState = 
     let positions = [One; Two; Three]
@@ -167,7 +167,7 @@ module Game =
 After each move is made, we need a function to evaluate move outcome: whether current
 game is finished or is still in progress. I defined a function `evaluate` for that:
 
-``` fs
+``` fsharp
 let private evaluate (history: Move list): GameOutcome option = ...
 ```
 
@@ -186,7 +186,7 @@ doesn't make sense
 
 Here is the function implementation:
 
-``` fs
+``` fsharp
 let makeMove (game: RunningGame) (move: Move): GameState =
   let movesDone = move :: game.MovesDone
   match evaluate movesDone with
@@ -210,7 +210,7 @@ Tic-Tic-Toe is two-player game, so I defined another function which runs
 a turn of 2 moves by 2 players, given the decision making functions of both
 players (so it's a higher-order function):
 
-``` fs
+``` fsharp
 let makeRound player1 player2 gameState =
   let newGameState = player1 gameState |> makeMove gameState
   match newGameState with
@@ -262,7 +262,7 @@ Here is how one such test is implemented.
 
 A helper function plays a sequence of indexes as moves:
 
-``` fs
+``` fsharp
 let playSequence moves = 
   let playOne s i =
     match s with
@@ -273,7 +273,7 @@ let playSequence moves =
 
 Then the property "The game is always finished after 9 moves" is simply:
 
-``` fs
+``` fsharp
 testProp "The game is always finished after 9 moves" <| fun (Gen.ListOf9 xs) ->
   let result = playSequence xs
   Expect.isTrue (Game.isFinished result) "Game should be finished"
@@ -369,7 +369,7 @@ list of links now has only 7 links, based on the count of free cells.
 
 The client keeps navigating the links until it gets non-empty `result` field:
 
-```
+``` json
 {
     "id": "5d7b2261",
     "result": "You Win!",
@@ -405,7 +405,7 @@ with precompiled F# functions.
 
 The initial `POST /game` request is handled by `Start` function:
 
-``` fs
+``` fsharp
 type GameRequest = { Name: string }
 
 type Cell = { Name: string; Value: string }
@@ -441,7 +441,7 @@ The outline of this function:
 
 The second Function `Play` handles the moves:
 
-``` fs
+``` fsharp
 [<FunctionName("Play")>]
 let play([<HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "game/{gameid}/move/{index}")>] 
          req: HttpRequest, gameid: string, index: int,
@@ -482,7 +482,7 @@ playing bot. This wasn't the goal though: it's more fun for a human to win.
 
 So, actually, the only property test that I ended up implementing is the following:
 
-``` fs
+``` fsharp
 testProp "Bot is able to play O at any possible position" <| fun (Gen.ListOfNonNegative xs) ->
   let human i p _ = p.PossibleMoves.[i % p.PossibleMoves.Length]
   let round s i =
@@ -508,7 +508,7 @@ I implemented the bot using the approach described in my
 [Functional Fold as Decision Tree Pattern](https://mikhail.io/2016/07/building-a-poker-bot-functional-fold-as-decision-tree-pattern/)
 post:
 
-``` fs
+``` fsharp
 let pickMove (game: RunningGame) = 
   [winNow O; notLoseNow; pickRandom]
   |> Seq.ofList
@@ -521,7 +521,7 @@ decision will be promoted to final decision.
 
 And here are those functions:
 
-``` fs
+``` fsharp
 let winNow player (game: RunningGame) =
   let isWin = function | Finished { Outcome = Won x } when x = player -> true | _ -> false
   game.PossibleMoves
@@ -555,7 +555,7 @@ you play, the higher the score is. Move count is more important than timing.
 
 These principles are nicely expressed as property tests:
 
-``` fs
+``` fsharp
 testProp "The score of faster game is not lower than slower game" 
   <| fun (Gen.Positive duration1) (Gen.Positive duration2) game ->
   let (slower, faster) = maxmin id duration1 duration2
@@ -580,7 +580,7 @@ scenarios: the framework should take care of those.
 
 One of the possible implementations for scoring is:
 
-``` fs
+``` fsharp
 let calculateScore duration (state: GameState) =
   let durationScore = (100.0 * (1.0 - duration / (duration + 10000.0))) |> int
   match state with
@@ -596,7 +596,7 @@ There is another Azure Function which handles `GET` requests to `/leaderboard` r
 loads all the past games from Table Storage, and then passes them to leaderboard calculation
 function below:
 
-``` fs
+``` fsharp
 let calculateLeaderboard top ns =
   ns
   |> Seq.filter (fun entity -> snd entity > 0 && not (String.IsNullOrEmpty (fst entity)))

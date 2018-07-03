@@ -39,7 +39,7 @@ will apply it to the 2D matrix at hand.
 
 The graph is defined by the following type:
 
-``` fs
+``` fsharp
 type Graph<'a> = {
   Nodes: seq<'a>
   Neighbours: 'a -> seq<'a>
@@ -67,7 +67,7 @@ is added to both current set and total visited set.
 Let's start the implementation from inside out. The following recursive function
 adds a node to the accumulated sets and calls itself for non-visited neighbours:
 
-``` fs
+``` fsharp
 let rec visitNode accumulator visited node =
   let newAccumulator = Set.add node accumulator
   let newVisited = Set.add node visited
@@ -81,7 +81,7 @@ The type of this function is `Set<'a> -> Set<'a> -> 'a -> Set<'a> * Set<'a>`.
 
 Step 3 is implemented with `visitComponent` function:
 
-``` fs
+``` fsharp
 let visitComponent (sets, visited) node =
   if Set.contains node visited 
   then sets, visited
@@ -92,7 +92,7 @@ let visitComponent (sets, visited) node =
 
 Now, the graph traversal is just a `fold` of graph nodes with `visitComponent` function.
 
-``` fs
+``` fsharp
 module Graph =
   let findConnectedComponents graph = 
     graph.Nodes
@@ -110,7 +110,7 @@ underneath (and they close over the graph value).
 Now, let's forget about the graphs for a second and model the 2D matrix of integers.
 The type definition is simple, it's just an alias for the array:
 
-``` fs
+``` fsharp
 type Matrix2D = int[,]
 ```
 
@@ -120,7 +120,7 @@ find the neighbours of each element.
 The implementation below is mostly busy validating the boundaries of the array. The
 neighbours of a cell are up to 8 cells around it, diagonal elements included.
 
-``` fs
+``` fsharp
 module Matrix2D =
   let allCells (mx: Matrix2D) = seq {
     for x in [0 .. Array2D.length1 mx - 1] do
@@ -140,7 +140,7 @@ Putting It All Together
 
 Now we are all set to solve the puzzle. Here is our input array:
 
-``` fs
+``` fsharp
 let mat = array2D
             [| [|1; 1; 0; 0; 0|];
                [|0; 1; 0; 0; 1|];
@@ -152,14 +152,14 @@ let mat = array2D
 
 We need a function to define if a given cell is a piece of an island:
 
-``` fs
+``` fsharp
 let isNode (x, y) = mat.[x, y] = 1
 ```
 
 And here is the essence of the solution - our graph definition. Both `Nodes`
 and `Neightbours` are matrix cells filtered to contain 1's. 
 
-``` fs
+``` fsharp
 let graph = {
   Nodes = Matrix2D.allCells mat |> Seq.filter isNode
   Neighbours = Matrix2D.neighbours mat >> Seq.filter isNode
@@ -168,7 +168,7 @@ let graph = {
 
 The result is calculated with one-liner:
 
-``` fs
+``` fsharp
 graph |> Graph.findConnectedComponents |> List.length
 ```
 

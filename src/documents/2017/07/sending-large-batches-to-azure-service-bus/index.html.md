@@ -22,7 +22,7 @@ obviously each one of them must satisfy the restriction of 256k max size.
 
 So, we want to implement a method with the following signature:
 
-``` cs
+``` csharp
 public Task SendBigBatchAsync<T>(IEnumerable<T> messages);
 ```
 
@@ -49,7 +49,7 @@ It's defined by hypothetical `Func<T, long> getSize` function. Here is a
 helpful extension method that will split an arbitrary collection based on
 a metric function and maximum chunk size:
 
-``` cs
+``` csharp
 public static List<List<T>> ChunkBy<T>(this IEnumerable<T> source, Func<T, long> metric, long maxChunkSize)
 {
     return source
@@ -79,7 +79,7 @@ public static List<List<T>> ChunkBy<T>(this IEnumerable<T> source, Func<T, long>
 
 Now, the implementation of `SendBigBatchAsync` is simple:
 
-``` cs
+``` csharp
 public async Task SendBigBatchAsync(IEnumerable<T> messages, Func<T, long> getSize)
 {
     var chunks = messages.ChunkBy(getSize, MaxServiceBusMessage);
@@ -108,7 +108,7 @@ OK, how do we determine the size of each message? How do we implement
 `BrokeredMessage` class exposes `Size` property, so it might be tempting to
 rewrite our method the following way:
 
-``` cs
+``` csharp
 public async Task SendBigBatchAsync<T>(IEnumerable<T> messages)
 {
     var brokeredMessages = messages.Select(m => new BrokeredMessage(m));
@@ -146,7 +146,7 @@ fixed value inside a configuration file.
 
 Here is how you measure the headers of a `BrokeredMessage` message:
 
-``` cs
+``` csharp
 var sizeBefore = message.Size;
 client.Send(message);
 var sizeAfter = message.Size;
@@ -156,7 +156,7 @@ var headerSize = sizeAfter - sizeBefore;
 Now you just need to adjust one line from the previous version of 
 `SendBigBatchAsync` method
 
-``` cs
+``` csharp
 var chunks = brokeredMessages.ChunkBy(bm => FixedHeaderSize + bm.Size, MaxServiceBusMessage);
 ```
 
@@ -190,7 +190,7 @@ operation failed, so we can use this information.
 
 Here is a sketch of how to do that in code:
 
-``` cs
+``` csharp
 // Sender is reused across requests
 public class BatchSender
 {

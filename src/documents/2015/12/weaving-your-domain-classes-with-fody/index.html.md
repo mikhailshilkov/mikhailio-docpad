@@ -6,7 +6,7 @@ tags: ["Fody", "DDD", "Code Generation"]
 teaser: When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive cruft. In this article I show off one trick to reduce this boilerplate code with Fody library.
 ---
 When I model the business domain with C#, the resulting data structures tend to contain a lot of boilerplate code. It's repeated from class to class and it gets more difficult to see the essence of the model behind the repetitive cruft. Here is a simplistic example, which illustrates the problem. Let's say we are modelling Trips, and for each `Trip` we need to keep track of `Origin`, `Destination` and `Vehicle` which executes the `Trip`, nothing else. Here is a code to create an sample trip:
-``` cs
+``` csharp
 var trip = new Trip(
     origin: new Location("Paris", geoParis), 
     destination: new Location("Amsterdam", geoAmsterdam),
@@ -23,7 +23,7 @@ Initial version
 ---------------
 
 First, let's implement these requirement in a usual way:
-``` cs
+``` csharp
 public class Trip : IEquatable<Trip>
 {
     public Trip(Location origin, Location destination, Vehicle vehicle)
@@ -118,7 +118,7 @@ The root of your project will now contain the following configuration file:
 (I've added `IncludeDebugAssert` attribute manually to disable assert statements in debug mode)
 
 Let's adjust our class to make use of the plugins:
-``` cs
+``` csharp
 [Equals]
 public class Trip
 {
@@ -140,7 +140,7 @@ And that's it! We still get the same functionality but the code is just trivial.
 - I used no attributes from `NullGuard` plugin. This plugin works in *opt-out* mode, i.e. it changes all the classes by default, and if you don't want it for some piece of code - you can always opt out. This default makes a lot of sense to me: I don't want any nulls in my code unless I really need them due to some external contracts.
 
 Let's open the resulting assembly in [ILSpy](http://ilspy.net/) to see what it compiles to. Here is the constructor:
-``` cs
+``` csharp
 public Trip(Location origin, Location destination, Vehicle vehicle)
 {
     bool flag = origin == null;
@@ -165,7 +165,7 @@ public Trip(Location origin, Location destination, Vehicle vehicle)
 ```
 
 It's bit more verbose but essentially equivalent to what I did manually before. By default null guard will be very strict, so you will see that even auto-property's return values are checked:
-``` cs
+``` csharp
 public Location Origin
 {
     [CompilerGenerated]
@@ -182,12 +182,12 @@ public Location Origin
 ```
 
 It doesn't make much sense to me, so I configured Fody on assembly level to check only arguments and return values:
-``` cs
+``` csharp
 [assembly: NullGuard(ValidationFlags.Arguments | ValidationFlags.ReturnValues)]
 ```
 
 Here is a set of operations related to equality (I'll skip the body in sake of brevity):
-``` cs
+``` csharp
 public class Trip : IEquatable<Trip>
 {
     [GeneratedCode("Equals.Fody", "1.4.6.0"), DebuggerNonUserCode]
@@ -211,7 +211,8 @@ Bonus - a proper solution
 ------------------------
 
 Here is how you actually should define similar types:
-``` fs
+
+``` fsharp
 type Trip = 
   { Origin : Location
     Destination : Location

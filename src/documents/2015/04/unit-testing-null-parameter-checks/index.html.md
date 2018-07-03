@@ -127,7 +127,7 @@ I'm still not quite satisfied with the amount of code we have to write for such 
 
 I solved it with a simple helper method:
 
-``` cs
+``` csharp
 public void ConstructorMustThrowArgumentNullException(Type type)
 {
     foreach (var constructor in type.GetConstructors())

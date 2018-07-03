@@ -16,7 +16,7 @@ Let's say we get a request from some client code and we need to check if this
 request is actually valid. If it's not valid, we want to make a detailed description
 of the problems that we identified. If it is valid, we want to produce a response
 about the successful acceptance of the request. Let's define the classes:
-``` cs
+``` csharp
 public class Request { ... }
 public class Response { ... }
 public class ValidationError { ... }
@@ -29,7 +29,7 @@ Throw an exception
 ------------------
 
 Validation *error* sounds like it could be an exception:
-``` cs
+``` csharp
 public Response Validate(Request r)
 {
    if (!Valid(r))
@@ -49,7 +49,7 @@ Output parameter
 ----------------
 
 We could make an output parameter of `ValidationError` type:
-``` cs
+``` csharp
 public Response Validate(Request r, out ValidationError error)
 {
     if (Valid(r))
@@ -75,7 +75,7 @@ Return the combined result
 We could declare a container class which would keep both `Response` and 
 `ValidationError`, and then return it from the method.
 
-``` cs
+``` csharp
 public class Both<TData, TError>
 {
     public TData Data { get; set; }
@@ -100,7 +100,7 @@ Instead of returning `Both` with nullable properties, let's return `Either`
 with just one of them. When constructing an object, you can specify either
 a 'left' or a 'right' argument, but not both.
 
-``` cs
+``` csharp
 public class Either<TL, TR>
 {
     private readonly TL left;
@@ -124,7 +124,7 @@ public class Either<TL, TR>
 Now, the main difference is in how the client uses it. There are no properties
 to accept `Left` and `Right` parts. Instead we define the following method:
 
-``` cs
+``` csharp
 public T Match<T>(Func<TL, T> leftFunc, Func<TR, T> rightFunc)
     => this.isLeft ? leftFunc(this.left) : rightFunc(this.right);
 ```
@@ -136,7 +136,7 @@ of the right function.
 Another improvement would be to create explicit operators for easy conversions
 from left and right types:
 
-``` cs
+``` csharp
 public static implicit operator Either<TL, TR>(TL left) => new Either<TL, TR>(left);
 
 public static implicit operator Either<TL, TR>(TR right) => new Either<TL, TR>(right);
@@ -149,7 +149,7 @@ Why it's great
 
 Here is the service code written with `Either`:
 
-``` cs
+``` csharp
 public Either<Response, ValidationError> Validate(Request r)
 {
     return Valid(r) 
@@ -160,7 +160,7 @@ public Either<Response, ValidationError> Validate(Request r)
 
 Clean and nice! Now a simplistic client:
 
-``` cs
+``` csharp
 var validated = service.Validate(request);
 Console.WriteLine(
     validated.Match(

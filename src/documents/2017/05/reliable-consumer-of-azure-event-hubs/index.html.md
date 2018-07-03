@@ -162,7 +162,7 @@ sit in the event hub anyway. You could still log it for diagnostics purpose - ju
 There's no notion of dead letters in Event Hubs SDK, so I defined my own
 interface `IDeadLetterManager` with a single `AddFailedEvents` method:
 
-``` cs
+``` csharp
 public interface IDeadLetterManager
 {
     Task AddFailedEvents(IEnumerable<DeadLetter<EventData>> deadLetters);
@@ -197,7 +197,7 @@ into its constructor, and then I implement `IEventProcessor`'s
 
 The code block that illustrates this workflow:
 
-``` cs
+``` csharp
 public async Task ProcessEventsAsync(
     PartitionContext context, 
     IEnumerable<EventData> eventDatas)

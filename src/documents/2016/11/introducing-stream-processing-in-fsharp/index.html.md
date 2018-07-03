@@ -197,14 +197,14 @@ Our domain is very simple in Gift Count example. Still, we could describe `Gift`
 type to restrict it to be lowercase, not empty etc. But for the sake of simplisity 
 I'll limit it to one liner:
 
-``` fs
+``` fsharp
 type Gift = string
 ```
 
 Now, the type of the first transformation should be `string -> Gift list`. So,
 our transformation is based on a function 
 
-``` fs
+``` fsharp
 let tokenize (wishlist: string) =
   wishlist.ToLowerInvariant().Split(", ")
   |> List.ofArray
@@ -215,7 +215,7 @@ let tokenize (wishlist: string) =
 The counting transformation is modeled in a similar way. The base function
 is of type `Gift list -> (Gift * int) list` and is actually implemented as 
 
-``` fs
+``` fsharp
 let count xs = List.countBy id xs
 ```
 
@@ -223,7 +223,7 @@ Instead of using a real database, we will just print the counts to console.
 So the last optional step for our examples will be to print out the counts
 one by one. Here is a helper function:
 
-``` fs
+``` fsharp
 let print (gift, count) = sprintf "%i %s" count gift
 ```
 
@@ -269,7 +269,7 @@ How would we like to see this pipeline in F#? Our motivation example is going to
 be the same processing applied to a normal F# list of wishlists (strings). The following
 code snippet counts the gifts in wishlists and prints the result:
 
-``` fs
+``` fsharp
 wishlists
 |> List.collect tokenize
 |> List.countBy id
@@ -281,7 +281,7 @@ My goal for the rest of the article will be to define a `Flow` module which woul
 enable me to write a Stream Processing pipeline in the same fashion. Here is the
 target code:
 
-``` fs
+``` fsharp
 sourceOfWishlists
 |> Flow.collect tokenize
 |> Flow.countBy id
@@ -311,7 +311,7 @@ offering a way to reuse streaming code and capacity also for bounded data worklo
 
 To follow this modern path, we will declare our `Source` as following:
 
-``` fs
+``` fsharp
 type BoundedSource<'T> = unit -> 'T seq
 type UnboundedSource<'T> = ('T -> unit) -> unit
 
@@ -332,14 +332,14 @@ see a usage example later.
 The `Sink` represents an action to happen at the end of pipeline. I've made it
 a discriminated union too, but with just one case:
 
-``` fs
+``` fsharp
 type Sink<'T> = | Action of ('T -> unit)
 ```
 
 Now, we should be able to simulate an empty processing pipeline: directly connect 
 a source to a sink. Let's start with bounded data:
 
-``` fs
+``` fsharp
 let copyPipeline source sink =
   match source, sink with
   | Bounded b, Action a -> b() |> Seq.iter a
@@ -356,7 +356,7 @@ copyPipeline giftBoundedSource consoleSink
 This code will print out all the gift names from the sequence. Now, let's extend it to
 stream unbounded data. Before we can do that, let's introduce a helper class:
 
-``` fs
+``` fsharp
 type Triggered<'T>() = 
   let subscribers = new List<'T -> unit>()
   member this.DoNext x =
@@ -370,7 +370,7 @@ and each subscriber will get an item every time.
 
 Here's how we can use it for unbounded data processing:
 
-``` fs
+``` fsharp
 let copyPipeline source sink =
   match source, sink with
   | Bounded b, Action a -> b() |> Seq.iter a
@@ -406,7 +406,7 @@ Now it's time to implement the contracts for the flow that we defined
 in Gift Count example. The contract consists of two parts. The first part
 is a generic interface which defines all the operations that we need:
 
-``` fs
+``` fsharp
 type Runnable = unit -> unit
 
 type IFlow<'a> =
@@ -419,7 +419,7 @@ type IFlow<'a> =
 Then we define a module which is just a wrapper around the interface to
 enable F#-style API:
 
-``` fs
+``` fsharp
 module Flow =
   let map<'TI, 'TO> (f: 'TI -> 'TO) (flow: IFlow<'TI>) = flow.Map f
   let collect<'TI, 'TO> (f: 'TI -> 'TO list) (flow: IFlow<'TI>) = flow.Collect f
@@ -443,7 +443,7 @@ purposes.
 We will have a look at more advanced implementations in the further articles, but
 for now here is a naive version:
 
-``` fs
+``` fsharp
 module Runner =
   let private mapTransform map = function
     | Bounded bs -> bs >> Seq.map map |> Bounded
@@ -495,7 +495,7 @@ module Runner =
 The implementation details are not that important at the moment (even though it's
 just 37 lines of code), so I'll just proceed to the pipeline definition:
 
-``` fs
+``` fsharp
 unboundedSource                // e.g. same console source as before
 |> Runner.from                 // create Runner implementation of IFlow
 |> Flow.collect tokenize

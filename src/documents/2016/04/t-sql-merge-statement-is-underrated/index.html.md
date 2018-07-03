@@ -18,7 +18,7 @@ Example
 Let's take a concrete example. You have a person object with just 3 fields, here is the
 type definition:
 
-``` cs
+``` csharp
 public class Person
 {
     public Guid Id { get; set; }
@@ -120,7 +120,7 @@ general-purpose language, but stay "close to the metal", or rather to SQL engine
 
 Here is how I invoke a `MERGE` statement for a Person object (given a connection from the pool):
 
-``` cs
+``` csharp
 var person = new Person(...);
 DapperAdapter.Merge(connection, person);
 ```
@@ -128,7 +128,7 @@ DapperAdapter.Merge(connection, person);
 Voila! The implementation of generic `Merge` method takes care of the syntax complications.
 Write once, use everywhere:
 
-``` cs
+``` csharp
 public void Merge<TEntity>(IDbConnection dbConnection, TEntity entity) where TEntity : class
 {
     var props = entity.GetType().GetProperties().Select(p => p.Name).ToList();

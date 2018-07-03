@@ -49,7 +49,7 @@ I used the Azure Portal to generate a function, so here is the
 For precompiled functions, just decorate it with `HttpTriggerAttribute` with
 POST method:
 
-``` cs
+``` csharp
 public static Task<HttpResponseMessage> Run(
     [HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestMessage req)
 ```
@@ -76,7 +76,7 @@ Here is an example of events to expect:
 To be able to parse those data more easily, I defined a C# class to deserialize
 JSON to:
 
-``` cs
+``` csharp
 public class GridEvent
 {
     public string Id { get; set; }
@@ -91,7 +91,7 @@ public class GridEvent
 Now, the function can read the events (note, that they are sent in arrays)
 from the body of POST request:
 
-``` cs
+``` csharp
 public static async Task<HttpResponseMessage> Run(HttpRequestMessage req, TraceWriter log)
 {
     string jsonContent = await req.Content.ReadAsStringAsync();
@@ -115,7 +115,7 @@ The validation request will contain a code, which we need to echo back in
 
 Here is a small piece of code to do just that:
 
-``` cs
+``` csharp
 if (req.Headers.GetValues("Aeg-Event-Type").FirstOrDefault() == "SubscriptionValidation")
 {
     var code = events[0].Data["validationCode"];
