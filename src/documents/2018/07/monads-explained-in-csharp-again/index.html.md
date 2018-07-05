@@ -3,7 +3,7 @@ layout: post
 title: Monads explained in C# (again)
 date: 2018-07-05
 tags: ["Functional Programming", "Monads", "Maybe", "LINQ", "C#", "F#"]
-teaserImage: functional-programming-word-cloud.png
+teaserImage: teaser.png
 description: Yet another Monad tutorial, this time for C# OOP developers
 ---
 

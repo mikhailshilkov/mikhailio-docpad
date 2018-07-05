@@ -11,6 +11,7 @@ menuOrder: 3
     <div class="abstract-title">Performance Tales of Serverless
     </div>
     <div class="abstract-tags">
+        <a href='https://www.youtube.com/watch?v=eTmf8FXUMwU' target="_blank">Video</a>, 
         <a href='https://www.slideshare.net/MikhailShilkov/performance-tales-of-serverless-96499763' target="_blank">Slides</a>
         at <a href='https://amsterdam2018.codemotionworld.com/conference/09-May/' target="_blank">Codemotion Amsterdam 2018</a>
     </div>
