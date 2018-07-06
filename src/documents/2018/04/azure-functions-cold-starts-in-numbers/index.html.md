@@ -131,3 +131,6 @@ Here are some lessons learned from all the experiments above:
 
 Do you see anything weird or unexpected in my results? Do you need me to dig deeper on other aspects?
 Please leave a comment below or ping me on twitter, and let's sort it all out.
+
+There is a follow-up post available: 
+[Cold Starts Beyond First Request in Azure Functions](https://mikhail.io/2018/05/azure-functions-cold-starts-beyond-first-load/)

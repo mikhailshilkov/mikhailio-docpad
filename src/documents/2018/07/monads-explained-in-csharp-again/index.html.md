@@ -426,7 +426,7 @@ original shape.
 In the following code, `NextTalk` returns the first instance inside the container:
 
 ``` csharp
-WorkflowThatReturns<Phone> Workflow(Speaker speaker) 
+WorkflowThatReturns<City> Workflow(Speaker speaker) 
 {
     return 
         speaker
@@ -567,7 +567,7 @@ public static IEnumerable<U> SelectMany<T, U>(
     Func<T, IEnumerable<U>> selector)
 ```
 
-Direct implementation is quite straitforward:
+Direct implementation is quite straightforward:
 
 ``` csharp
 static class Enumerable 
