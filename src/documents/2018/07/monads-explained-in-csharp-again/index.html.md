@@ -789,7 +789,7 @@ A typical monad tutorial will make a lot of emphasis on the laws, but I find the
 less important to explain to a beginner. Nonetheless, here they are for the sake
 of completeness.
 
-**Identity law** says that that Monad constructor is a neutral operation: you can safely
+**Left Identity law** says that that Monad constructor is a neutral operation: you can safely
 run it before `Bind`, and it won't change the result of the function call:
 
 ``` csharp
@@ -797,8 +797,19 @@ run it before `Bind`, and it won't change the result of the function call:
 T value;
 Func<T, Monad<U>> f;
 
-// == means both parts are equivalent
+// Then (== means both parts are equivalent)
 new Monad<T>(value).Bind(f) == f(value) 
+```
+
+**Right Identity law** says that given a monadic value, wrapping its contained data
+into another monad of same type and then `Bind`ing it, doesn't change the original value:
+
+``` csharp
+// Given
+Monad<T> monadicValue;
+
+// Then (== means both parts are equivalent)
+monadicValue.Bind(x => new Monad<T>(x)) == monadicValue
 ```
 
 **Associativity law** means that the order in which `Bind` operations
@@ -810,7 +821,7 @@ Monad<T> m;
 Func<T, Monad<U>> f;
 Func<U, Monad<V>> g;
 
-// == means both parts are equivalent
+// Then (== means both parts are equivalent)
 m.Bind(f).Bind(g) == m.Bind(a => f(a).Bind(g))
 ```
 
