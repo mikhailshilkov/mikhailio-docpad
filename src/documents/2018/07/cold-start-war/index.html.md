@@ -80,17 +80,24 @@ AWS is more tricky. Here is the same kind of chart, relative durations vs time s
 measured for AWS Lambda. To help you read it, I've marked cold starts with blue color, and warm starts
 with orange color:
 
-TODO ![AWS Cold Start vs Warm Start](/aws-coldstart-threshold.png)
+TODO: make Azure orage too?
 
-There's no clear threshold here... No cold starts happen within XX minutes after previous invocation.
-But then, the frequency of cold starts rises slowly. After 1 hour of inactivity, there's still a
-chance that your instance is alive and ready to take requests.
+![AWS Cold Start vs Warm Start](/aws-coldstart-threshold.png)
 
-Are the warm starts getting slower over time? Let's leave just the orange dots:
+There's no clear threshold here... Within this sample, no cold starts happenned within 28 minutes after previous 
+invocation. Then the frequency of cold starts slowly rises. But even after 1 hour of inactivity, there's still a
+good chance that your instance is alive and ready to take requests.
 
-TODO ![AWS Warm Start Durations](/aws-coldstart-durations.png)
+This doesn't match the official information that AWS Lambdas stay alive for just 5 minutes after the last
+invocation. I reached out to Chris Munns, and he confirmed:
 
-TODO: yes/no
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">So what you are seeing is very much possible as the team plays with certain knobs/levers for execution environment lifecycle. let me know if you have concerns about it, but it should be just fine</p>&mdash; chrismunns (@chrismunns) <a href="https://twitter.com/chrismunns/status/1021452964630851585?ref_src=twsrc%5Etfw">July 23, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+A couple learning points here:
+
+- AWS is working on improving cold start experience (and probably Azure/GCP do too)
+- My results might not be reliably reproducible in your application, since it's affected by recent adjustments
 
 ### GCP
 
