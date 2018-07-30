@@ -101,7 +101,16 @@ A couple learning points here:
 
 ### GCP
 
-TODO
+Google Cloud Functions left me completely puzzled. Here is the same chart for GCP coldstarts (again,
+orange are warm and blue are cold):
+
+![GCP Cold Start vs Warm Start](/gcp-coldstart-threshold.png)
+
+This looks totally random to me. Cold start can happen in 3 minutes after the previous request, or an instance
+can be kept alive for the whole hour. The probability of cold start doesn't seem to depend on the interval,
+at least just by looking at this chart.
+
+Any ideas of what's going on are welcome!
 
 Javascript Baseline
 -------------------
@@ -115,7 +124,7 @@ dependencies, so deployment package is really small.
 
 Here are the numbers for cold starts:
 
-TODO chart
+![Cold Start for Basic Javascript Functions](/coldstart-js-baseline.png)
 
 TODO conclusion
 
@@ -136,7 +145,7 @@ The following chart shows some intuition about the cold start duration per langu
 are ordered based on mean response time, from lowest to highest. 65% of request
 durations are inside the vertical bar (1-sigma interval) and 95% are inside the vertical line (2-sigma):
 
-TODO ![Cold Start per Language per Cloud](/coldstarts-per-cloud.png)
+![Cold Start per Language per Cloud and Language](/coldstart-per-language.png)
 
 TODO conclusion
 
