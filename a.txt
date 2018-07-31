@@ -1,0 +1,899 @@
+[33mwarning:[39m docpad-plugin-paged: getPageUrl is deprecated and may clash with other plugins. Use getPagedUrl instead.
+[32minfo:[39m Welcome to DocPad v6.80.6 (local installation: C:\Work\mikhailio-docpad\node_modules\docpad)
+[33mnotice:[39m Please donate to DocPad or have your company sponsor it: https://docpad.org/donate
+[32minfo:[39m Contribute: https://docpad.org/docs/contribute
+[32minfo:[39m Plugins: cleanurls, eco, ghpages, less, marked, paged, partials, sitemap, tags
+[32minfo:[39m Environment: development
+[32minfo:[39m Generating...
+[32minfo:[39m Created tag page for Hackathon at tags/hackathon/index.html.eco
+[32minfo:[39m Created tag page for Hackfest at tags/hackfest/index.html.eco
+[32minfo:[39m Created tag page for Challenge at tags/challenge/index.html.eco
+[32minfo:[39m Created tag page for Green Hackfest at tags/green-hackfest/index.html.eco
+[32minfo:[39m Created tag page for Green Technologies at tags/green-technologies/index.html.eco
+[32minfo:[39m Created tag page for Architecture at tags/architecture/index.html.eco
+[32minfo:[39m Created tag page for Design at tags/design/index.html.eco
+[32minfo:[39m Created tag page for Messages at tags/messages/index.html.eco
+[32minfo:[39m Created tag page for Message Processing at tags/message-processing/index.html.eco
+[32minfo:[39m Created tag page for Azure at tags/azure/index.html.eco
+[32minfo:[39m Created tag page for Azure Functions at tags/azure-functions/index.html.eco
+[32minfo:[39m Created tag page for Serverless at tags/serverless/index.html.eco
+[32minfo:[39m Created tag page for Performance at tags/performance/index.html.eco
+[32minfo:[39m Created tag page for Cold Start at tags/cold-start/index.html.eco
+[32minfo:[39m Created tag page for Unit Testing at tags/unit-testing/index.html.eco
+[32minfo:[39m Created tag page for Dependency Injection at tags/dependency-injection/index.html.eco
+[32minfo:[39m Created tag page for Guard at tags/guard/index.html.eco
+[32minfo:[39m Created tag page for Clean Code at tags/clean-code/index.html.eco
+[32minfo:[39m Created tag page for Best Practices at tags/best-practices/index.html.eco
+[32minfo:[39m Created tag page for Reflection at tags/reflection/index.html.eco
+[32minfo:[39m Created tag page for C# at tags/c/index.html.eco
+[32minfo:[39m Created tag page for TDD at tags/tdd/index.html.eco
+[32minfo:[39m Created tag page for Pluralsight at tags/pluralsight/index.html.eco
+[32minfo:[39m Created tag page for Course at tags/course/index.html.eco
+[32minfo:[39m Created tag page for Learning at tags/learning/index.html.eco
+[32minfo:[39m Created tag page for Javascript at tags/javascript/index.html.eco
+[32minfo:[39m Created tag page for JSPM at tags/jspm/index.html.eco
+[32minfo:[39m Created tag page for SystemJS at tags/systemjs/index.html.eco
+[32minfo:[39m Created tag page for Aurelia at tags/aurelia/index.html.eco
+[32minfo:[39m Created tag page for Animation at tags/animation/index.html.eco
+[32minfo:[39m Created tag page for Coursera at tags/coursera/index.html.eco
+[32minfo:[39m Created tag page for gamification at tags/gamification/index.html.eco
+[32minfo:[39m Created tag page for Online Classes at tags/online-classes/index.html.eco
+[32minfo:[39m Created tag page for Online Learning at tags/online-learning/index.html.eco
+[32minfo:[39m Created tag page for Statement of Accomplishment at tags/statement-of-accomplishment/index.html.eco
+[32minfo:[39m Created tag page for Units of Measurement at tags/units-of-measurement/index.html.eco
+[32minfo:[39m Created tag page for Domain Design at tags/domain-design/index.html.eco
+[32minfo:[39m Created tag page for DDD at tags/ddd/index.html.eco
+[32minfo:[39m Created tag page for AppEngine at tags/appengine/index.html.eco
+[32minfo:[39m Created tag page for i18n at tags/i18n/index.html.eco
+[32minfo:[39m Created tag page for jinja2 at tags/jinja2/index.html.eco
+[32minfo:[39m Created tag page for Python at tags/python/index.html.eco
+[32minfo:[39m Created tag page for Translations at tags/translations/index.html.eco
+[32minfo:[39m Created tag page for Pulumi at tags/pulumi/index.html.eco
+[32minfo:[39m Created tag page for Azure App Service at tags/azure-app-service/index.html.eco
+[32minfo:[39m Created tag page for Code Review at tags/code-review/index.html.eco
+[32minfo:[39m Created tag page for Hotels API at tags/hotels-api/index.html.eco
+[32minfo:[39m Created tag page for HotelsCombined at tags/hotelscombined/index.html.eco
+[32minfo:[39m Created tag page for Public API at tags/public-api/index.html.eco
+[32minfo:[39m Created tag page for SQL Server at tags/sql-server/index.html.eco
+[32minfo:[39m Created tag page for Execution Plan at tags/execution-plan/index.html.eco
+[32minfo:[39m Created tag page for Query Plan at tags/query-plan/index.html.eco
+[32minfo:[39m Created tag page for Database at tags/database/index.html.eco
+[32minfo:[39m Created tag page for Repro at tags/repro/index.html.eco
+[32minfo:[39m Created tag page for Erland Sommarskog at tags/erland-sommarskog/index.html.eco
+[32minfo:[39m Created tag page for AWS at tags/aws/index.html.eco
+[32minfo:[39m Created tag page for AWS Lambda at tags/aws-lambda/index.html.eco
+[32minfo:[39m Created tag page for GCP at tags/gcp/index.html.eco
+[32minfo:[39m Created tag page for Google Cloud Functions at tags/google-cloud-functions/index.html.eco
+[32minfo:[39m Created tag page for F# at tags/f/index.html.eco
+[32minfo:[39m Created tag page for Programming Puzzles at tags/programming-puzzles/index.html.eco
+[32minfo:[39m Created tag page for Advent of Code at tags/advent-of-code/index.html.eco
+[32minfo:[39m Created tag page for Visualization at tags/visualization/index.html.eco
+[32minfo:[39m Created tag page for F# Exchange at tags/f-exchange/index.html.eco
+[32minfo:[39m Created tag page for Talk at tags/talk/index.html.eco
+[32minfo:[39m Created tag page for finance at tags/finance/index.html.eco
+[32minfo:[39m Created tag page for Functional Programming at tags/functional-programming/index.html.eco
+[32minfo:[39m Created tag page for Monads at tags/monads/index.html.eco
+[32minfo:[39m Created tag page for Maybe at tags/maybe/index.html.eco
+[32minfo:[39m Created tag page for LINQ at tags/linq/index.html.eco
+[32minfo:[39m Created tag page for BrowserSync at tags/browsersync/index.html.eco
+[32minfo:[39m Created tag page for REST at tags/rest/index.html.eco
+[32minfo:[39m Created tag page for API at tags/api/index.html.eco
+[32minfo:[39m Created tag page for Service Fabric at tags/service-fabric/index.html.eco
+[32minfo:[39m Created tag page for Akka.NET at tags/akka-net/index.html.eco
+[32minfo:[39m Created tag page for Actor Model at tags/actor-model/index.html.eco
+[32minfo:[39m Created tag page for Bugs at tags/bugs/index.html.eco
+[32minfo:[39m Created tag page for Error log at tags/error-log/index.html.eco
+[32minfo:[39m Created tag page for SQL Server Service Broker at tags/sql-server-service-broker/index.html.eco
+[32minfo:[39m Created tag page for Event Sourcing at tags/event-sourcing/index.html.eco
+[32minfo:[39m Created tag page for CQRS at tags/cqrs/index.html.eco
+[32minfo:[39m Created tag page for Application Insights at tags/application-insights/index.html.eco
+[32minfo:[39m Created tag page for Typescript at tags/typescript/index.html.eco
+[32minfo:[39m Created tag page for Scala at tags/scala/index.html.eco
+[32minfo:[39m Created tag page for Fody at tags/fody/index.html.eco
+[32minfo:[39m Created tag page for Immutability at tags/immutability/index.html.eco
+[32minfo:[39m Created tag page for Code Generation at tags/code-generation/index.html.eco
+[32minfo:[39m Created tag page for Azure Event Hubs at tags/azure-event-hubs/index.html.eco
+[32minfo:[39m Created tag page for Azure Service Bus at tags/azure-service-bus/index.html.eco
+[32minfo:[39m Created tag page for Scalability at tags/scalability/index.html.eco
+[32minfo:[39m Created tag page for ASP.NET Web API at tags/asp-net-web-api/index.html.eco
+[32minfo:[39m Created tag page for SPA at tags/spa/index.html.eco
+[32minfo:[39m Created tag page for Continuous Deployment at tags/continuous-deployment/index.html.eco
+[32minfo:[39m Created tag page for Git at tags/git/index.html.eco
+[32minfo:[39m Created tag page for Azure SQL Database at tags/azure-sql-database/index.html.eco
+[32minfo:[39m Created tag page for F# Advent Calendar at tags/f-advent-calendar/index.html.eco
+[32minfo:[39m Created tag page for Meetup at tags/meetup/index.html.eco
+[32minfo:[39m Created tag page for Slides at tags/slides/index.html.eco
+[32minfo:[39m Created tag page for Books at tags/books/index.html.eco
+[32minfo:[39m Created tag page for Business books at tags/business-books/index.html.eco
+[32minfo:[39m Created tag page for Metrics at tags/metrics/index.html.eco
+[32minfo:[39m Created tag page for Monitoring at tags/monitoring/index.html.eco
+[32minfo:[39m Created tag page for PRTG at tags/prtg/index.html.eco
+[32minfo:[39m Created tag page for Durable Functions at tags/durable-functions/index.html.eco
+[32minfo:[39m Created tag page for HTTPS at tags/https/index.html.eco
+[32minfo:[39m Created tag page for HTTP/2 at tags/http-2/index.html.eco
+[32minfo:[39m Created tag page for CloudFlare at tags/cloudflare/index.html.eco
+[32minfo:[39m Created tag page for Poker Bot at tags/poker-bot/index.html.eco
+[32minfo:[39m Created tag page for HATEOAS at tags/hateoas/index.html.eco
+[32minfo:[39m Created tag page for Property-Based Testing at tags/property-based-testing/index.html.eco
+[32minfo:[39m Created tag page for NEventStore at tags/neventstore/index.html.eco
+[32minfo:[39m Created tag page for Stream Processing at tags/stream-processing/index.html.eco
+[32minfo:[39m Created tag page for Data Processing at tags/data-processing/index.html.eco
+[32minfo:[39m Created tag page for Image Recognition at tags/image-recognition/index.html.eco
+[32minfo:[39m Created tag page for Full Tilt Poker at tags/full-tilt-poker/index.html.eco
+[32minfo:[39m Created tag page for Poker at tags/poker/index.html.eco
+[32minfo:[39m Created tag page for Poker Money at tags/poker-money/index.html.eco
+[32minfo:[39m Created tag page for Poker Money application at tags/poker-money-application/index.html.eco
+[32minfo:[39m Created tag page for Poker Stars at tags/poker-stars/index.html.eco
+[32minfo:[39m Created tag page for Windows 8 at tags/windows-8/index.html.eco
+[32minfo:[39m Created tag page for Windows RT at tags/windows-rt/index.html.eco
+[32minfo:[39m Created tag page for Windows Store at tags/windows-store/index.html.eco
+[32minfo:[39m Created tag page for Human-like Behavior at tags/human-like-behavior/index.html.eco
+[32minfo:[39m Created tag page for OCR at tags/ocr/index.html.eco
+[32minfo:[39m Created tag page for Machine Learning at tags/machine-learning/index.html.eco
+[32minfo:[39m Created tag page for Stanford at tags/stanford/index.html.eco
+[32minfo:[39m Created tag page for SOLID at tags/solid/index.html.eco
+[32minfo:[39m Created tag page for Dependency Inversion at tags/dependency-inversion/index.html.eco
+[32minfo:[39m Created tag page for fixing memory leaks at tags/fixing-memory-leaks/index.html.eco
+[32minfo:[39m Created tag page for Memory leaks at tags/memory-leaks/index.html.eco
+[32minfo:[39m Created tag page for Silverlight at tags/silverlight/index.html.eco
+[32minfo:[39m Created tag page for WinDbg at tags/windbg/index.html.eco
+[32minfo:[39m Created tag page for Disaster Recovery at tags/disaster-recovery/index.html.eco
+[32minfo:[39m Created tag page for Speech Bubble at tags/speech-bubble/index.html.eco
+[32minfo:[39m Created tag page for User Control at tags/user-control/index.html.eco
+[32minfo:[39m Created tag page for WPF at tags/wpf/index.html.eco
+[32minfo:[39m Created tag page for Dapper at tags/dapper/index.html.eco
+[32minfo:[39m Created tag page for ORM at tags/orm/index.html.eco
+[32minfo:[39m Created tag page for T-SQL at tags/t-sql/index.html.eco
+[32minfo:[39m Created tag page for Patterns at tags/patterns/index.html.eco
+[32minfo:[39m Created tag page for Leaflet at tags/leaflet/index.html.eco
+[32minfo:[39m Created tag page for Maps at tags/maps/index.html.eco
+[32minfo:[39m Created tag page for Debugging at tags/debugging/index.html.eco
+[32minfo:[39m Created tag page for Fiddler at tags/fiddler/index.html.eco
+[32minfo:[39m Created tag page for Google AppEngine at tags/google-appengine/index.html.eco
+[32minfo:[39m Created tag page for gauge control at tags/gauge-control/index.html.eco
+[32minfo:[39m Created tag page for Model Thinking at tags/model-thinking/index.html.eco
+[32minfo:[39m Created tag page for Google Maps at tags/google-maps/index.html.eco
+[32minfo:[39m Created tag page for Google Transit at tags/google-transit/index.html.eco
+[32minfo:[39m Created tag page for Telerik at tags/telerik/index.html.eco
+[32minfo:[39m Created tag page for TileView at tags/tileview/index.html.eco
+[32minfo:[39m Created tag page for .NET at tags/net/index.html.eco
+[32minfo:[39m Created tag page for ASP.NET at tags/asp-net/index.html.eco
+[32minfo:[39m Created tag page for MSBuild at tags/msbuild/index.html.eco
+[32minfo:[39m Created tag page for Sgen at tags/sgen/index.html.eco
+[32minfo:[39m Created tag page for XmlSerializer at tags/xmlserializer/index.html.eco
+[32minfo:[39m Created tag page for Azure Event Grid at tags/azure-event-grid/index.html.eco
+[32minfo:[39m Adding pages for 1 documents...
+[32minfo:[39m Creating page 1 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 2\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.1.html
+[32minfo:[39m Creating page 2 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 3\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.2.html
+[32minfo:[39m Creating page 3 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 4\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.3.html
+[32minfo:[39m Creating page 4 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 5\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.4.html
+[32minfo:[39m Creating page 5 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 6\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.5.html
+[32minfo:[39m Creating page 6 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 7\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.6.html
+[32minfo:[39m Creating page 7 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 8\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.7.html
+[32minfo:[39m Creating page 8 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 9\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.8.html
+[32minfo:[39m Creating page 9 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 10\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.9.html
+[32minfo:[39m Creating page 10 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 11\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.10.html
+[32minfo:[39m Creating page 11 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 12\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.11.html
+[32minfo:[39m Creating page 12 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 13\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.12.html
+[32minfo:[39m Creating page 13 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 14\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.13.html
+[32minfo:[39m Creating page 14 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 15\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.14.html
+[32minfo:[39m Creating page 15 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 16\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.15.html
+[32minfo:[39m Creating page 16 for C:\Work\mikhailio-docpad\src\documents\index.html.eco at 17\index.html.eco
+[32minfo:[39m Created secondary url structure for index.html at /index.16.html
+[32minfo:[39m Added pages
+[33mwarning:[39m A warning occured:
+
+Error: Rendering the extension "eco" to "html" on "C:\Work\mikhailio-docpad\src\documents\talks\index.html.eco" didn't do anything.
+Explanation here: https://docpad.org/extension-not-rendering
+    at DocPad.warn (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\docpad.js:1:1)
+    at DocumentModel.<anonymous> (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\docpad.js:1:1)
+    at triggerEvents (C:\Work\mikhailio-docpad\node_modules\backbone\backbone.js:1:1)
+    at triggerApi (C:\Work\mikhailio-docpad\node_modules\backbone\backbone.js:1:1)
+    at eventsApi (C:\Work\mikhailio-docpad\node_modules\backbone\backbone.js:1:1)
+    at DocumentModel.Events.trigger (C:\Work\mikhailio-docpad\node_modules\backbone\backbone.js:1:1)
+    at DocumentModel.emit (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\base.js:1:1)
+    at DocumentModel.log (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\base.js:1:1)
+    at C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\models\document.js:1:1
+    at TaskGroup.<anonymous> (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\docpad.js:1:1)
+    at Object.onceWrapper (events.js:1:1)
+    at emitTwo (events.js:1:1)
+    at TaskGroup.emit (events.js:1:1)
+    at TaskGroup.listener (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\interface.js:1:1)
+    at emitTwo (events.js:1:1)
+    at TaskGroup.emit (events.js:1:1)
+    at TaskGroup.finish (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\taskgroup.js:1:1)
+    at TaskGroup.fire (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\taskgroup.js:1:1)
+    at TaskGroup.itemDoneCallbackNextState (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\taskgroup.js:1:1)
+    at Object.onceWrapper (events.js:1:1)
+    at emitTwo (events.js:1:1)
+    at Task.emit (events.js:1:1)
+    at Task.listener (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\interface.js:1:1)
+    at emitTwo (events.js:1:1)
+    at Task.emit (events.js:1:1)
+    at Task.finish (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at Task.itemCompletionCallback (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at completeMethod (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at ambi (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\ambi\source\index.js:1:1)
+    at Domain.fireMethod (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at Domain.run (domain.js:1:1)
+    at Task.fire (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at Immediate.queue (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at runCallback (timers.js:1:1)
+    at tryOnImmediate (timers.js:1:1)
+    at processImmediate [as _immediateCallback] (timers.js:1:1)
+
+To report the above, follow the guide at: https://docpad.org/bug-report
+[32minfo:[39m Waiting on the following files on renderFiles: 
+index.html.eco
+talks\index.html.eco
+2015\03\the-green-hackfest-my-first-hackathon\index.html.md
+about\index.html.md
+2015\02\how-we-do-message-processing\index.html.md
+2018\05\azure-functions-cold-starts-beyond-first-load\index.html.md
+2018\04\azure-functions-cold-starts-in-numbers\index.html.md
+2015\04\unit-testing-null-parameter-checks\index.html.md
+2015\11\review-of-jspm-course\index.html.md
+archives\index.html.eco
+tags\index.html.eco
+2015\07\aurelia-element-animation-with-custom-attribute\index.html.md
+2012\10\29\gamification-class-at-coursera\index.html.md
+2015\08\units-of-measurement-in-domain-design\index.html.md
+2012\07\26\enable-jinja2-and-i18n-translations-on-google-appengine\index.html.md
+2018\06\programmable-cloud-provisioning-azure-app-service-with-pulumi\index.html.md
+2015\05\peer-code-review-whys-hows-and-whats\index.html.md
+2012\05\17\api-to-get-the-list-of-hotels\index.html.md
+2015\02\how-i-fixed-a-bug-in-sql-server\index.html.md
+2018\07\cold-start-war\index.html.md
+2017\01\my-praise-of-advent-of-code-2016\index.html.md
+2017\03\visualizing-dependency-tree-from-di-container\index.html.md
+2018\04\fsharp-exchange-2018\index.html.md
+2012\11\01\finance-class-at-coursera\index.html.md
+2018\07\monads-explained-in-csharp-again\index.html.md
+2016\07\mocking-api-calls-in-aurelia\index.html.md
+2016\01\validation-with-either-data-type-in-csharp\index.html.md
+2016\02\akka-net-style-actors-in-service-fabric\index.html.md
+2014\10\16\nice-way-to-kill-your-sql-server\index.html.md
+2016\11\event-sourcing-and-io-complexity\index.html.md
+2016\08\getting-started-with-azure-application-insights-in-aurelia\index.html.md
+2016\08\comparing-scala-to-fsharp\index.html.md
+2016\05\tweaking-immutable-objects-with-csharp-and-fody\index.html.md
+2017\05\reliable-consumer-of-azure-event-hubs\index.html.md
+2017\08\azure-functions-are-they-really-infinitely-scalable-and-elastic\index.html.md
+2015\12\deploy-your-spa-to-azure\index.html.md
+2018\02\load-testing-azure-sql-database-by-copying-traffic-from-production-sql-server\index.html.md
+2017\07\custom-auto-scaling-in-azure\index.html.md
+2017\12\precompiled-azure-functions-in-fsharp\index.html.md
+2017\01\functional-programming-fsharp-talks\index.html.md
+2017\02\coding-puzzle-in-fsharp-find-the-number-of-islands\index.html.md
+2017\12\azure-functions-get-more-scalable-and-elastic\index.html.md
+2012\03\01\books-that-ive-recently-read\index.html.md
+2017\03\azure-functions-as-facade-for-azure-monitoring\index.html.md
+2017\07\custom-autoscaling-with-durable-functions\index.html.md
+2018\07\getting-started-with-aws-lambda-in-pulumi\index.html.md
+2017\07\authoring-custom-binding-azure-functions\index.html.md
+2017\06\mikhail-io-upgraded-to-https-and-http2\index.html.md
+2017\06\finding-lost-events-in-azure-application-insights\index.html.md
+2016\07\building-a-poker-bot-functional-fold-as-decision-tree-pattern\index.html.md
+2018\01\tictactoe-with-fsharp-azurefunctions-hateoas-and-property-based-testing\index.html.md
+2017\01\event-sourcing-optimizing-neventstore-sql-read-performance\index.html.md
+2015\12\weaving-your-domain-classes-with-fody\index.html.md
+2017\11\azure-functions-fsharp-talk\index.html.md
+2016\11\introducing-stream-processing-in-fsharp\index.html.md
+2016\02\building-a-poker-bot-card-recognition\index.html.md
+2013\01\06\poker-money-application-for-windows-store\index.html.md
+2016\03\building-a-poker-bot-mouse-movements\index.html.md
+2016\02\building-a-poker-bot-string-recognition\index.html.md
+2012\02\01\machine-learning-class-at-stanford-online\index.html.md
+2016\05\dependency-inversion-implies-interfaces-are-owned-by-high-level-modules\index.html.md
+2012\02\05\hunting-memory-leaks-in-silverlight\index.html.md
+2017\07\sending-large-batches-to-azure-service-bus\index.html.md
+2017\03\azure-service-bus-entity-metrics-dotnet-apis\index.html.md
+2018\02\azure-durable-functions-in-fsharp\index.html.md
+2017\05\why-fsharp-and-functional-programming-will-make-you-a-better-developer-talk\index.html.md
+2016\10\azure-sql-databases-backups-disaster-recovery-import-export\index.html.md
+2012\01\26\speech-bubble-control-in-sl\index.html.md
+2012\12\26\one-certificate-missing-one-received-unexpectedly\index.html.md
+2017\09\wanted-effectively-once-processing-in-azure\index.html.md
+2016\02\unit-testing-dapper-repositories\index.html.md
+2016\04\t-sql-merge-statement-is-underrated\index.html.md
+2016\03\functional-actor-patterns-with-akkadotnet-and-fsharp\index.html.md
+2016\04\building-a-poker-bot-with-akka-net-actors\index.html.md
+2016\03\aurelia-map-component-with-leaflet\index.html.md
+2016\01\fire-and-forget-in-service-fabric-actors\index.html.md
+2016\01\monads-explained-in-csharp\index.html.md
+2012\05\16\books-that-ive-recently-read-part-2\index.html.md
+2012\09\02\use-fiddler-to-debug-urlfetch-requests-in-google-appengine\index.html.md
+2012\02\28\gauge-control-with-two-values-silverlight\index.html.md
+2012\06\21\model-thinking-class-at-coursera\index.html.md
+2012\08\14\google-adds-public-transit-into-api\index.html.md
+2012\03\13\multi-level-teleriks-tileview\index.html.md
+2014\06\03\sql-produce-resultset-with-n-rows\index.html.md
+2016\10\leaflet-plugin-to-render-geographic-corridors\index.html.md
+2014\05\21\sgen-to-precompile-classes-for-xmpserializer\index.html.md
+2012\04\10\google-transit-api-research\index.html.md
+2017\10\azure-function-triggered-by-azure-event-grid\index.html.md
+tags/hackathon/index.html.eco
+tags/hackfest/index.html.eco
+tags/challenge/index.html.eco
+tags/green-hackfest/index.html.eco
+tags/green-technologies/index.html.eco
+tags/architecture/index.html.eco
+tags/design/index.html.eco
+tags/messages/index.html.eco
+tags/message-processing/index.html.eco
+tags/azure/index.html.eco
+tags/azure-functions/index.html.eco
+tags/serverless/index.html.eco
+tags/performance/index.html.eco
+tags/cold-start/index.html.eco
+tags/unit-testing/index.html.eco
+tags/dependency-injection/index.html.eco
+tags/guard/index.html.eco
+tags/clean-code/index.html.eco
+tags/best-practices/index.html.eco
+tags/reflection/index.html.eco
+tags/c/index.html.eco
+tags/tdd/index.html.eco
+tags/pluralsight/index.html.eco
+tags/course/index.html.eco
+tags/learning/index.html.eco
+tags/javascript/index.html.eco
+tags/jspm/index.html.eco
+tags/systemjs/index.html.eco
+tags/aurelia/index.html.eco
+tags/animation/index.html.eco
+tags/coursera/index.html.eco
+tags/gamification/index.html.eco
+tags/online-classes/index.html.eco
+tags/online-learning/index.html.eco
+tags/statement-of-accomplishment/index.html.eco
+tags/units-of-measurement/index.html.eco
+tags/domain-design/index.html.eco
+tags/ddd/index.html.eco
+tags/appengine/index.html.eco
+tags/i18n/index.html.eco
+tags/jinja2/index.html.eco
+tags/python/index.html.eco
+tags/translations/index.html.eco
+tags/pulumi/index.html.eco
+tags/azure-app-service/index.html.eco
+tags/code-review/index.html.eco
+tags/hotels-api/index.html.eco
+tags/hotelscombined/index.html.eco
+tags/public-api/index.html.eco
+tags/sql-server/index.html.eco
+tags/execution-plan/index.html.eco
+tags/query-plan/index.html.eco
+tags/database/index.html.eco
+tags/repro/index.html.eco
+tags/erland-sommarskog/index.html.eco
+tags/aws/index.html.eco
+tags/aws-lambda/index.html.eco
+tags/gcp/index.html.eco
+tags/google-cloud-functions/index.html.eco
+tags/f/index.html.eco
+tags/programming-puzzles/index.html.eco
+tags/advent-of-code/index.html.eco
+tags/visualization/index.html.eco
+tags/f-exchange/index.html.eco
+tags/talk/index.html.eco
+tags/finance/index.html.eco
+tags/functional-programming/index.html.eco
+tags/monads/index.html.eco
+tags/maybe/index.html.eco
+tags/linq/index.html.eco
+tags/browsersync/index.html.eco
+tags/rest/index.html.eco
+tags/api/index.html.eco
+tags/service-fabric/index.html.eco
+tags/akka-net/index.html.eco
+tags/actor-model/index.html.eco
+tags/bugs/index.html.eco
+tags/error-log/index.html.eco
+tags/sql-server-service-broker/index.html.eco
+tags/event-sourcing/index.html.eco
+tags/cqrs/index.html.eco
+tags/application-insights/index.html.eco
+tags/typescript/index.html.eco
+tags/scala/index.html.eco
+tags/fody/index.html.eco
+tags/immutability/index.html.eco
+tags/code-generation/index.html.eco
+tags/azure-event-hubs/index.html.eco
+tags/azure-service-bus/index.html.eco
+tags/scalability/index.html.eco
+tags/asp-net-web-api/index.html.eco
+tags/spa/index.html.eco
+tags/continuous-deployment/index.html.eco
+tags/git/index.html.eco
+tags/azure-sql-database/index.html.eco
+tags/f-advent-calendar/index.html.eco
+tags/meetup/index.html.eco
+tags/slides/index.html.eco
+tags/books/index.html.eco
+tags/business-books/index.html.eco
+tags/metrics/index.html.eco
+tags/monitoring/index.html.eco
+tags/prtg/index.html.eco
+tags/durable-functions/index.html.eco
+tags/https/index.html.eco
+tags/http-2/index.html.eco
+tags/cloudflare/index.html.eco
+tags/poker-bot/index.html.eco
+tags/hateoas/index.html.eco
+tags/property-based-testing/index.html.eco
+tags/neventstore/index.html.eco
+tags/stream-processing/index.html.eco
+tags/data-processing/index.html.eco
+tags/image-recognition/index.html.eco
+tags/full-tilt-poker/index.html.eco
+tags/poker/index.html.eco
+tags/poker-money/index.html.eco
+tags/poker-money-application/index.html.eco
+tags/poker-stars/index.html.eco
+tags/windows-8/index.html.eco
+tags/windows-rt/index.html.eco
+tags/windows-store/index.html.eco
+tags/human-like-behavior/index.html.eco
+tags/ocr/index.html.eco
+tags/machine-learning/index.html.eco
+tags/stanford/index.html.eco
+tags/solid/index.html.eco
+tags/dependency-inversion/index.html.eco
+tags/fixing-memory-leaks/index.html.eco
+tags/memory-leaks/index.html.eco
+tags/silverlight/index.html.eco
+tags/windbg/index.html.eco
+tags/disaster-recovery/index.html.eco
+tags/speech-bubble/index.html.eco
+tags/user-control/index.html.eco
+tags/wpf/index.html.eco
+tags/dapper/index.html.eco
+tags/orm/index.html.eco
+tags/t-sql/index.html.eco
+tags/patterns/index.html.eco
+tags/leaflet/index.html.eco
+tags/maps/index.html.eco
+tags/debugging/index.html.eco
+tags/fiddler/index.html.eco
+tags/google-appengine/index.html.eco
+tags/gauge-control/index.html.eco
+tags/model-thinking/index.html.eco
+tags/google-maps/index.html.eco
+tags/google-transit/index.html.eco
+tags/telerik/index.html.eco
+tags/tileview/index.html.eco
+tags/net/index.html.eco
+tags/asp-net/index.html.eco
+tags/msbuild/index.html.eco
+tags/sgen/index.html.eco
+tags/xmlserializer/index.html.eco
+tags/azure-event-grid/index.html.eco
+2\index.html.eco
+3\index.html.eco
+4\index.html.eco
+5\index.html.eco
+6\index.html.eco
+7\index.html.eco
+8\index.html.eco
+9\index.html.eco
+10\index.html.eco
+11\index.html.eco
+12\index.html.eco
+13\index.html.eco
+14\index.html.eco
+15\index.html.eco
+16\index.html.eco
+17\index.html.eco
+[33mwarning:[39m A warning occured:
+
+Error: Rendering the extension "eco" to "html" on "C:\Work\mikhailio-docpad\src\documents\talks\index.html.eco" didn't do anything.
+Explanation here: https://docpad.org/extension-not-rendering
+    at DocPad.warn (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\docpad.js:1:1)
+    at DocumentModel.<anonymous> (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\docpad.js:1:1)
+    at triggerEvents (C:\Work\mikhailio-docpad\node_modules\backbone\backbone.js:1:1)
+    at triggerApi (C:\Work\mikhailio-docpad\node_modules\backbone\backbone.js:1:1)
+    at eventsApi (C:\Work\mikhailio-docpad\node_modules\backbone\backbone.js:1:1)
+    at DocumentModel.Events.trigger (C:\Work\mikhailio-docpad\node_modules\backbone\backbone.js:1:1)
+    at DocumentModel.emit (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\base.js:1:1)
+    at DocumentModel.log (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\base.js:1:1)
+    at C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\models\document.js:1:1
+    at TaskGroup.<anonymous> (C:\Work\mikhailio-docpad\node_modules\docpad\esnext\lib\docpad.js:1:1)
+    at Object.onceWrapper (events.js:1:1)
+    at emitTwo (events.js:1:1)
+    at TaskGroup.emit (events.js:1:1)
+    at TaskGroup.listener (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\interface.js:1:1)
+    at emitTwo (events.js:1:1)
+    at TaskGroup.emit (events.js:1:1)
+    at TaskGroup.finish (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\taskgroup.js:1:1)
+    at TaskGroup.fire (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\taskgroup.js:1:1)
+    at TaskGroup.itemDoneCallbackNextState (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\taskgroup.js:1:1)
+    at Object.onceWrapper (events.js:1:1)
+    at emitTwo (events.js:1:1)
+    at Task.emit (events.js:1:1)
+    at Task.listener (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\interface.js:1:1)
+    at emitTwo (events.js:1:1)
+    at Task.emit (events.js:1:1)
+    at Task.finish (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at Task.itemCompletionCallback (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at completeMethod (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at ambi (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\ambi\source\index.js:1:1)
+    at Domain.fireMethod (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at Domain.run (domain.js:1:1)
+    at Task.fire (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at Immediate.queue (C:\Work\mikhailio-docpad\node_modules\event-emitter-grouped\node_modules\taskgroup\source\lib\task.js:1:1)
+    at runCallback (timers.js:1:1)
+    at tryOnImmediate (timers.js:1:1)
+    at processImmediate [as _immediateCallback] (timers.js:1:1)
+
+To report the above, follow the guide at: https://docpad.org/bug-report
+[32minfo:[39m Waiting on the following files on renderFiles: 
+index.html.eco
+talks\index.html.eco
+2015\03\the-green-hackfest-my-first-hackathon\index.html.md
+about\index.html.md
+2015\02\how-we-do-message-processing\index.html.md
+2018\05\azure-functions-cold-starts-beyond-first-load\index.html.md
+2018\04\azure-functions-cold-starts-in-numbers\index.html.md
+2015\04\unit-testing-null-parameter-checks\index.html.md
+2015\11\review-of-jspm-course\index.html.md
+archives\index.html.eco
+tags\index.html.eco
+2015\07\aurelia-element-animation-with-custom-attribute\index.html.md
+2012\10\29\gamification-class-at-coursera\index.html.md
+2015\08\units-of-measurement-in-domain-design\index.html.md
+2012\07\26\enable-jinja2-and-i18n-translations-on-google-appengine\index.html.md
+2018\06\programmable-cloud-provisioning-azure-app-service-with-pulumi\index.html.md
+2015\05\peer-code-review-whys-hows-and-whats\index.html.md
+2012\05\17\api-to-get-the-list-of-hotels\index.html.md
+2015\02\how-i-fixed-a-bug-in-sql-server\index.html.md
+2018\07\cold-start-war\index.html.md
+2017\01\my-praise-of-advent-of-code-2016\index.html.md
+2017\03\visualizing-dependency-tree-from-di-container\index.html.md
+2018\04\fsharp-exchange-2018\index.html.md
+2012\11\01\finance-class-at-coursera\index.html.md
+2018\07\monads-explained-in-csharp-again\index.html.md
+2016\07\mocking-api-calls-in-aurelia\index.html.md
+2016\01\validation-with-either-data-type-in-csharp\index.html.md
+2016\02\akka-net-style-actors-in-service-fabric\index.html.md
+2014\10\16\nice-way-to-kill-your-sql-server\index.html.md
+2016\11\event-sourcing-and-io-complexity\index.html.md
+2016\08\getting-started-with-azure-application-insights-in-aurelia\index.html.md
+2016\08\comparing-scala-to-fsharp\index.html.md
+2016\05\tweaking-immutable-objects-with-csharp-and-fody\index.html.md
+2017\05\reliable-consumer-of-azure-event-hubs\index.html.md
+2017\08\azure-functions-are-they-really-infinitely-scalable-and-elastic\index.html.md
+2015\12\deploy-your-spa-to-azure\index.html.md
+2018\02\load-testing-azure-sql-database-by-copying-traffic-from-production-sql-server\index.html.md
+2017\07\custom-auto-scaling-in-azure\index.html.md
+2017\12\precompiled-azure-functions-in-fsharp\index.html.md
+2017\01\functional-programming-fsharp-talks\index.html.md
+2017\02\coding-puzzle-in-fsharp-find-the-number-of-islands\index.html.md
+2017\12\azure-functions-get-more-scalable-and-elastic\index.html.md
+2012\03\01\books-that-ive-recently-read\index.html.md
+2017\03\azure-functions-as-facade-for-azure-monitoring\index.html.md
+2017\07\custom-autoscaling-with-durable-functions\index.html.md
+2018\07\getting-started-with-aws-lambda-in-pulumi\index.html.md
+2017\07\authoring-custom-binding-azure-functions\index.html.md
+2017\06\mikhail-io-upgraded-to-https-and-http2\index.html.md
+2017\06\finding-lost-events-in-azure-application-insights\index.html.md
+2016\07\building-a-poker-bot-functional-fold-as-decision-tree-pattern\index.html.md
+2018\01\tictactoe-with-fsharp-azurefunctions-hateoas-and-property-based-testing\index.html.md
+2017\01\event-sourcing-optimizing-neventstore-sql-read-performance\index.html.md
+2015\12\weaving-your-domain-classes-with-fody\index.html.md
+2017\11\azure-functions-fsharp-talk\index.html.md
+2016\11\introducing-stream-processing-in-fsharp\index.html.md
+2016\02\building-a-poker-bot-card-recognition\index.html.md
+2013\01\06\poker-money-application-for-windows-store\index.html.md
+2016\03\building-a-poker-bot-mouse-movements\index.html.md
+2016\02\building-a-poker-bot-string-recognition\index.html.md
+2012\02\01\machine-learning-class-at-stanford-online\index.html.md
+2016\05\dependency-inversion-implies-interfaces-are-owned-by-high-level-modules\index.html.md
+2012\02\05\hunting-memory-leaks-in-silverlight\index.html.md
+2017\07\sending-large-batches-to-azure-service-bus\index.html.md
+2017\03\azure-service-bus-entity-metrics-dotnet-apis\index.html.md
+2018\02\azure-durable-functions-in-fsharp\index.html.md
+2017\05\why-fsharp-and-functional-programming-will-make-you-a-better-developer-talk\index.html.md
+2016\10\azure-sql-databases-backups-disaster-recovery-import-export\index.html.md
+2012\01\26\speech-bubble-control-in-sl\index.html.md
+2012\12\26\one-certificate-missing-one-received-unexpectedly\index.html.md
+2017\09\wanted-effectively-once-processing-in-azure\index.html.md
+2016\02\unit-testing-dapper-repositories\index.html.md
+2016\04\t-sql-merge-statement-is-underrated\index.html.md
+2016\03\functional-actor-patterns-with-akkadotnet-and-fsharp\index.html.md
+2016\04\building-a-poker-bot-with-akka-net-actors\index.html.md
+2016\03\aurelia-map-component-with-leaflet\index.html.md
+2016\01\fire-and-forget-in-service-fabric-actors\index.html.md
+2016\01\monads-explained-in-csharp\index.html.md
+2012\05\16\books-that-ive-recently-read-part-2\index.html.md
+2012\09\02\use-fiddler-to-debug-urlfetch-requests-in-google-appengine\index.html.md
+2012\02\28\gauge-control-with-two-values-silverlight\index.html.md
+2012\06\21\model-thinking-class-at-coursera\index.html.md
+2012\08\14\google-adds-public-transit-into-api\index.html.md
+2012\03\13\multi-level-teleriks-tileview\index.html.md
+2014\06\03\sql-produce-resultset-with-n-rows\index.html.md
+2016\10\leaflet-plugin-to-render-geographic-corridors\index.html.md
+2014\05\21\sgen-to-precompile-classes-for-xmpserializer\index.html.md
+2012\04\10\google-transit-api-research\index.html.md
+2017\10\azure-function-triggered-by-azure-event-grid\index.html.md
+tags/hackathon/index.html.eco
+tags/hackfest/index.html.eco
+tags/challenge/index.html.eco
+tags/green-hackfest/index.html.eco
+tags/green-technologies/index.html.eco
+tags/architecture/index.html.eco
+tags/design/index.html.eco
+tags/messages/index.html.eco
+tags/message-processing/index.html.eco
+tags/azure/index.html.eco
+tags/azure-functions/index.html.eco
+tags/serverless/index.html.eco
+tags/performance/index.html.eco
+tags/cold-start/index.html.eco
+tags/unit-testing/index.html.eco
+tags/dependency-injection/index.html.eco
+tags/guard/index.html.eco
+tags/clean-code/index.html.eco
+tags/best-practices/index.html.eco
+tags/reflection/index.html.eco
+tags/c/index.html.eco
+tags/tdd/index.html.eco
+tags/pluralsight/index.html.eco
+tags/course/index.html.eco
+tags/learning/index.html.eco
+tags/javascript/index.html.eco
+tags/jspm/index.html.eco
+tags/systemjs/index.html.eco
+tags/aurelia/index.html.eco
+tags/animation/index.html.eco
+tags/coursera/index.html.eco
+tags/gamification/index.html.eco
+tags/online-classes/index.html.eco
+tags/online-learning/index.html.eco
+tags/statement-of-accomplishment/index.html.eco
+tags/units-of-measurement/index.html.eco
+tags/domain-design/index.html.eco
+tags/ddd/index.html.eco
+tags/appengine/index.html.eco
+tags/i18n/index.html.eco
+tags/jinja2/index.html.eco
+tags/python/index.html.eco
+tags/translations/index.html.eco
+tags/pulumi/index.html.eco
+tags/azure-app-service/index.html.eco
+tags/code-review/index.html.eco
+tags/hotels-api/index.html.eco
+tags/hotelscombined/index.html.eco
+tags/public-api/index.html.eco
+tags/sql-server/index.html.eco
+tags/execution-plan/index.html.eco
+tags/query-plan/index.html.eco
+tags/database/index.html.eco
+tags/repro/index.html.eco
+tags/erland-sommarskog/index.html.eco
+tags/aws/index.html.eco
+tags/aws-lambda/index.html.eco
+tags/gcp/index.html.eco
+tags/google-cloud-functions/index.html.eco
+tags/f/index.html.eco
+tags/programming-puzzles/index.html.eco
+tags/advent-of-code/index.html.eco
+tags/visualization/index.html.eco
+tags/f-exchange/index.html.eco
+tags/talk/index.html.eco
+tags/finance/index.html.eco
+tags/functional-programming/index.html.eco
+tags/monads/index.html.eco
+tags/maybe/index.html.eco
+tags/linq/index.html.eco
+tags/browsersync/index.html.eco
+tags/rest/index.html.eco
+tags/api/index.html.eco
+tags/service-fabric/index.html.eco
+tags/akka-net/index.html.eco
+tags/actor-model/index.html.eco
+tags/bugs/index.html.eco
+tags/error-log/index.html.eco
+tags/sql-server-service-broker/index.html.eco
+tags/event-sourcing/index.html.eco
+tags/cqrs/index.html.eco
+tags/application-insights/index.html.eco
+tags/typescript/index.html.eco
+tags/scala/index.html.eco
+tags/fody/index.html.eco
+tags/immutability/index.html.eco
+tags/code-generation/index.html.eco
+tags/azure-event-hubs/index.html.eco
+tags/azure-service-bus/index.html.eco
+tags/scalability/index.html.eco
+tags/asp-net-web-api/index.html.eco
+tags/spa/index.html.eco
+tags/continuous-deployment/index.html.eco
+tags/git/index.html.eco
+tags/azure-sql-database/index.html.eco
+tags/f-advent-calendar/index.html.eco
+tags/meetup/index.html.eco
+tags/slides/index.html.eco
+tags/books/index.html.eco
+tags/business-books/index.html.eco
+tags/metrics/index.html.eco
+tags/monitoring/index.html.eco
+tags/prtg/index.html.eco
+tags/durable-functions/index.html.eco
+tags/https/index.html.eco
+tags/http-2/index.html.eco
+tags/cloudflare/index.html.eco
+tags/poker-bot/index.html.eco
+tags/hateoas/index.html.eco
+tags/property-based-testing/index.html.eco
+tags/neventstore/index.html.eco
+tags/stream-processing/index.html.eco
+tags/data-processing/index.html.eco
+tags/image-recognition/index.html.eco
+tags/full-tilt-poker/index.html.eco
+tags/poker/index.html.eco
+tags/poker-money/index.html.eco
+tags/poker-money-application/index.html.eco
+tags/poker-stars/index.html.eco
+tags/windows-8/index.html.eco
+tags/windows-rt/index.html.eco
+tags/windows-store/index.html.eco
+tags/human-like-behavior/index.html.eco
+tags/ocr/index.html.eco
+tags/machine-learning/index.html.eco
+tags/stanford/index.html.eco
+tags/solid/index.html.eco
+tags/dependency-inversion/index.html.eco
+tags/fixing-memory-leaks/index.html.eco
+tags/memory-leaks/index.html.eco
+tags/silverlight/index.html.eco
+tags/windbg/index.html.eco
+tags/disaster-recovery/index.html.eco
+tags/speech-bubble/index.html.eco
+tags/user-control/index.html.eco
+tags/wpf/index.html.eco
+tags/dapper/index.html.eco
+tags/orm/index.html.eco
+tags/t-sql/index.html.eco
+tags/patterns/index.html.eco
+tags/leaflet/index.html.eco
+tags/maps/index.html.eco
+tags/debugging/index.html.eco
+tags/fiddler/index.html.eco
+tags/google-appengine/index.html.eco
+tags/gauge-control/index.html.eco
+tags/model-thinking/index.html.eco
+tags/google-maps/index.html.eco
+tags/google-transit/index.html.eco
+tags/telerik/index.html.eco
+tags/tileview/index.html.eco
+tags/net/index.html.eco
+tags/asp-net/index.html.eco
+tags/msbuild/index.html.eco
+tags/sgen/index.html.eco
+tags/xmlserializer/index.html.eco
+tags/azure-event-grid/index.html.eco
+2\index.html.eco
+3\index.html.eco
+4\index.html.eco
+5\index.html.eco
+6\index.html.eco
+7\index.html.eco
+8\index.html.eco
+9\index.html.eco
+10\index.html.eco
+11\index.html.eco
+12\index.html.eco
+13\index.html.eco
+14\index.html.eco
+15\index.html.eco
+16\index.html.eco
+17\index.html.eco
+[32minfo:[39m Generated 671/682 files in 72.516 seconds
+[32minfo:[39m The action completed successfully
+[32minfo:[39m Shutting down... cya next time!
+Waiting on the handles:
+[ WriteStream {
+    connecting: false,
+    _hadError: false,
+    _handle: 
+     TTY {
+       bytesRead: 0,
+       _externalStream: [External],
+       fd: -1,
+       writeQueueSize: 0,
+       owner: [Circular],
+       onread: [Function: onread] },
+    _parent: null,
+    _host: null,
+    _readableState: 
+     ReadableState {
+       objectMode: false,
+       highWaterMark: 16384,
+       buffer: [Object],
+       length: 0,
+       pipes: null,
+       pipesCount: 0,
+       flowing: null,
+       ended: false,
+       endEmitted: false,
+       reading: false,
+       sync: true,
+       needReadable: false,
+       emittedReadable: false,
+       readableListening: false,
+       resumeScheduled: false,
+       destroyed: false,
+       defaultEncoding: 'utf8',
+       awaitDrain: 0,
+       readingMore: false,
+       decoder: null,
+       encoding: null },
+    readable: false,
+    domain: null,
+    _events: 
+     { end: [Object],
+       finish: [Function: onSocketFinish],
+       _socketEnd: [Function: onSocketEnd] },
+    _eventsCount: 3,
+    _maxListeners: undefined,
+    _writableState: 
+     WritableState {
+       objectMode: false,
+       highWaterMark: 16384,
+       finalCalled: false,
+       needDrain: false,
+       ending: false,
+       ended: false,
+       finished: false,
+       destroyed: false,
+       decodeStrings: false,
+       defaultEncoding: 'utf8',
+       length: 0,
+       writing: false,
+       corked: 0,
+       sync: true,
+       bufferProcessing: false,
+       onwrite: [Function: bound onwrite],
+       writecb: null,
+       writelen: 0,
+       bufferedRequest: null,
+       lastBufferedRequest: null,
+       pendingcb: 0,
+       prefinished: false,
+       errorEmitted: false,
+       bufferedRequestCount: 0,
+       corkedRequestsFree: [Object] },
+    writable: true,
+    allowHalfOpen: false,
+    _bytesDispatched: 0,
+    _sockname: null,
+    _writev: null,
+    _pendingData: null,
+    _pendingEncoding: '',
+    server: null,
+    _server: null,
+    columns: 122,
+    rows: 29,
+    _type: 'tty',
+    fd: 2,
+    _isStdio: true,
+    destroySoon: [Function: destroy],
+    _destroy: [Function],
+    [Symbol(asyncId)]: 3,
+    [Symbol(bytesRead)]: 0 } ]

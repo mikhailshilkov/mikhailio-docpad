@@ -32,17 +32,17 @@
   },
   "dependencies": {
     "cheerio": "~0.12.3",
-    "docpad": "~6.78.1",
-    "docpad-plugin-cleanurls": "https://github.com/ervwalter/docpad-plugin-cleanurls/tarball/compiled",
-    "docpad-plugin-eco": "~2.1.0",
-    "docpad-plugin-ghpages": "~2.4.4",
-    "docpad-plugin-less": "~2.4.1",
-    "docpad-plugin-marked": "~2.3.0",
-    "docpad-plugin-paged": "^2.5.0",
-    "docpad-plugin-partials": "~2.9.2",
-    "docpad-plugin-sitemap": "~2.2.0",
-    "docpad-plugin-tags": "~2.0.7",
-    "moment": "~2.4.0"
+    "docpad": "~6.80.6",
+    "docpad-plugin-cleanurls": "~2.11.0",
+    "docpad-plugin-eco": "~2.3.0",
+    "docpad-plugin-ghpages": "~2.7.0",
+    "docpad-plugin-less": "~2.6.0",
+    "docpad-plugin-marked": "~2.5.0",
+    "docpad-plugin-paged": "~2.6.0",
+    "docpad-plugin-partials": "~2.13.0",
+    "docpad-plugin-sitemap": "~2.5.0",
+    "docpad-plugin-tags": "~2.2.0",
+    "moment": "^2.22.2"
   },
   "devDependencies": {},
   "main": "node_modules/docpad/bin/docpad-server"
