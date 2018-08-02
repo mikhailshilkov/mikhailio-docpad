@@ -789,7 +789,7 @@ A typical monad tutorial will make a lot of emphasis on the laws, but I find the
 less important to explain to a beginner. Nonetheless, here they are for the sake
 of completeness.
 
-**Left Identity law** says that that Monad constructor is a neutral operation: you can safely
+**Left Identity law** says that Monad constructor is a neutral operation: you can safely
 run it before `Bind`, and it won't change the result of the function call:
 
 ``` csharp

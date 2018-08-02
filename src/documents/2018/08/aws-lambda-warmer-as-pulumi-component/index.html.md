@@ -1,13 +1,13 @@
 ---
 layout: post
 title: AWS Lambda Warmer as Pulumi Component
-date: 2018-08-01
+date: 2018-08-02
 tags: ["AWS", "AWS Lambda", "Pulumi", "Serverless", "Cold Starts"]
 teaserImage: teaser.jpg
 description: Provisioning AWS Lambda and API Gateway with Pulumi, examples in 5 programming languages
 ---
 
-Out of curiosity, I'm currently playing with cold starts of Function-as-a-Service platforms of major cloud providers. Basically,
+Out of curiosity, I'm currently investigating cold starts of Function-as-a-Service platforms of major cloud providers. Basically,
 if a function is not called for several minutes, the cloud instance behind it might be recycled, and then the next request will
 take longer because a new instance will need to be provisioned.
 
@@ -17,29 +17,27 @@ Chris Munns [endorsed](https://twitter.com/chrismunns/status/1017777028274294784
 
 The amount of actions to be taken is quite significant:
 
-- Define a CloudWatch event which would trigger every 5 minutes
-- Bind this event as trigger for your Lambda
-- Inside the Lambdra, detect that current invocation is triggered by our CloudWatch event
-- If so, short-circuit the execution and return immediately. Otherwise, run the normal workload
+- Define a CloudWatch event which would fire every 5 minutes
+- Bind this event as another trigger for your Lambda
+- Inside the Lambda, detect whether current invocation is triggered by our CloudWatch event
+- If so, short-circuit the execution and return immediately; otherwise, run the normal workload
 - (Bonus point) If you want to keep multiple instances alive, do some extra dancing with calling itself N times in parallel,
 provided by an extra permission to do so.
 
 Pursuing Reusability
 --------------------
 
-To simplify this for his reader, Jeremy was so kind to create 
+To simplify this for his readers, Jeremy was so kind to
 
-- Create an NPM package which you can install and then call to a warmer function 
+- Create an NPM package which you can install and then call from a function-to-be-warmed
 - Provide SAM and Serverless Framework templates to automate Cloud Watch integration
 
-Thanks Jeremy!
-
-Those are still two distict steps: writing the node (JS + NPM) and provisioning the cloud resources (YAML). There are some
+Those are still two distinct steps: writing the node (JS + NPM) and provisioning the cloud resources (YAML + CLI). There are some
 drawbacks to that:
 
 - You need to change two parts, which don't look like each other
-- They have to work in sync, e.g. Cloud Watch even must provide the right payload for the handler
-- There's still some boilerplate
+- They have to work in sync, e.g. Cloud Watch event must provide the right payload for the handler
+- There's still some boilerplate for every new Lambda
 
 Pulumi Components
 -----------------
@@ -64,11 +62,11 @@ const handler = (event: any, context: any, callback: (error: any, result: any) =
 const lambda = new aws.serverless.Function("my-function", { /* options */ }, handler);
 ```
 
-The processing code `handler` is just passed as parameter to infrastructure code as a parameter.
+The processing code `handler` is just passed to infrastructure code as a parameter.
 
 So, if I wanted to make reusable API for an "always warm" function, how would it look like?
 
-Simple, I just want to be able to do that:
+From the client code perspective, I just want to be able to do the same thing:
 
 ``` typescript
 const lambda = new mylibrary.WarmLambda("my-warm-function", { /* options */ }, handler);
@@ -113,8 +111,8 @@ const eventRule = new aws.cloudwatch.EventRule(`${name}-warming-rule`,
 ```
 
 Then goes the cool trick. We substitute the user-provided handler with our own "outer" handler. This handler closes
-over `eventRule`, so it can use the rule to identity the warm-up call coming from CloudWatch. If such is identifier,
-the handler short-cicuits to the callback. Otherwise, it passes the event over to the original handler:
+over `eventRule`, so it can use the rule to identify the warm-up call coming from CloudWatch. If such is identified,
+the handler short-circuits to the callback. Otherwise, it passes the event over to the original handler:
 
 ``` typescript
 const outerHandler = (event: any, context: aws.serverless.Context, callback: (error: any, result: any) => void) =>
@@ -129,7 +127,10 @@ const outerHandler = (event: any, context: aws.serverless.Context, callback: (er
 };
 ```
 
-It time to bind both `eventRule` and `outerHandler` to a new serverless function:
+That's a great example of synergy enabled by doing both application code and application infrastructure in a
+single program. I'm free to mix and match objects from both worlds.
+
+It's time to bind both `eventRule` and `outerHandler` to a new serverless function:
 
 ``` typescript
 const func = new aws.serverless.Function(
@@ -139,3 +140,60 @@ const func = new aws.serverless.Function(
     { parent: this, ...opts });
 this.lambda = func.lambda;            
 ```
+
+Finally, I create an event subscription from CloudWatch schedule to the Lambda:
+
+``` typescript
+this.subscription = new serverless.cloudwatch.CloudwatchEventSubscription(
+    `${name}-warming-subscription`, 
+    eventRule,
+    this.lambda,
+    { },
+    { parent: this, ...opts });
+```
+
+And that's all we need for now! See the full code 
+[here](https://github.com/mikhailshilkov/pulumi-serverless-examples/blob/master/WarmedLambda-TypeScript/warmLambda.ts).
+
+Here is the output of `pulumi update` command for my sample "warm" lambda application:
+
+```
+     Type                                                      Name                            Plan
+ +   pulumi:pulumi:Stack                                       WarmLambda-WarmLambda-dev       create
+ +    samples:WarmLambda                                       i-am-warm                       create
+ +      aws-serverless:cloudwatch:CloudwatchEventSubscription  i-am-warm-warming-subscription  create
+ +        aws:lambda:Permission                                i-am-warm-warming-subscription  create
+ +        aws:cloudwatch:EventTarget                           i-am-warm-warming-subscription  create
+ +      aws:cloudwatch:EventRule                               i-am-warm-warming-rule          create
+ +      aws:serverless:Function                                i-am-warm-warmed                create
+ +         aws:lambda:Function                                 i-am-warm-warmed                create
+```
+
+7 Pulumi components and 4 AWS cloud resources are provisioned by one `new WarmLambda()` line.
+
+Multi-Instance Warming
+----------------------
+
+Jeremy's library supports warming several instances of Lambda by issuing parallel self-calls.
+
+Reproducing the same with Pulumi component should be fairly straightforward:
+
+- Add an extra constructor option to accept the number of instances to keep warm
+- Add a permission to call Lambda from itself
+- Fire N calls when warming event is triggered
+- Short-circuit those calls in each instance
+
+Note that only the first item would be visible to the client code. That's the power of componentization
+and code reuse.
+
+I didn't need multi-instance warming, so I'll leave the implementation as excercise for the reader.
+
+Conclusion
+----------
+
+Obligatory note: most probably, you don't need to add warming to your AWS Lambdas.
+
+But whatever advanced scenario you might have, it's likely that it is easier to express the scenario
+in terms of general-purpose reusable component, rather than a set of guidelines or templates.
+
+Happy hacking!
