@@ -32,7 +32,7 @@ To simplify this for his readers, Jeremy was so kind to
 - Create an NPM package which you can install and then call from a function-to-be-warmed
 - Provide SAM and Serverless Framework templates to automate Cloud Watch integration
 
-Those are still two distinct steps: writing the node (JS + NPM) and provisioning the cloud resources (YAML + CLI). There are some
+Those are still two distinct steps: writing the code (JS + NPM) and provisioning the cloud resources (YAML + CLI). There are some
 drawbacks to that:
 
 - You need to change two parts, which don't look like each other
@@ -42,7 +42,7 @@ drawbacks to that:
 Pulumi Components
 -----------------
 
-Pulumi takes a different approach. You can (but don't have to) blend the application code and infrastructure management code
+Pulumi takes a different approach. You can blend the application code and infrastructure management code
 into one cohesive cloud application.
 
 Related resources can be combined together into reusable components, which hide repetitive stuff behind code abstractions.
@@ -72,7 +72,7 @@ From the client code perspective, I just want to be able to do the same thing:
 const lambda = new mylibrary.WarmLambda("my-warm-function", { /* options */ }, handler);
 ```
 
-Cloud Watch? Event subscription? Short-circuiting? They are implementation details!
+CloudWatch? Event subscription? Short-circuiting? They are implementation details!
 
 Warm Lambda
 -----------
@@ -111,7 +111,7 @@ const eventRule = new aws.cloudwatch.EventRule(`${name}-warming-rule`,
 ```
 
 Then goes the cool trick. We substitute the user-provided handler with our own "outer" handler. This handler closes
-over `eventRule`, so it can use the rule to identify the warm-up call coming from CloudWatch. If such is identified,
+over `eventRule`, so it can use the rule to identify the warm-up event coming from CloudWatch. If such is identified,
 the handler short-circuits to the callback. Otherwise, it passes the event over to the original handler:
 
 ``` typescript
@@ -141,7 +141,7 @@ const func = new aws.serverless.Function(
 this.lambda = func.lambda;            
 ```
 
-Finally, I create an event subscription from CloudWatch schedule to the Lambda:
+Finally, I create an event subscription from CloudWatch schedule to Lambda:
 
 ``` typescript
 this.subscription = new serverless.cloudwatch.CloudwatchEventSubscription(
@@ -186,7 +186,7 @@ Reproducing the same with Pulumi component should be fairly straightforward:
 Note that only the first item would be visible to the client code. That's the power of componentization
 and code reuse.
 
-I didn't need multi-instance warming, so I'll leave the implementation as excercise for the reader.
+I didn't need multi-instance warming, so I'll leave the implementation as exercise for the reader.
 
 Conclusion
 ----------
