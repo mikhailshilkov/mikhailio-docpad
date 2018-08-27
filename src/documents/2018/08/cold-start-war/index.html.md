@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Cold Start War
-date: 2018-07-29
+date: 2018-08-29
 tags: ["Azure", "Azure Functions", "Serverless", "Performance", "Cold Start", "AWS", "AWS Lambda", "GCP", "Google Cloud Functions"]
 ---
 
-Serverless services are hot. Except when they are not :)
+Serverless cloud services are hot. Except when they are not :)
 
 AWS Lambda, Azure Functions, Google Cloud Functions are all similar in their attempt
 to enable rapid development of cloud-native serverless applications.
@@ -111,6 +111,29 @@ can be kept alive for the whole hour. The probability of cold start doesn't seem
 at least just by looking at this chart.
 
 Any ideas of what's going on are welcome!
+
+Memory Allocation
+-----------------
+
+AWS Lambda and Google Cloud Functions have a setting to define the max memory size that gets allocated to a single
+instance of a function. User can select a value from 128MB to 2GB and above at creation time.
+
+More importantly, the virtual CPU cycles get allocated proportionally to this provisioned memory size. This means
+that an instance of 512 MB will have twice as many CPU speed as an instance of 256MB.
+
+Does this affect the cold start time?
+
+I've run a series of tests to compare cold start latency across the board of memory/CPU sizes:
+
+TODO
+
+In contrast to Amazon and Google, Microsoft doesn't ask to select a memory limit. Azure will charge Functions based 
+on the actual memory usage. More importantly, it will always dedicate a full vCore for a give Function execution.
+
+It's not exactly apples-to-apples, but I chose to fix the memore allocations of AWS Lambda and GCF to 1024MB.
+This feels the closest to Azure's vCore capacity, although I haven't tried a formal CPU performance comparison.
+
+Given that, let's see how the 3 cloud providers compare in cold start time.
 
 Javascript Baseline
 -------------------
