@@ -124,6 +124,10 @@ that an instance of 512 MB will have twice as many CPU speed as an instance of 2
 Does this affect the cold start time?
 
 I've run a series of tests to compare cold start latency across the board of memory/CPU sizes:
+                           
+![AWS Javascript Cold Start by Memory](/aws-coldstart-js-by-memory.png)
+![AWS C# Cold Start by Memory](/aws-coldstart-csharp-by-memory.png)
+![GCP Javascript Cold Start by Memory](/gcp-coldstart-js-by-memory.png)
 
 TODO
 
@@ -186,7 +190,7 @@ To simulate such scenario, I've measured cold starts for functions with extra de
 
 Here are the results:
 
-![Cold Start Dependencies](/coldstarts-dependencies.png)
+![Cold Start Dependencies](/coldstart-dependencies.png)
 
 As expected, the dependencies slow the loading down. You should keep your Functions lean,
 otherwise you will pay in seconds for every cold start.
