@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Cold Start War
+title: Serverless: Cold Start War
 date: 2018-08-29
 tags: ["Azure", "Azure Functions", "Serverless", "Performance", "Cold Start", "AWS", "AWS Lambda", "GCP", "Google Cloud Functions"]
 ---
@@ -50,10 +50,9 @@ have minimal impact:
 
 ![Test Setup](/test-setup.png)
 
-Important notes:
-
-- Azure tests were done with version 1 of Functions runtime (Full .NET Framework), which is the production-ready GA version as of today
-- Google Cloud Functions are still in beta, so it might be they haven't rolled out all optimizations yet
+Important note: I ran all my tests on GA (generally available) versions of services / languages, so e.g.
+Azure tests were done with version 1 of Functions runtime (.NET Framework), and GCP tests were only made for
+Javascript runtime.
 
 When Does Cold Start Happen?
 ----------------------------
@@ -80,7 +79,7 @@ AWS is more tricky. Here is the same kind of chart, relative durations vs time s
 measured for AWS Lambda. To help you read it, I've marked cold starts with blue color, and warm starts
 with orange color:
 
-TODO: make Azure orage too?
+TODO: make Azure orange too?
 
 ![AWS Cold Start vs Warm Start](/aws-coldstart-threshold.png)
 
@@ -102,7 +101,7 @@ A couple learning points here:
 ### GCP
 
 Google Cloud Functions left me completely puzzled. Here is the same chart for GCP coldstarts (again,
-orange are warm and blue are cold):
+orange dots are warm and blue ones are cold):
 
 ![GCP Cold Start vs Warm Start](/gcp-coldstart-threshold.png)
 
@@ -123,13 +122,22 @@ that an instance of 512 MB will have twice as many CPU speed as an instance of 2
 
 Does this affect the cold start time?
 
-I've run a series of tests to compare cold start latency across the board of memory/CPU sizes:
+I've run a series of tests to compare cold start latency across the board of memory/CPU sizes. The results are
+somewhat mixed.
+
+AWS Lambda Javascript doesn't seem to have significant differences. That probably means that not so much CPU load
+is required to start a Node.js "Hello World" application:
                            
 ![AWS Javascript Cold Start by Memory](/aws-coldstart-js-by-memory.png)
-![AWS C# Cold Start by Memory](/aws-coldstart-csharp-by-memory.png)
-![GCP Javascript Cold Start by Memory](/gcp-coldstart-js-by-memory.png)
 
-TODO
+AWS Lambda .NET Core runtime does depend on memory size though. Cold start time drops dramatically with every increase
+in allocated memory and CPU:
+
+![AWS C# Cold Start by Memory](/aws-coldstart-csharp-by-memory.png)
+
+GCP Cloud Functions expose a similar effect even for Javascript runtime:
+
+![GCP Javascript Cold Start by Memory](/gcp-coldstart-js-by-memory.png)
 
 In contrast to Amazon and Google, Microsoft doesn't ask to select a memory limit. Azure will charge Functions based 
 on the actual memory usage. More importantly, it will always dedicate a full vCore for a give Function execution.
@@ -153,7 +161,8 @@ Here are the numbers for cold starts:
 
 ![Cold Start for Basic Javascript Functions](/coldstart-js-baseline.png)
 
-TODO conclusion
+AWS is clearly doing the best job here. GCP takes the second place, and Azure is the slowest. Having said that,
+all 3 services are sort of in the same ball park (TODO).
 
 How Do Languages Compare?
 -------------------------
@@ -171,10 +180,14 @@ experimental / preview, so the cold starts are not fully optimized. See
 The following chart shows some intuition about the cold start duration per language. The languages
 are ordered based on mean response time, from lowest to highest. 65% of request
 durations are inside the vertical bar (1-sigma interval) and 95% are inside the vertical line (2-sigma):
+TODO
 
 ![Cold Start per Language per Cloud and Language](/coldstart-per-language.png)
 
-TODO conclusion
+AWS provides the richest selection of runtimes, and all of them are faster than the other two cloud providers.
+C# / .NET seems to be the least optimized out of the 5 languages of AWS Lambda.
+
+TODO - cross check with other charts.
 
 Does Size Matter?
 -----------------
@@ -184,9 +197,10 @@ depend on other third-party libraries.
 
 To simulate such scenario, I've measured cold starts for functions with extra dependencies:
 
-- Javascript referenced Bluebird, lodash and AWS SDK (TODO total size)
-- .NET function references Entity Framework, Automapper, Polly and Serilog (TODO)
-- Java function references TODO
+- Javascript referencing 3 NPM packages - 5MB zipped
+- Javascript referencing 38 NPM packages - 35 MB zipped
+- .NET function referencing 5 NuGet packages - 2 MB zipped
+- Java function referencing 5 Maven packages - 15 MB zipped
 
 Here are the results:
 
@@ -195,88 +209,33 @@ Here are the results:
 As expected, the dependencies slow the loading down. You should keep your Functions lean,
 otherwise you will pay in seconds for every cold start.
 
-TODO:
-An important note for Javascript developers: the above numbers are for Functions deployed
-after [`Funcpack`](https://github.com/Azure/azure-functions-pack) preprocessor. The package
-contained the single `js` file with Webpack-ed dependency tree. Without that, the mean
-cold start time of the same function is 20 seconds!
+However, the increase in cold start seems quite low, especially for precompiled languages.
 
-Keeping Always Warm
--------------------
+A very cool feature of GCP Cloud Functions is that you don't have to include NPM packages into
+the deployment archive. You just add `package.json` file and the runtime will restore them for you.
+This makes the deployment artifact rediculously small, but doesn't seem to slow down the cold
+starts either. Obvious, Google pre-restores the packages in advance, before the actual request 
+comes in.
 
-Can we avoid cold starts except the very first one by keeping the instance warm? In theory,
-if we issue at least 1 request every several minutes, the first instance should stay warm for
-long time.
+Avoiding Cold Starts
+--------------------
 
-For each service, I've added an extra hook to trigger the function every 10 minutes. I then 
-measured the cold start statistics similar to all the tests above.
+Overall impression is that cold start delays aren't that high, so most applications can tolerate
+them just fine.
 
-TODO:
+If that's not the case, some tricks can be implemented to keep the functions intances warm.
+The approach is universal for all 3 providers: once in X minutes, make an artificial call to
+the function to prevent it from expiring.
 
-During 2 days I was issuing infrequent requests to the same app, most of them would normally
-lead to a cold start. Interestingly, even though I was regularly firing the timer, Azure 
-switched instances to serve my application 2 times during the test period:
+Implementation details will differ since the expiration policies are different, as we explored
+above.
 
-![Infrequent Requests to Azure Functions with "Keep It Warm" Timer](/cold-starts-keep-warm.png)
+For applications with higher load profile, you might want to fire several parallel "warming"
+requests in order to make sure that enough instances are kept in warm stock.
 
-I can see that most responses are fast, so timer "warmer" definitely helps.
-
-Anyway, keeping Functions warm seems a viable strategy.
-
-TODO: link to prewarmer
-
-Parallel Requests
------------------
-
-The problem of cold starts is not solved yet, at least not for more busy applications. 
-
-What happens when there is a warm instance, but it's already busy with processing another
-request?
-
-I tested with a very lightweight function, which nevertheless takes some time to complete.
-All it does is a sleep for 500 ms.
-
-I believe it's an OK approximation for an IO-bound function.
-
-The test client then issued 2 to 10 parallel requests to this function and measured the
-response time for all requests.
-
-TODO: 
-
-The answer is that each instance can only handle one request simultaneously. Even if one 
-instance is warm, if two requests come at the same time, one of the requests will hit a 
-cold start because existing instance is busy with the other.
-
-It's not the easiest chart to understand in full, but note the following:
-
-- Each group of bars are for requests sent at the same time. Then there goes a pause about
-20 seconds before the next group of requests gets sent
-
-- The bars are colored by the instance which processed that request: same instance - same
-color
-
-![Azure Functions Response Time to Batches of Simultaneous Requests](/cold-starts-during-simultaneous-requests.png)
-
-Here are some observations from this experiment:
-
-- Out of 64 requests, there were 11 cold starts
-
-- Same instance *can* process multiple simultaneous requests, e.g. one instance processed
-7 out of 10 requests in the last batch
-
-- Nonetheless, Azure is eager to spin up new instances for multiple requests. In total
-12 instances were created, which is even more than max amount of requests in any single
-batch
-
-- Some of those instances were actually never reused (gray-ish bars in batched x2 and x3,
-brown bar in x10)
-
-- The first request to each new instance pays the full cold start price. Runtime doesn't
-provision them in background while reusing existing instances for received requests
-
-- If an instance handled more than one request at a time, response time invariably suffers,
-even though the function is super lightweight (`Task.Delay`)
-
+For further reading, have a look at my 
+[Cold Starts Beyond First Request in Azure Functions](https://mikhail.io/2018/05/azure-functions-cold-starts-beyond-first-load/)
+and [AWS Lambda Warmer as Pulumi Component](https://mikhail.io/2018/08/aws-lambda-warmer-as-pulumi-component/).
 
 Conclusions
 -----------
@@ -284,8 +243,7 @@ Conclusions
 Here are some lessons learned from all the experiments above:
 
 - Be prepared for 1-3 seconds cold starts even for the smallest Functions
-- Stay on V1 of runtime until V2 goes GA unless you don't care about perf
-- .NET precompiled and Javascript Functions have roughly same cold start time
+- Different languages and runtimes have roughly comparable cold start time within the same platform
 - Minimize the amount of dependencies, only bring what's needed
 
 Do you see anything weird or unexpected in my results? Do you need me to dig deeper on other aspects?
