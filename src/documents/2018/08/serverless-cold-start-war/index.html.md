@@ -3,6 +3,8 @@ layout: post
 title: Serverless: Cold Start War
 date: 2018-08-29
 tags: ["Azure", "Azure Functions", "Serverless", "Performance", "Cold Start", "AWS", "AWS Lambda", "GCP", "Google Cloud Functions"]
+teaserImage: teaser.jpg
+description: Comparison of cold start statistics for FaaS across AWS, Azure and GCP
 ---
 
 Serverless cloud services are hot. Except when they are not :)
