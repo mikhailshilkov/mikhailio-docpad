@@ -14,26 +14,38 @@ Auto-provisioning and auto-scalability are the killer features of those Function
 cloud offerings. No management required, cloud providers will do the provisioning for the user
 based on the actual incoming load.
 
-One drawback of such dynamic provisioning is a phenomenon called "Cold Start". Basically,
+One drawback of such dynamic provisioning is a phenomenon called "cold start". Basically,
 applications that haven't been used for a while take longer to startup and to handle the
 first request.
 
-TODO brief summary, with picture:
+Cloud providers keep a bunch of generic unspecialized workers on stock. Whenever a serverless
+application needs to scale up, be it from 0 to 1 instances, or from N to N+1 likewise, the runtime
+will pick one of the spare workers and will configure it to serve the named application:
 
-![Cold Start](/coldstart.jpg)
+![Cold Start](/coldstart.png)
 
-The problem was described multiple times, here are the notable links:
+This procedure takes time, so the latency of the application event handling increases. To avoid
+doing this for every event, the specialized worker will be kept intact for some period of time.
+When another event comes it, this worker will stand available to process it as soon as possible.
+This is a "warm start":
+
+![Warm Start](/warmstart.png)
+
+The problem of cold start latency was described multiple times, here are the notable links:
 - [Understanding Serverless Cold Start](https://blogs.msdn.microsoft.com/appserviceteam/2018/02/07/understanding-serverless-cold-start/)
-- TODO
+- [Everything you need to know about cold starts in AWS Lambda](https://hackernoon.com/cold-starts-in-aws-lambda-f9e3432adbf0)
+- [Keeping Functions Warm](https://serverless.com/blog/keep-your-lambdas-warm/)
+- [I’m afraid you’re thinking about AWS Lambda cold starts all wrong](https://theburningmonk.com/2018/01/im-afraid-youre-thinking-about-aws-lambda-cold-starts-all-wrong/)
 
 The goal of my article today is to explore how cold starts compare:
 
-- Across Big-3 cloud providers
+- Across Big-3 cloud providers (Amazon, Google, Microsoft)
 - For different languages and runtimes
 - For smaller vs larger applications (including dependencies)
+- How often cold starts happen
 - What can be done to optimize the cold starts
 
-TODO: shed the light on where industry is going = teaser of conclusion.
+Let's see how I did that and what the outcome was.
 
 Methodology
 -----------
@@ -62,6 +74,9 @@ the instance is kept alive in case subsequent requests arrive. But for how long?
 
 The answer differs between cloud providers.
 
+To help you read the charts in this section, I've marked cold starts with blue color dots, and warm starts
+with orange color dots.
+
 ### Azure
 
 Here is the chart for Azure. It shows values of normalized request durations across
@@ -76,21 +91,22 @@ threshold hit another cold start.
 ### AWS
 
 AWS is more tricky. Here is the same kind of chart, relative durations vs time since last request, 
-measured for AWS Lambda. To help you read it, I've marked cold starts with blue color, and warm starts
-with orange color:
-
-TODO: make Azure orange too?
+measured for AWS Lambda:
 
 ![AWS Cold Start vs Warm Start](/aws-coldstart-threshold.png)
 
-There's no clear threshold here... Within this sample, no cold starts happenned within 28 minutes after previous 
-invocation. Then the frequency of cold starts slowly rises. But even after 1 hour of inactivity, there's still a
+There's no clear threshold here... For this sample, no cold starts happenned within 28 minutes after previous 
+invocation. Afterwards the frequency of cold starts slowly rises. But even after 1 hour of inactivity, there's still a
 good chance that your instance is alive and ready to take requests.
 
 This doesn't match the official information that AWS Lambdas stay alive for just 5 minutes after the last
 invocation. I reached out to Chris Munns, and he confirmed:
 
-<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">So what you are seeing is very much possible as the team plays with certain knobs/levers for execution environment lifecycle. let me know if you have concerns about it, but it should be just fine</p>&mdash; chrismunns (@chrismunns) <a href="https://twitter.com/chrismunns/status/1021452964630851585?ref_src=twsrc%5Etfw">July 23, 2018</a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr">
+So what you are seeing is very much possible as the team plays with certain knobs/levers for execution environment lifecycle. 
+let me know if you have concerns about it, but it should be just fine</p>&mdash; chrismunns (@chrismunns) 
+<a href="https://twitter.com/chrismunns/status/1021452964630851585?ref_src=twsrc%5Etfw">July 23, 2018</a>
+</blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 A couple learning points here:
@@ -111,14 +127,34 @@ at least just by looking at this chart.
 
 Any ideas of what's going on are welcome!
 
+### Parallel requests
+
+Cold starts happen not only when a first instance of application is provisioned. The same issue will happen whenever
+all the provisioned instances are busy handling incoming events, and yet another event comes in (at scale out).
+
+As far as I'm aware, this behavior is common for all 3 providers, so I haven't prepared any comparison charts
+for N+1 cold starts. Yet, be aware of them!
+
+Reading Candle Charts
+---------------------
+
+In the following sections, you will see charts that represent statistical distribution of cold start time as
+measured during my experiments. I repeated experiments multiple times, and then groupped the metric values, e.g.
+by cloud provider or by language.
+
+Each group will be represented by a "candle" on the chart. This is how you should read each candle:
+
+![How to Read Cold Start Charts](/sample-coldstart-chart.png)
+
+
 Memory Allocation
 -----------------
 
-AWS Lambda and Google Cloud Functions have a setting to define the max memory size that gets allocated to a single
+AWS Lambda and Google Cloud Functions have a setting to define the memory size that gets allocated to a single
 instance of a function. User can select a value from 128MB to 2GB and above at creation time.
 
 More importantly, the virtual CPU cycles get allocated proportionally to this provisioned memory size. This means
-that an instance of 512 MB will have twice as many CPU speed as an instance of 256MB.
+that an instance of 512 MB will have twice as much CPU speed as an instance of 256MB.
 
 Does this affect the cold start time?
 
