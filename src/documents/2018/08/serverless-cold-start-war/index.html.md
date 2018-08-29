@@ -161,7 +161,7 @@ Does this affect the cold start time?
 I've run a series of tests to compare cold start latency across the board of memory/CPU sizes. The results are
 somewhat mixed.
 
-AWS Lambda Javascript doesn't seem to have significant differences. That probably means that not so much CPU load
+AWS Lambda Javascript doesn't seem to have significant differences. This probably means that not so much CPU load
 is required to start a Node.js "Hello World" application:
                            
 ![AWS Javascript Cold Start by Memory](/aws-coldstart-js-by-memory.png)
@@ -176,9 +176,9 @@ GCP Cloud Functions expose a similar effect even for Javascript runtime:
 ![GCP Javascript Cold Start by Memory](/gcp-coldstart-js-by-memory.png)
 
 In contrast to Amazon and Google, Microsoft doesn't ask to select a memory limit. Azure will charge Functions based 
-on the actual memory usage. More importantly, it will always dedicate a full vCore for a give Function execution.
+on the actual memory usage. More importantly, it will always dedicate a full vCore for a given Function execution.
 
-It's not exactly apples-to-apples, but I chose to fix the memore allocations of AWS Lambda and GCF to 1024MB.
+It's not exactly apples-to-apples, but I chose to fix the memory allocations of AWS Lambda and GCF to 1024 MB.
 This feels the closest to Azure's vCore capacity, although I haven't tried a formal CPU performance comparison.
 
 Given that, let's see how the 3 cloud providers compare in cold start time.
@@ -186,11 +186,11 @@ Given that, let's see how the 3 cloud providers compare in cold start time.
 Javascript Baseline
 -------------------
 
-Javascript is the only language supported by Google Cloud Functions right now. Javascript is also
+Node.js is the only runtime supported in production by Google Cloud Functions right now. Javascript is also
 probably by far the most popular language for serverless applications across the board.
 
 Thus, it makes sense to compare the 3 cloud providers on how they perform in Javascript. The
-base test measures the cold starts of "Hello World" type of functions. Functions have to 
+base test measures the cold starts of "Hello World" type of functions. Functions have no 
 dependencies, so deployment package is really small.
 
 Here are the numbers for cold starts:
@@ -213,15 +213,15 @@ Azure kind of supports much more languages, including Python and Java but they a
 experimental / preview, so the cold starts are not fully optimized. See 
 [my previous article](https://mikhail.io/2018/04/azure-functions-cold-starts-in-numbers/) for exact numbers.
 
+Same applies to Python on GCP.
+
 The following chart shows some intuition about the cold start duration per language. The languages
-are ordered based on mean response time, from lowest to highest. 65% of request
-durations are inside the vertical bar (1-sigma interval) and 95% are inside the vertical line (2-sigma):
-TODO
+are ordered based on mean response time, from lowest to highest:
 
 ![Cold Start per Language per Cloud and Language](/coldstart-per-language.png)
 
-AWS provides the richest selection of runtimes, and all of them are faster than the other two cloud providers.
-C# / .NET seems to be the least optimized out of the 5 languages of AWS Lambda.
+AWS provides the richest selection of runtimes, and 4 out of 5 are faster than the other two cloud providers.
+C# / .NET seems to be the least optimized (Amazon, why is that?).
 
 TODO - cross check with other charts.
 
@@ -235,7 +235,7 @@ To simulate such scenario, I've measured cold starts for functions with extra de
 
 - Javascript referencing 3 NPM packages - 5MB zipped
 - Javascript referencing 38 NPM packages - 35 MB zipped
-- .NET function referencing 5 NuGet packages - 2 MB zipped
+- C# function referencing 5 NuGet packages - 2 MB zipped
 - Java function referencing 5 Maven packages - 15 MB zipped
 
 Here are the results:
@@ -250,7 +250,7 @@ However, the increase in cold start seems quite low, especially for precompiled 
 A very cool feature of GCP Cloud Functions is that you don't have to include NPM packages into
 the deployment archive. You just add `package.json` file and the runtime will restore them for you.
 This makes the deployment artifact rediculously small, but doesn't seem to slow down the cold
-starts either. Obvious, Google pre-restores the packages in advance, before the actual request 
+starts either. Obviously, Google pre-restores the packages in advance, before the actual request 
 comes in.
 
 Avoiding Cold Starts
@@ -259,7 +259,7 @@ Avoiding Cold Starts
 Overall impression is that cold start delays aren't that high, so most applications can tolerate
 them just fine.
 
-If that's not the case, some tricks can be implemented to keep the functions intances warm.
+If that's not the case, some tricks can be implemented to keep function intances warm.
 The approach is universal for all 3 providers: once in X minutes, make an artificial call to
 the function to prevent it from expiring.
 
