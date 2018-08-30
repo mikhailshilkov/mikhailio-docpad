@@ -7,6 +7,8 @@ teaserImage: teaser.jpg
 description: Comparison of cold start statistics for FaaS across AWS, Azure and GCP
 ---
 
+![Cold Start teaser](/teaser.jpg)
+
 Serverless cloud services are hot. Except when they are not :)
 
 AWS Lambda, Azure Functions, Google Cloud Functions are all similar in their attempt
@@ -46,6 +48,10 @@ The goal of my article today is to explore how cold starts compare:
 - For smaller vs larger applications (including dependencies)
 - How often cold starts happen
 - What can be done to optimize the cold starts
+
+*DISCLAIMER. Performance testing is hard. I might be missing some important factors and parameters that
+influence the outcome. My interpretation might be wrong. The results might change over time. If you happen 
+to know a way to improve my tests, please let me know and I will re-run them and re-publish the results.*
 
 Let's see how I did that and what the outcome was.
 
@@ -199,8 +205,8 @@ Here are the numbers for cold starts:
 
 ![Cold Start for Basic Javascript Functions](/coldstart-js-baseline.png)
 
-AWS is clearly doing the best job here. GCP takes the second place, and Azure is the slowest. Having said that,
-all 3 services are sort of in the same ball park (TODO).
+AWS is clearly doing the best job here. GCP takes the second place, and Azure is the slowest. The rivals are
+sort of close though, seemingly playing in the same league, so the exact disposition might change over time.
 
 How Do Languages Compare?
 -------------------------
@@ -224,8 +230,6 @@ are ordered based on mean response time, from lowest to highest:
 
 AWS provides the richest selection of runtimes, and 4 out of 5 are faster than the other two cloud providers.
 C# / .NET seems to be the least optimized (Amazon, why is that?).
-
-TODO - cross check with other charts.
 
 Does Size Matter?
 -----------------
@@ -283,30 +287,12 @@ Here are some lessons learned from all the experiments above:
 - Be prepared for 1-3 seconds cold starts even for the smallest Functions
 - Different languages and runtimes have roughly comparable cold start time within the same platform
 - Minimize the amount of dependencies, only bring what's needed
+- AWS keeps cold starts below 1 second most of the time, which is pretty amazing
+- All cloud providers are aware of the problem and are actively optimizing the cold start experience
+- It's likely that in middle term these optimizations will make cold starts a no-issue for the
+vast majority of application
 
 Do you see anything weird or unexpected in my results? Do you need me to dig deeper on other aspects?
 Please leave a comment below or ping me on twitter, and let's sort it all out.
-
-Conclusions2
-----------
-
-Getting back to the experiment goals, there are several things that we learned.
-
-For low-traffic apps with sporadic requests it makes sense to setup a "warmer" timer
-function firing every 10 minutes or so to prevent the only instance from being recycled.
-
-However, scale-out cold starts are real and I don't see any way to prevent them from
-happening.
-
-When multiple requests come in at the same time, we might expect some of them to hit
-a new instance and get slowed down. The exact algorithm of instance reuse is not
-entirely clear.
-
-Same instance is capable of processing multiple requests in parallel, so there are
-possibilities for optimization in terms of routing to warm instances during the
-provisioning of cold ones. 
-
-If such optimizations happen, I'll be glad to re-run my tests and report any noticeable
-improvements.
 
 Stay tuned for more serverless perf goodness!
