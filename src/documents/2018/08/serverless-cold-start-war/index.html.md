@@ -1,13 +1,11 @@
 ---
 layout: post
 title: Serverless: Cold Start War
-date: 2018-08-29
+date: 2018-08-30
 tags: ["Azure", "Azure Functions", "Serverless", "Performance", "Cold Start", "AWS", "AWS Lambda", "GCP", "Google Cloud Functions"]
 teaserImage: teaser.jpg
 description: Comparison of cold start statistics for FaaS across AWS, Azure and GCP
 ---
-
-![Cold Start teaser](/teaser.jpg)
 
 Serverless cloud services are hot. Except when they are not :)
 
@@ -15,7 +13,7 @@ AWS Lambda, Azure Functions, Google Cloud Functions are all similar in their att
 to enable rapid development of cloud-native serverless applications.
 
 Auto-provisioning and auto-scalability are the killer features of those Function-as-a-Service
-cloud offerings. No management required, cloud providers will do the provisioning for the user
+cloud offerings. No management required, cloud providers will deliver infrastructure for the user
 based on the actual incoming load.
 
 One drawback of such dynamic provisioning is a phenomenon called "cold start". Basically,
@@ -39,21 +37,21 @@ The problem of cold start latency was described multiple times, here are the not
 - [Understanding Serverless Cold Start](https://blogs.msdn.microsoft.com/appserviceteam/2018/02/07/understanding-serverless-cold-start/)
 - [Everything you need to know about cold starts in AWS Lambda](https://hackernoon.com/cold-starts-in-aws-lambda-f9e3432adbf0)
 - [Keeping Functions Warm](https://serverless.com/blog/keep-your-lambdas-warm/)
-- [I’m afraid you’re thinking about AWS Lambda cold starts all wrong](https://theburningmonk.com/2018/01/im-afraid-youre-thinking-about-aws-lambda-cold-starts-all-wrong/)
+- [I'm afraid you're thinking about AWS Lambda cold starts all wrong](https://theburningmonk.com/2018/01/im-afraid-youre-thinking-about-aws-lambda-cold-starts-all-wrong/)
 
 The goal of my article today is to explore how cold starts compare:
 
-- Across Big-3 cloud providers (Amazon, Google, Microsoft)
+- Across Big-3 cloud providers (Amazon, Microsoft, Google)
 - For different languages and runtimes
 - For smaller vs larger applications (including dependencies)
 - How often cold starts happen
 - What can be done to optimize the cold starts
 
+Let's see how I did that and what the outcome was.
+
 *DISCLAIMER. Performance testing is hard. I might be missing some important factors and parameters that
 influence the outcome. My interpretation might be wrong. The results might change over time. If you happen 
 to know a way to improve my tests, please let me know and I will re-run them and re-publish the results.*
-
-Let's see how I did that and what the outcome was.
 
 Methodology
 -----------
@@ -103,7 +101,7 @@ measured for AWS Lambda:
 
 ![AWS Cold Start vs Warm Start](/aws-coldstart-threshold.png)
 
-There's no clear threshold here... For this sample, no cold starts happenned within 28 minutes after previous 
+There's no clear threshold here... For this sample, no cold starts happened within 28 minutes after previous 
 invocation. Afterwards the frequency of cold starts slowly rises. But even after 1 hour of inactivity, there's still a
 good chance that your instance is alive and ready to take requests.
 
@@ -124,7 +122,7 @@ A couple learning points here:
 
 ### GCP
 
-Google Cloud Functions left me completely puzzled. Here is the same chart for GCP coldstarts (again,
+Google Cloud Functions left me completely puzzled. Here is the same chart for GCP cold starts (again,
 orange dots are warm and blue ones are cold):
 
 ![GCP Cold Start vs Warm Start](/gcp-coldstart-threshold.png)
@@ -147,7 +145,7 @@ Reading Candle Charts
 ---------------------
 
 In the following sections, you will see charts that represent statistical distribution of cold start time as
-measured during my experiments. I repeated experiments multiple times, and then groupped the metric values, e.g.
+measured during my experiments. I repeated experiments multiple times, and then grouped the metric values, e.g.
 by cloud provider or by language.
 
 Each group will be represented by a "candle" on the chart. This is how you should read each candle:
@@ -255,7 +253,7 @@ However, the increase in cold start seems quite low, especially for precompiled 
 
 A very cool feature of GCP Cloud Functions is that you don't have to include NPM packages into
 the deployment archive. You just add `package.json` file and the runtime will restore them for you.
-This makes the deployment artifact rediculously small, but doesn't seem to slow down the cold
+This makes the deployment artifact ridiculously small, but doesn't seem to slow down the cold
 starts either. Obviously, Google pre-restores the packages in advance, before the actual request 
 comes in.
 
@@ -265,7 +263,7 @@ Avoiding Cold Starts
 Overall impression is that cold start delays aren't that high, so most applications can tolerate
 them just fine.
 
-If that's not the case, some tricks can be implemented to keep function intances warm.
+If that's not the case, some tricks can be implemented to keep function instances warm.
 The approach is universal for all 3 providers: once in X minutes, make an artificial call to
 the function to prevent it from expiring.
 
@@ -290,9 +288,10 @@ Here are some lessons learned from all the experiments above:
 - AWS keeps cold starts below 1 second most of the time, which is pretty amazing
 - All cloud providers are aware of the problem and are actively optimizing the cold start experience
 - It's likely that in middle term these optimizations will make cold starts a no-issue for the
-vast majority of application
+vast majority of applications
 
 Do you see anything weird or unexpected in my results? Do you need me to dig deeper on other aspects?
-Please leave a comment below or ping me on twitter, and let's sort it all out.
+Please leave a comment below or ping me on [twitter](https://twitter.com/MikhailShilkov), and let's 
+sort it all out.
 
 Stay tuned for more serverless perf goodness!
