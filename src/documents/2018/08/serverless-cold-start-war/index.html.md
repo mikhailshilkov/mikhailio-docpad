@@ -20,7 +20,7 @@ One drawback of such dynamic provisioning is a phenomenon called "cold start". B
 applications that haven't been used for a while take longer to startup and to handle the
 first request.
 
-Cloud providers keep a bunch of generic unspecialized workers on stock. Whenever a serverless
+Cloud providers keep a bunch of generic unspecialized workers in stock. Whenever a serverless
 application needs to scale up, be it from 0 to 1 instances, or from N to N+1 likewise, the runtime
 will pick one of the spare workers and will configure it to serve the named application:
 
@@ -28,7 +28,7 @@ will pick one of the spare workers and will configure it to serve the named appl
 
 This procedure takes time, so the latency of the application event handling increases. To avoid
 doing this for every event, the specialized worker will be kept intact for some period of time.
-When another event comes it, this worker will stand available to process it as soon as possible.
+When another event comes in, this worker will stand available to process it as soon as possible.
 This is a "warm start":
 
 ![Warm Start](/warmstart.png)
@@ -56,19 +56,19 @@ to know a way to improve my tests, please let me know and I will re-run them and
 Methodology
 -----------
 
-All tests were run against HTTP Functions, because that's where cold start matters the most. 
+All tests were run against HTTP Functions because that's where cold start matters the most. 
 
 All the functions were returning a simple JSON reporting their current instance ID, language etc.
 Some functions were also loading extra dependencies, see below.
 
 I did not rely on execution time reported by a cloud provider. Instead, I measured end-to-end duration from
-client perspective. This means that durations of HTTP gateway (e.g. API Gateway in case of AWS) are included
+the client perspective. This means that durations of HTTP gateway (e.g. API Gateway in case of AWS) are included
 into the total duration. However, all calls were made from within the same region, so network latency should 
 have minimal impact:
 
 ![Test Setup](/test-setup.png)
 
-Important note: I ran all my tests on GA (generally available) versions of services / languages, so e.g.
+Important note: I ran all my tests on GA (generally available) versions of services/languages, so e.g.
 Azure tests were done with version 1 of Functions runtime (.NET Framework), and GCP tests were only made for
 Javascript runtime.
 
@@ -85,9 +85,9 @@ with orange color dots.
 
 ### Azure
 
-Here is the chart for Azure. It shows values of normalized request durations across
-different languages and runtime versions (Y axis) depending on the time since the previous
-request in minutes (X axis):
+Here is the chart for Azure. It shows the values of normalized request durations across
+different languages and runtime versions (Y-axis) depending on the time since the previous
+request in minutes (X-axis):
 
 ![Azure Cold Start Threshold](/azure-coldstart-threshold.png)
 
@@ -96,13 +96,13 @@ threshold hit another cold start.
 
 ### AWS
 
-AWS is more tricky. Here is the same kind of chart, relative durations vs time since last request, 
+AWS is more tricky. Here is the same kind of chart, relative durations vs time since the last request, 
 measured for AWS Lambda:
 
 ![AWS Cold Start vs Warm Start](/aws-coldstart-threshold.png)
 
-There's no clear threshold here... For this sample, no cold starts happened within 28 minutes after previous 
-invocation. Afterwards the frequency of cold starts slowly rises. But even after 1 hour of inactivity, there's still a
+There's no clear threshold here... For this sample, no cold starts happened within 28 minutes after the previous 
+invocation. Afterward, the frequency of cold starts slowly rises. But even after 1 hour of inactivity, there's still a
 good chance that your instance is alive and ready to take requests.
 
 This doesn't match the official information that AWS Lambdas stay alive for just 5 minutes after the last
@@ -118,7 +118,7 @@ let me know if you have concerns about it, but it should be just fine</p>&mdash;
 A couple learning points here:
 
 - AWS is working on improving cold start experience (and probably Azure/GCP do too)
-- My results might not be reliably reproducible in your application, since it's affected by recent adjustments
+- My results might not be reliably reproducible in your application since it's affected by recent adjustments
 
 ### GCP
 
@@ -127,26 +127,26 @@ orange dots are warm and blue ones are cold):
 
 ![GCP Cold Start vs Warm Start](/gcp-coldstart-threshold.png)
 
-This looks totally random to me. Cold start can happen in 3 minutes after the previous request, or an instance
-can be kept alive for the whole hour. The probability of cold start doesn't seem to depend on the interval,
+This looks totally random to me. A cold start can happen in 3 minutes after the previous request, or an instance
+can be kept alive for the whole hour. The probability of a cold start doesn't seem to depend on the interval,
 at least just by looking at this chart.
 
-Any ideas of what's going on are welcome!
+Any ideas about what's going on are welcome!
 
 ### Parallel requests
 
-Cold starts happen not only when a first instance of application is provisioned. The same issue will happen whenever
+Cold starts happen not only when the first instance of an application is provisioned. The same issue will happen whenever
 all the provisioned instances are busy handling incoming events, and yet another event comes in (at scale out).
 
-As far as I'm aware, this behavior is common for all 3 providers, so I haven't prepared any comparison charts
+As far as I'm aware, this behavior is common to all 3 providers, so I haven't prepared any comparison charts
 for N+1 cold starts. Yet, be aware of them!
 
 Reading Candle Charts
 ---------------------
 
 In the following sections, you will see charts that represent statistical distribution of cold start time as
-measured during my experiments. I repeated experiments multiple times, and then grouped the metric values, e.g.
-by cloud provider or by language.
+measured during my experiments. I repeated experiments multiple times and then grouped the metric values, e.g.
+by the cloud provider or by language.
 
 Each group will be represented by a "candle" on the chart. This is how you should read each candle:
 
@@ -157,7 +157,7 @@ Memory Allocation
 -----------------
 
 AWS Lambda and Google Cloud Functions have a setting to define the memory size that gets allocated to a single
-instance of a function. User can select a value from 128MB to 2GB and above at creation time.
+instance of a function. A user can select a value from 128MB to 2GB and above at creation time.
 
 More importantly, the virtual CPU cycles get allocated proportionally to this provisioned memory size. This means
 that an instance of 512 MB will have twice as much CPU speed as an instance of 256MB.
@@ -204,7 +204,7 @@ Here are the numbers for cold starts:
 ![Cold Start for Basic Javascript Functions](/coldstart-js-baseline.png)
 
 AWS is clearly doing the best job here. GCP takes the second place, and Azure is the slowest. The rivals are
-sort of close though, seemingly playing in the same league, so the exact disposition might change over time.
+sort of close though, seemingly playing in the same league so the exact disposition might change over time.
 
 How Do Languages Compare?
 -------------------------
@@ -215,7 +215,7 @@ I've written Hello World HTTP function in all supported languages of the cloud p
 - Azure: Javascript and C# (precompiled .NET assembly)
 - GCP: Javascript
 
-Azure kind of supports much more languages, including Python and Java but they are still considered
+Azure kind of supports much more languages, including Python and Java, but they are still considered
 experimental / preview, so the cold starts are not fully optimized. See 
 [my previous article](https://mikhail.io/2018/04/azure-functions-cold-starts-in-numbers/) for exact numbers.
 
@@ -247,7 +247,7 @@ Here are the results:
 ![Cold Start Dependencies](/coldstart-dependencies.png)
 
 As expected, the dependencies slow the loading down. You should keep your Functions lean,
-otherwise you will pay in seconds for every cold start.
+otherwise, you will pay in seconds for every cold start.
 
 However, the increase in cold start seems quite low, especially for precompiled languages.
 
@@ -260,7 +260,7 @@ comes in.
 Avoiding Cold Starts
 --------------------
 
-Overall impression is that cold start delays aren't that high, so most applications can tolerate
+The overall impression is that cold start delays aren't that high, so most applications can tolerate
 them just fine.
 
 If that's not the case, some tricks can be implemented to keep function instances warm.
@@ -284,13 +284,13 @@ Here are some lessons learned from all the experiments above:
 
 - Be prepared for 1-3 seconds cold starts even for the smallest Functions
 - Different languages and runtimes have roughly comparable cold start time within the same platform
-- Minimize the amount of dependencies, only bring what's needed
+- Minimize the number of dependencies, only bring what's needed
 - AWS keeps cold starts below 1 second most of the time, which is pretty amazing
 - All cloud providers are aware of the problem and are actively optimizing the cold start experience
-- It's likely that in middle term these optimizations will make cold starts a no-issue for the
+- It's likely that in middle term these optimizations will make cold starts a non-issue for the
 vast majority of applications
 
-Do you see anything weird or unexpected in my results? Do you need me to dig deeper on other aspects?
+Do you see anything weird or unexpected in my results? Do you need me to dig deeper into other aspects?
 Please leave a comment below or ping me on [twitter](https://twitter.com/MikhailShilkov), and let's 
 sort it all out.
 
