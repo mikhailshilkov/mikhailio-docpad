@@ -7,6 +7,37 @@ menuOrder: 3
 ---
 <div class="abstract">
     <div class="abstract-year">2018</div>
+    <div class="abstract-date">Sep 29</div>
+    <div class="abstract-title">Monads Explained for OOP Developers
+    </div>
+    <div class="abstract-tags">
+        <a href='https://www.slideshare.net/MikhailShilkov/monads-explained-for-oop-developers-117384840' target="_blank">Slides</a>
+        at <a href='http://nextbuild.nl/sessions/monads-explained-for-oop-developers/' target="_blank">NextBuild 2018</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
+    <div class="abstract-date">Sep 28</div>
+    <div class="abstract-title">Performance Tales of Serverless
+    </div>
+    <div class="abstract-tags">
+        <a href='https://skillsmatter.com/skillscasts/12094-performance-tales-of-serverless' target="_blank">Video (requires free signup)</a>, 
+        <a href='https://www.slideshare.net/MikhailShilkov/performance-tales-of-serverless-cloudnative-london-2018-117115358' target="_blank">Slides</a>
+        at <a href='https://skillsmatter.com/conferences/10160-cloudnative-london-2018#program' target="_blank">CloudNative London 2018</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
+    <div class="abstract-date">Sep 18</div>
+    <div class="abstract-title">Introduction to F# and Functional Programming
+    </div>
+    <div class="abstract-tags">
+        <a href='https://mikhail.io/talks/why-fsharp2.' target="_blank">Slides</a>
+        at <a href='https://www.meetup.com/F-P-Eindhoven/events/254014704/' target="_blank">F#P Eindhoven meetup</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
     <div class="abstract-date">May 9</div>
     <div class="abstract-title">Performance Tales of Serverless
     </div>
