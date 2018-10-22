@@ -14,8 +14,10 @@ In theory, .NET Core runtime is more lean and performant.
 But last time [I checked back in April](https://mikhail.io/2018/04/azure-functions-cold-starts-in-numbers/),
 the preview version of Azure Functions V2 had some serious issues with cold start durations.
 
-I decided to give the new and shiny version another try and ran several benchmarks. **TL;DR**: it's not
-perfect just yet.
+I decided to give the new and shiny version another try and ran several benchmarks. All tests were conducted on 
+Consumption plan.
+
+**TL;DR**: it's not perfect just yet.
 
 Cold Starts
 -----------
@@ -55,14 +57,15 @@ All the functions were deployed with the Run-from-Package method which promises 
 
 ### Java
 
-Functions V2 come with a new generally-available runtime: Java / JVM. It utilizes the same extensibility
-model as Javascript, and thus it seems to be a first-class citizen now.
+Functions V2 come with a preview of a new runtime: Java / JVM. It utilizes the same extensibility model 
+as Javascript, and thus it seems to be a first-class citizen now.
 
 Cold starts are not first-class though: 
 
 ![Cold Starts Java](cold-starts-java.png)
 
-If you are a Java developer, be prepared for 20-25 seconds of initial startup time.
+If you are a Java developer, be prepared for 20-25 seconds of initial startup time. That will probably 
+be resolved when the Java runtime becomes generally available:
 
 <blockquote class="twitter-tweet" data-conversation="none" data-dnt="true"><p lang="en" dir="ltr">That matches some of our internal data. We are looking into it.</p>&mdash; Paul Batum (@paulbatum) <a href="https://twitter.com/paulbatum/status/1048391445386735616?ref_src=twsrc%5Etfw">October 6, 2018</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 

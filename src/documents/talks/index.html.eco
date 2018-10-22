@@ -7,6 +7,16 @@ menuOrder: 3
 ---
 <div class="abstract">
     <div class="abstract-year">2018</div>
+    <div class="abstract-date">Oct 13</div>
+    <div class="abstract-title">Performance Tales of Serverless
+    </div>
+    <div class="abstract-tags">
+        <a href='https://speakerdeck.com/mikhailshilkov/performance-tales-of-serverless' target="_blank">Slides</a>
+        at <a href='https://www.cloudbrew.be/' target="_blank">CloudBrew 2018</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
     <div class="abstract-date">Sep 29</div>
     <div class="abstract-title">Monads Explained for OOP Developers
     </div>
