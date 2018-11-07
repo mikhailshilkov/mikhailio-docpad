@@ -1,0 +1,43 @@
+---
+cacheable: false
+---
+<article class="post">
+    <div class="post-date"><%=  @moment(@date).format('MMM Do, YYYY') %></div>
+    <% if @individualPost: %>
+    <h1><%= @title %></h1>
+    <% else: %>
+    <h1><a href='<%= @url %>'><%= @title %></a></h1>
+    <% end %>
+    <div class="post-content">
+        <%- @fixLinks(@content, @url) %>
+    </div>
+
+    <% if @individualPost: %>
+    <p>
+      Like this post? Please share it!<br />
+      <table>
+        <tr>
+          <td>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-via="MikhailShilkov">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+          </td>
+          <td>
+            <a href="http://news.ycombinator.com/submit" class="hn-share-button" style="height: 28px">Vote on HN</a>
+            <script src="//hnbutton.appspot.com/static/hn.min.js" async defer></script>
+          </td>
+          <td style="vertical-align: top; padding-top: 3px">
+            <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent(window.location); return false"> <img src="//www.redditstatic.com/spreddit7.gif" alt="submit to reddit" border="0" width="75" /> </a>
+          </td>
+        </tr>
+      </table>
+    </p>
+
+    See a mistake? <a href="https://github.com/mikhailshilkov/mikhailio-docpad/edit/master/src/documents<%= @url %>/index.html.md">Edit this post!</a><br />
+    <% end %>
+
+    <% if @tags?: %>
+    <div class="post-tags">
+        Posted In: <%- ("<a href='/tags/#{@getTagUrl(tag)}/'>#{tag}</a>" for tag in @tags).join(', ') %>
+    </div>
+    <% end %>
+</article>
