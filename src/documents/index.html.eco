@@ -7,7 +7,7 @@ pagePathPrefix: page
 ---
 
 <% for document in @getCollection('posts').sortArray(date: -1)[@document.page.startIdx...@document.page.endIdx]: %>
-    <%- @partial('blogpost', {title: document.title, url: document.url, tags: document.tags, date: document.date, content: document.contentRenderedWithoutLayouts }) %>
+    <%- @partial('blogpost', {title: document.title, url: document.url, tags: document.tags, originalUrl: document.originalUrl, originalSource: document.originalSource, date: document.date, content: document.contentRenderedWithoutLayouts }) %>
 <% end %>
 
 <div class="page-nav">

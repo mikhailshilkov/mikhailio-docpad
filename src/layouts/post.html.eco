@@ -2,7 +2,7 @@
 layout: default
 ---
 <div class="container">
-    <%- @partial('blogpost', {title: @document.title, url: @document.url, tags: @document.tags, date: @document.date, content: @content, individualPost: true }) %>
+    <%- @partial('blogpost', {title: @document.title, url: @document.url, tags: @document.tags, date: @document.date, content: @content, originalUrl: @document.originalUrl, originalSource: @document.originalSource, individualPost: true }) %>
     <%- @partial('me', false) %>
     <%- @partial('disqus') %>
 </div>

@@ -7,12 +7,53 @@ menuOrder: 3
 ---
 <div class="abstract">
     <div class="abstract-year">2018</div>
+    <div class="abstract-date">Nov 29</div>
+    <div class="abstract-title">Serverless Workflows with Durable Functions
+    </div>
+    <div class="abstract-tags">
+        <a href='https://speakerdeck.com/mikhailshilkov/serverless-workflows-with-durable-functions' target="_blank">Slides</a>
+        at <a href='https://milan2018.codemotionworld.com/conference/' target="_blank">Codemotion Milan</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
+    <div class="abstract-date">Nov 16</div>
+    <div class="abstract-title">All-in on Cloud: How We Moved from Million Euro Worth of Hardware to Azure PaaS
+    </div>
+    <div class="abstract-tags">
+        <a href='https://speakerdeck.com/mikhailshilkov/all-in-on-cloud-how-we-moved-from-million-euro-worth-of-hardware-to-azure-paas' target="_blank">Slides</a>
+        at <a href='https://www.buildstuff.lt/' target="_blank">BuildStuff</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
+    <div class="abstract-date">Nov 12</div>
+    <div class="abstract-title">Performance Tales of Serverless
+    </div>
+    <div class="abstract-tags">
+        <a href='https://speakerdeck.com/mikhailshilkov/performance-tales-of-serverless-10413e55-28aa-4a3d-bb98-272a825892c0' target="_blank">Slides</a>
+        at <a href='https://serverlesscomputing.london/sessions/performance-tales-serverless/' target="_blank">Serverless Computing London</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
+    <div class="abstract-date">Nov 1</div>
+    <div class="abstract-title">All-in on Cloud: How We Moved from Million Euro Worth of Hardware to Azure PaaS
+    </div>
+    <div class="abstract-tags">
+        <a href='https://youtu.be/-wycjfKA8c0' target="_blank">Video</a>,
+        <a href='https://speakerdeck.com/mikhailshilkov/all-in-on-cloud-how-we-moved-from-million-euro-worth-of-hardware-to-azure-paas' target="_blank">Slides</a>
+        at <a href='https://www.meetup.com/ru-RU/dotnet-amsterdam/events/255737023/' target="_blank">.NET Amsterdam meetup</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
     <div class="abstract-date">Oct 13</div>
     <div class="abstract-title">Performance Tales of Serverless
     </div>
     <div class="abstract-tags">
         <a href='https://speakerdeck.com/mikhailshilkov/performance-tales-of-serverless' target="_blank">Slides</a>
-        at <a href='https://www.cloudbrew.be/' target="_blank">CloudBrew 2018</a>
+        at <a href='https://www.cloudbrew.be/' target="_blank">CloudBrew</a>
     </div>
 </div>
 <div class="abstract">
@@ -22,7 +63,7 @@ menuOrder: 3
     </div>
     <div class="abstract-tags">
         <a href='https://www.slideshare.net/MikhailShilkov/monads-explained-for-oop-developers-117384840' target="_blank">Slides</a>
-        at <a href='http://nextbuild.nl/sessions/monads-explained-for-oop-developers/' target="_blank">NextBuild 2018</a>
+        at <a href='http://nextbuild.nl/sessions/monads-explained-for-oop-developers/' target="_blank">NextBuild</a>
     </div>
 </div>
 <div class="abstract">
@@ -33,7 +74,7 @@ menuOrder: 3
     <div class="abstract-tags">
         <a href='https://skillsmatter.com/skillscasts/12094-performance-tales-of-serverless' target="_blank">Video (requires free signup)</a>, 
         <a href='https://www.slideshare.net/MikhailShilkov/performance-tales-of-serverless-cloudnative-london-2018-117115358' target="_blank">Slides</a>
-        at <a href='https://skillsmatter.com/conferences/10160-cloudnative-london-2018#program' target="_blank">CloudNative London 2018</a>
+        at <a href='https://skillsmatter.com/conferences/10160-cloudnative-london-2018#program' target="_blank">CloudNative London</a>
     </div>
 </div>
 <div class="abstract">
@@ -54,7 +95,7 @@ menuOrder: 3
     <div class="abstract-tags">
         <a href='https://www.youtube.com/watch?v=eTmf8FXUMwU' target="_blank">Video</a>, 
         <a href='https://www.slideshare.net/MikhailShilkov/performance-tales-of-serverless-96499763' target="_blank">Slides</a>
-        at <a href='https://amsterdam2018.codemotionworld.com/conference/09-May/' target="_blank">Codemotion Amsterdam 2018</a>
+        at <a href='https://amsterdam2018.codemotionworld.com/conference/09-May/' target="_blank">Codemotion Amsterdam</a>
     </div>
 </div>
 <div class="abstract">
@@ -63,7 +104,7 @@ menuOrder: 3
     </div>
     <div class="abstract-tags">
         <a href='https://www.slideshare.net/MikhailShilkov/monads-explained-for-oop-developers' target="_blank">Slides</a>
-        at <a href='https://rome2018.codemotionworld.com/conference/14-April/' target="_blank">Codemotion Rome 2018</a>
+        at <a href='https://rome2018.codemotionworld.com/conference/14-April/' target="_blank">Codemotion Rome</a>
     </div>
 </div>
 <div class="abstract">
@@ -73,7 +114,7 @@ menuOrder: 3
     <div class="abstract-tags">
         <a href='https://www.youtube.com/watch?v=5EAqupJWp90' target="_blank">Video</a>, 
         <a href='https://www.slideshare.net/MikhailShilkov/performance-tales-of-serverless' target="_blank">Slides</a>
-        at <a href='https://rome2018.codemotionworld.com/conference/13-April/' target="_blank">Codemotion Rome 2018</a>
+        at <a href='https://rome2018.codemotionworld.com/conference/13-April/' target="_blank">Codemotion Rome</a>
     </div>
 </div>
 <div class="abstract">
@@ -83,7 +124,7 @@ menuOrder: 3
     <div class="abstract-tags">
         <a href='https://skillsmatter.com/skillscasts/11347-azure-f-sharpunctions' target="_blank">Video (requires free signup)</a>, 
         <a href='https://www.slideshare.net/MikhailShilkov/azure-functions-92988186' target="_blank">Slides</a>
-        at <a href='https://skillsmatter.com/conferences/9419-f-sharp-exchange-2018#program' target="_blank">F# eXchange 2018</a>
+        at <a href='https://skillsmatter.com/conferences/9419-f-sharp-exchange-2018#program' target="_blank">F# eXchange</a>
     </div>
 </div>
 <div class="abstract">

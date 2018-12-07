@@ -5,6 +5,8 @@ date: 2018-11-19
 tags: ["Azure", "Azure Functions", "Serverless", "Performance", "Scalability", "AWS", "AWS Lambda", "GCP", "Google Cloud Functions"]
 teaserImage: teaser.jpg
 description: Comparison of queue processing scalability for FaaS across AWS, Azure and GCP
+originalSource: Binaris Blog
+originalUrl: https://blog.binaris.com/from-0-to-1000-instances/
 ---
 
 Whenever I see a "Getting Started with Function-as-a-Service" tutorial, it usually shows off 

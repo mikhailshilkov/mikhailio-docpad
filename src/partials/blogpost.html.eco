@@ -8,6 +8,11 @@ cacheable: false
     <% else: %>
     <h1><a href='<%= @url %>'><%= @title %></a></h1>
     <% end %>
+
+    <% if @originalSource: %>
+        <div class="remark">Originally published at <a href='<%= @originalUrl %>'><%= @originalSource %></a></div>
+    <% end %>
+
     <div class="post-content">
         <%- @fixLinks(@content, @url) %>
     </div>

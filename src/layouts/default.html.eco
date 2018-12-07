@@ -24,6 +24,9 @@
 <% if @document.description: %>
     <meta property="og:description" content="<%= @document.description %>" />
 <% end %>
+<% if @document.originalUrl: %>
+    <link rel="canonical" href="<%= @document.originalUrl %>">
+<% end %>
 
     <link href="/feed/" rel="alternate" title="mikhail.io" type="application/atom+xml">
     <link href="/favicon.ico?v=2" rel="shortcut icon">
