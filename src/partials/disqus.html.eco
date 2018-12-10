@@ -10,4 +10,15 @@
         dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
         (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     })();
+
+    setInterval(() => {
+        let iframes = document.getElementsByTagName("iframe");
+        for (let iframe of iframes) {
+            let src = iframe.src;
+            if (src && src.match(/(ads-iframe)|(disqusads)/gi)) {
+                iframe.parentNode.removeChild(iframe);
+                console.log('Blocked a nasty ad');
+            }
+        }
+    }, 500);
 </script>

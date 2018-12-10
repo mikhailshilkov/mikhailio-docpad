@@ -12,19 +12,9 @@ Hi!
 
 I'm Mikhail Shilkov, a software professional, and the host of this blog. 
 
-Here are some software topics which I'm passionate about:
+I am a Microsoft Azure MVP, which means I know some Azure and I'm trying to help other people to learn it. 
 
-- Cloud Paas/SaaS/FaaS, mostly on Azure
-- Serverless 
-- Functional programming (mainly F#)
-- Elastic systems in cloud environments
-- Messaging, distributed systems
-- Stream processing, complex event processing
-- Data intensive applications
-- Event-driven systems and event sourcing
-- Clean architecture (and best parts of DDD)
-- Poker and poker bots
-- Behaviorism and its relation to technology
+I'm passionate about serverless and other cloud technologies, functional programming and the intersection of the two.
 
 I live in Eindhoven area, the Netherlands, and I originate from St. Petersburg, Russia.
 If you happen to be close by, and interested in the same range of topics, let's have a chat!
