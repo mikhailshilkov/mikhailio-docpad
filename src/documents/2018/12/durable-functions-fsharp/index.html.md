@@ -11,36 +11,38 @@ description:
 [F# Advent Calendar 2018](https://sergeytihon.com/2018/10/22/f-advent-calendar-in-english-2018/).*
 
 This summer I was hired by the office of Santa Claus. They have a large organization that supplies
-gifts and happiness to millions of children around the world.
+gifts and happiness to millions of children around the world. As any large organization, Santa has 
+impressive number of IT systems. 
 
-As any large organization, Santa has impressive number of IT systems. As part of IT modernization
+As part of IT modernization
 effort, they restructured the whole gift supply chain. They moved a lot of legacy components from
 self-managed data center at North Pole&mdash;although the cooling is quite cheap there&mdash;to 
-Azure cloud. Azure was an easy sell, since Santa's employees are using Office 365, SharePoint and
+Azure cloud. Azure was an easy sell, since Santa's elves are using Office 365, SharePoint and
 .NET development stack.
 
 One of the goals of the redesign was to use cloud managed services and serverless archetecture
-whenever possible. Santa has no spare elves to keep reinventing IT bycicles.
+whenever possible. Santa has no spare elves to keep reinventing the IT wheels.
 
 Wishlist Fulfillment Service
 ----------------------------
 
-My task was to implement a Wishlist Fulfillment service. The service receives a
-wishlist from a client (they call children "Clients"):
+My assignment was to implement a Wishlist Fulfillment service. The service receives a
+wishlist from a client (they call children "clients"):
 
 [TODO]
 
 Luckily, the wishlist is already parsed by some other service, and also contains the metadata about
-the kid's background and preferences.
+the kid's background (age, gender, etc.) and preferences.
 
 For each item in the wishlist, our service calls the Matching service, which uses machine learning,
-Azure Congintive services, and a bit of magic to determine actual gifts (they call gifts "Products")
-that best fit the expressed wish + kid's profile. For instance, my son's "LEGO Draak" will match
-to LEGO NINJAGO Masters of Spinjitzu Firstbourne Red Dragon. You get the point.
+Azure Congintive services, and a bit of magic to determine the actual products (they call gifts "products")
+that best fit the expressed wish + kid's profile. For instance, my son's wish for "LEGO Draak" will match
+to "LEGO NINJAGO Masters of Spinjitzu Firstbourne Red Dragon". You get the point.
 
-There might be several matches for each wish, and each result will have a confidence rating.
+There might be several matches for each wished item, and each result has a confidence estimate of how
+likely it is to fulfull the original desire.
 
-All the matching results are combined and sent to Gift Picking service. Gift Picking selects one
+All the results of matching are combined and sent to Gift Picking service. Gift Picking selects one
 of the options based on confidence ratings and Naughty-or-Nice score of the client.
 
 The last step of the workflow is to reserve the selected gift in the warehouse and shipping system
@@ -57,7 +59,7 @@ Original Design
 
 The Wishlist Fulfillment service should run in the cloud and integrate with other services. It
 should be able to process millions of requests in December and stay very cheap to run during the
-low season. We decided to leverage serverless with Azure Functions on Consumption Plan.
+low season. We decided to leverage serverless architecture with Azure Functions on Consumption Plan.
 
 Here is the diagram of the original design:
 
@@ -69,7 +71,7 @@ and load fluctuation.
 This design would mostly work, but we found a couple of problems with it.
 
 For instance, we had to pass all items of each wish list to the single invocation of Matching Function,
-otherwise combining the matching result would be tricky. Matching service proved to be relatively
+otherwise combining the matching results would be tricky. Matching service proved to be relatively
 slow though. Although not in scope for the initial release, there were plans to add manual elf 
 intervention for poorly matched items. This didn't really fit into the model of short executions
 of serverless functions.
