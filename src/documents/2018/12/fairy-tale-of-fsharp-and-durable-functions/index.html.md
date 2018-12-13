@@ -1,85 +1,90 @@
 ---
 layout: post
-title: TODO
+title: Fairy Tale of F# and Durable Functions
 date: 2018-12-20
 tags: ["Azure", "Azure Functions", "Serverless", "F#", "Workflows", "Azure Durable Functions"]
-teaserImage: TODO
-description: 
+teaserImage: teaser.jpg
+description: How F# and Azure Durable Functions make children happy (most developers are still kids at heart)
 ---
 
 *The post is published as part of 
 [F# Advent Calendar 2018](https://sergeytihon.com/2018/10/22/f-advent-calendar-in-english-2018/).*
 
-This summer I was hired by the office of Santa Claus. They have a large organization that supplies
-gifts and happiness to millions of children around the world. As any large organization, Santa has 
-impressive number of IT systems. 
+This summer I was hired by the office of Santa Claus. Santa is not just a lonely fairy tale
+character&mdash;he leads a large organization that supplies gifts and happiness to millions of 
+children around the world. As any large organization, Santa's office has impressive number of 
+IT systems. 
 
 As part of IT modernization
-effort, they restructured the whole gift supply chain. They moved a lot of legacy components from
+effort, they restructured the whole gift supply chain. Many legacy components were moved from
 self-managed data center at North Pole&mdash;although the cooling is quite cheap there&mdash;to 
-Azure cloud. Azure was an easy sell, since Santa's elves are using Office 365, SharePoint and
+Azure cloud. Azure was an easy sell, since Santa's techy elves use Office 365, SharePoint and
 .NET development stack.
 
-One of the goals of the redesign was to use cloud managed services and serverless archetecture
+One of the goals of the redesign was to leverage managed cloud services and serverless archetecture
 whenever possible. Santa has no spare elves to keep reinventing the IT wheels.
 
-Wishlist Fulfillment Service
-----------------------------
+Wish List Fulfillment Service
+-----------------------------
 
-My assignment was to implement a Wishlist Fulfillment service. The service receives a
-wishlist from a client (they call children "clients"):
+My assignment was to redesign the **Wish List Fulfillment** service. The service receives
+wish lists from clients (they call children "clients"):
 
 [TODO]
 
-Luckily, the wishlist is already parsed by some other service, and also contains the metadata about
+Luckily, the list is already parsed by some other service, and also contains the metadata about
 the kid's background (age, gender, etc.) and preferences.
 
-For each item in the wishlist, our service calls the Matching service, which uses machine learning,
+For each item in the list, our service calls the **Matching** service, which uses machine learning,
 Azure Congintive services, and a bit of magic to determine the actual products (they call gifts "products")
 that best fit the expressed wish + kid's profile. For instance, my son's wish for "LEGO Draak" will match
 to "LEGO NINJAGO Masters of Spinjitzu Firstbourne Red Dragon". You get the point.
 
-There might be several matches for each wished item, and each result has a confidence estimate of how
-likely it is to fulfull the original desire.
+There might be several matches for each desired item, and each result has an estimate of how
+likely it is to fulfill the original request and make the child happy.
 
-All the results of matching are combined and sent to Gift Picking service. Gift Picking selects one
-of the options based on confidence ratings and Naughty-or-Nice score of the client.
+All the matching products are combined and sent over to **Gift Picking** service. Gift Picking selects one
+of the options based on its price, demand, confidence level, and Naughty-or-Nice score of the client.
 
-The last step of the workflow is to reserve the selected gift in the warehouse and shipping system
-called "Santa's Archive of Products", also referred as SAP.
+The last step of the workflow is to **Reserve** the selected gift in the warehouse and shipping system
+called "Santa's Archive of Products", also referred to as SAP.
 
 Here is the whole flow in one picture:
 
-[TODO]
+[
+LEGO Draak
+Beyblate
+Hot Wheels]
 
 How should we implement this service?
 
 Original Design
 ---------------
 
-The Wishlist Fulfillment service should run in the cloud and integrate with other services. It
+The Wish List Fulfillment service should run in the cloud and integrate with other services. It
 should be able to process millions of requests in December and stay very cheap to run during the
-low season. We decided to leverage serverless architecture with Azure Functions on Consumption Plan.
+low season. We decided to leverage serverless architecture with Azure Functions on Consumption Plan,
+which provides pay-per-request model.
 
 Here is the diagram of the original design:
 
 [TODO]
 
 We used Azure Storage Queues to keep the whole flow asynchronous and more resilient to failures
-and load fluctuation.
+and fluctuation of the load.
 
 This design would mostly work, but we found a couple of problems with it.
-
-For instance, we had to pass all items of each wish list to the single invocation of Matching Function,
-otherwise combining the matching results would be tricky. Matching service proved to be relatively
-slow though. Although not in scope for the initial release, there were plans to add manual elf 
-intervention for poorly matched items. This didn't really fit into the model of short executions
-of serverless functions.
 
 The functions were manually wired with storage queues and correcsponding bindings. The workflow
 was spread over infrastructure definition, and thus was hard to grasp.
 
-To improve of these points, we decided to try 
+For instance, we had to pass all items of each wish list into the single invocation of Matching Function,
+otherwise combining the matching results from multiple queue messages would be tricky. 
+
+Although not in scope for the initial release, there were plans to add manual elf 
+intervention for poorly matched items. This feaute would require a change in the flow design.
+
+To improve on these points, we decided to try 
 [Durable Functions](https://docs.microsoft.com/azure/azure-functions/durable/durable-functions-overview)&mdash;a library 
 that brings workflow orchestration to Azure Functions. It introduces a number of tools to define stateful,
 potentially long-running operations, and manages a lot of mechanics of reliable communication 
@@ -90,18 +95,18 @@ I invite you to read my article
 [Making Sense of Azure Durable Functions](https://mikhail.io/2018/12/making-sense-of-azure-durable-functions/)
 (20 minutes read).
 
-For the rest of this post, I will walk you through the implementation of Wishlist Fulfillment workflow
+For the rest of this post, I will walk you through the implementation of the Wish List Fulfillment workflow
 with Azure Durable Functions.
 
 Domain Model
 ------------
 
-A good design starts with a decent domain model. I use F# for this project&mdash;the language with
-the most rich domain modelling capabilities in .NET ecosystem.
+A good design starts with a decent domain model. Luckily, the project was built with F#&mdash;the language with
+the most rich domain modelling capabilities in the .NET ecosystem.
 
 ### Types
 
-Our service is invoked with a wishlist as input parameter, so let's start with the type `WishList`:
+Our service is invoked with a wish list as the input parameter, so let's start with the type `WishList`:
 
 ``` fsharp
 type WishList = {
@@ -138,10 +143,10 @@ It represents the exact product selection for the specific kid.
 
 ### Functions
 
-Wishlist Fulfillment service needs to combine three actions to achieve its goal. The actions can be
+Wish List Fulfillment service needs to combine three actions to achieve its purpose. The actions can be
 modelled with three strongly-typed asynchronous functions.
 
-The first action is finding matches for each wish item:
+The first action finds matches for each wish item:
 
 ``` fsharp
 // string -> Async<Match list>
@@ -152,8 +157,11 @@ let findMatchingGift (wish: string) = async {
 }
 ```
 
+The first line of all my function definitions shows the function type. In this case, it's a mapping 
+from untyped wish item written by a child to the list of matches (zero, one, or many matches).
+
 The second action takes the *combined* list of all matches of all wishes and picks the one. Its
-real implementation is the secret souce of Santa, but my model just picks the one with the highest
+real implementation is the Santa's secret sauce, but my model just picks the one with the highest
 confidence level:
 
 ``` fsharp
@@ -164,9 +172,6 @@ let pickGift (candidates: Match list) =
     |> List.head
     |> (fun x -> x.Product)
 ```
-
-The first line of all my function definitions shows the function type. It's a mapping from untyped
-wish item written by a child to the list of matches (zero, one, or many matches).
 
 Provided the picked `gift`, the reservation is simply `{ Kid = wishlist.Kid; Product = gift }`,
 not worth of a separate action.
@@ -182,7 +187,7 @@ let reserve (reservation: Reservation) = async {
 
 ### Workflow
 
-The Fulfillment service combines the three actions into one workflow:
+The Fulfillment service combines three actions into one workflow:
 
 ``` fsharp
 // WishList -> Async<Reservation>
@@ -217,11 +222,11 @@ Classic Durable Functions API
 
 C# was the first target language for Durable Functions. Javascript is now fully supported too.
 
-F# wasn't initially mentioned as supported, but since F# runs on top of the same .NET runtime
+F# wasn't initially declared as officially supported, but since F# runs on top of the same .NET runtime
 as C#, it always worked. I had a blog post 
 [Azure Durable Functions in F#](https://mikhail.io/2018/02/azure-durable-functions-in-fsharp/) and
 then added some	[samples](https://github.com/Azure/azure-functions-durable-extension/tree/master/samples/fsharp)
-to the oficial repository.
+to the official repository.
 
 Here are two examples from that old F# code of mine (they have nothing to do with our today's domain):
 
@@ -241,7 +246,7 @@ let! results = Task.WhenAll tasks
 
 This code works and does its job, but doesn't really look like idiomatic F# code:
 
-- No strong typing: the activity functions are called by name and with types manually specified
+- No strong typing: activity functions are called by name and with types manually specified
 - Functions are not curried, so the partial application is hard
 - Use of `context` object for any operation
 
@@ -251,19 +256,19 @@ too C#-py.
 Better Durable Functions
 ------------------------
 
-Instead of going that sub-optimal route, we implemented the Durable service with more F#-idiomatic API.
+Instead of following the sub-optimal route, we implemented the service with more F#-idiomatic API.
 I'll show the code first, and then I'll explain its foundation.
 
 The implementation consists of three parts:
 
-- Activity functions&mdash;one per action function from the domain model
-- The Orchestrator function defines the workflow
-- Azure Function bindings to instruct Azure how to run the application
+- **Activity functions**&mdash;one per action from the domain model
+- **Orchestrator** function defines the workflow
+- Azure **bindings** to instruct how to run the application in the cloud
 
 ### Activity Functions
 
-Each Activity Function defines an action of the worflow: Matching, Picking and Reserving. We
-simply reference the F# functions of those actions in one-line definitions:
+Each activity function defines one step of the workflow: Matching, Picking, and Reserving. We
+simply reference F# functions of those actions in one-line definitions:
 
 ``` fsharp
 let findMatchingGiftActivity = Activity.defineAsync "FindMatchingGift" findMatchingGift
@@ -275,7 +280,7 @@ Each activity is defined by a name and a function.
 
 ### Orchestrator
 
-The Orchestrator calls Activity functions to produce the desired outcome of the service:
+The orchestrator calls activity functions to produce the desired outcome of the service:
 
 ``` fsharp
 let workflow wishlist = orchestrator {
@@ -299,13 +304,13 @@ Notice how closely it matches the workflow definition from our domain model:
 The only differences are:
 
 - `orchestrator` computation expression is used instead of `async` because multi-threading is
-not allowed in Orchestrator functions
-- `Activity.call` is used instead of direct call to functions
+not allowed in orchestrator functions
+- `Activity.call` is used instead of direct invocations of functions
 - `Activity.all` is used instead of `Async.Parallel`
 
 ### Hosting layer
 
-Azure Function triggers need to be defined to host any piece of code as a cloud function. This can
+An Azure Function trigger needs to be defined to host any piece of code as a cloud function. This can
 be done manually in `function.json`, or via trigger generation from .NET attributes. In my case
 I added the following four definitions:
 
@@ -336,14 +341,65 @@ The above code was implemented with the library
 [DurableFunctions.FSharp](https://github.com/mikhailshilkov/DurableFunctions.FSharp). I created
 this library as a thin F#-friendly wrapper around Durable Functions.
 
-Frankly, the whole purpose of this article was to introduce this library and make you curious
+Frankly speaking, the whole purpose of this article is to introduce this library and make you curious
 enough to give it a try. 
 
-Here is how you get started:
+### Here is how you get started
 
-TODO
+- Create a new .NET Core console application
 
-I love to get as much feedback as possible! Pretty please, leave comments below, create issues
+    ```
+    dotnet new console -lang F#
+    ```
+
+- Edit the top section in `fsproj` to be
+
+    ``` xml
+    <PropertyGroup>
+      <TargetFramework>netcoreapp2.1</TargetFramework>
+      <AzureFunctionsVersion>v2</AzureFunctionsVersion>
+    </PropertyGroup>
+    ```
+
+- Install `DurableFunctions.FSharp` NuGet package
+
+    ```
+    dotnet add package DurableFunctions.FSharp
+    ```
+
+- Define an activity and an orchestrator
+
+    ``` fsharp
+    namespace Sample
+
+    open Microsoft.Azure.WebJobs
+    open DurableFunctions.FSharp
+
+    module HelloSequence =
+
+      [<FunctionName("SayHello")>]
+      let SayHello([<ActivityTrigger>] name) = 
+        sprintf "Hello %s!" name
+
+      [<FunctionName("HelloSequence")>]
+      let Run ([<OrchestrationTrigger>] context: DurableOrchestrationContext) = 
+        context |>    
+        orchestrator {
+          let! hello1 = Activity.callByName<string> "SayHello" "Tokyo"
+          let! hello2 = Activity.callByName<string> "SayHello" "Seattle"
+          let! hello3 = Activity.callByName<string> "SayHello" "London"
+
+          // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
+          return [hello1; hello2; hello3]
+        }
+    ```
+
+- [Install Azure Functions Core Tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local)
+to run the app locally and deploy to the cloud, or use the tooling in Visual Studio or Visual Studio Code
+
+### Call for Action
+
+I'd love to get as much feedback as possible! Pretty please, leave comments below, create issues
 on the github repository, or open a PR. This would be super awesome!
 
 Happy coding, and Merry Christmas!
