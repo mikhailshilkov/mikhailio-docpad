@@ -32,8 +32,8 @@
     <link href="/favicon.ico?v=2" rel="shortcut icon">
 
     <!-- Bootstrap -->
-    <link href="/styles/site.css" rel="stylesheet" media="screen">
     <link href="/vendor/prism.css" rel="stylesheet" media="screen">
+    <link href="/styles/site.css" rel="stylesheet" media="screen">
 
     <%- @getBlock('meta').toHTML() %>
     <%- @getBlock('styles').toHTML() %>

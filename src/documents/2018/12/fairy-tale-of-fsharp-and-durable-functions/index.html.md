@@ -3,12 +3,13 @@ layout: post
 title: Fairy Tale of F# and Durable Functions
 date: 2018-12-20
 tags: ["Azure", "Azure Functions", "Serverless", "F#", "Workflows", "Azure Durable Functions"]
-teaserImage: teaser.jpg
+teaserImage: teaser.png
 description: How F# and Azure Durable Functions make children happy (most developers are still kids at heart)
 ---
 
 *The post is a part of 
-[F# Advent Calendar 2018](https://sergeytihon.com/2018/10/22/f-advent-calendar-in-english-2018/).*
+[F# Advent Calendar 2018](https://sergeytihon.com/2018/10/22/f-advent-calendar-in-english-2018/).
+It's Christmas time!*
 
 This summer I was hired by the office of Santa Claus. Santa is not just a lonely fairy tale
 character&mdash;he leads a large organization that supplies gifts and happiness to millions of 
@@ -32,7 +33,7 @@ wish lists from clients (they call children "clients"):
 
 ![Christmas Wish List](wish-list.png)
 
-<center class="img-caption">Christmas Wish List</center>
+<center class="img-caption">Christmas Card with a Wish List &copy; My son Tim</center>
 
 Luckily, the list is already parsed by some other service, and also contains the metadata about
 the kid's background (age, gender, and so on) and preferences.
@@ -302,7 +303,9 @@ let workflow wishlist = orchestrator {
 
 Notice how closely it matches the workflow definition from our domain model:
 
-[TODO]
+![Async Function vs Durable Orchestrator](durable-orchestrator-vs-async.png)
+
+<center class="img-caption">Async Function vs Durable Orchestrator</center>
 
 The only differences are:
 
@@ -401,7 +404,7 @@ enough to give it a try.
 - [Install Azure Functions Core Tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local)
 to run the app locally and deploy to the cloud, or use the tooling in Visual Studio or Visual Studio Code
 
-### Call for Action
+### Call to Action
 
 I'd love to get as much feedback as possible! Pretty please, leave comments below, create issues
 on [the GitHub repository](https://github.com/mikhailshilkov/DurableFunctions.FSharp), or open a PR. This would be super awesome!
