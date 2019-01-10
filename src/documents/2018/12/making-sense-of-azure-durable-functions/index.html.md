@@ -357,9 +357,9 @@ Currently, you can write Durable Functions in 3 programming languages: C#, F#, a
 Javascript (Node.js). All my examples are going to be in C#. For Javascript,
 check [this quickstart](https://docs.microsoft.com/en-us/azure/azure-functions/durable/quickstart-js-vscode)
 and [these samples](https://github.com/Azure/azure-functions-durable-extension/tree/master/samples/javascript).
-For F# see [the samples](https://github.com/Azure/azure-functions-durable-extension/tree/master/samples/fsharp), 
-[my walkthrough](https://mikhail.io/2018/02/azure-durable-functions-in-fsharp/) and stay
-tuned for another article soon.
+For F# see [the samples](https://github.com/Azure/azure-functions-durable-extension/tree/master/samples/fsharp),
+[the F#-specific library](https://github.com/mikhailshilkov/DurableFunctions.FSharp) and my article 
+[A Fairy Tale of F# and Durable Functions](https://mikhail.io/2018/12/fairy-tale-of-fsharp-and-durable-functions/). 
 
 Workflow building functionality is achieved by the introduction of two additional types
 of triggers: Activity Functions and Orchestrator Functions.

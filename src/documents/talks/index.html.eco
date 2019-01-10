@@ -31,6 +31,7 @@ menuOrder: 3
     <div class="abstract-title">Performance Tales of Serverless
     </div>
     <div class="abstract-tags">
+        <a href='https://www.youtube.com/watch?v=_3y5QSTNYq4' target="_blank">Video</a>,
         <a href='https://speakerdeck.com/mikhailshilkov/performance-tales-of-serverless-10413e55-28aa-4a3d-bb98-272a825892c0' target="_blank">Slides</a>
         at <a href='https://serverlesscomputing.london/sessions/performance-tales-serverless/' target="_blank">Serverless Computing London</a>
     </div>
