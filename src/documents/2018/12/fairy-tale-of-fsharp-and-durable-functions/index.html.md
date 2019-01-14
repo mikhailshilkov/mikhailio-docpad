@@ -165,7 +165,7 @@ It represents the exact product selection for the specific kid.
 The Wish Fulfillment service needs to perform three actions, which can be
 modeled with three strongly-typed asynchronous functions.
 
-*Note: I use lowercase "function" for F# functions and capitalized "Function" for Azure Functions
+*Note: I use lowercase "function" for F# functions and capitalize "Function" for Azure Functions
 throughout the article to minimize confusion.*
 
 The **first action** finds matches for each wish:
@@ -251,7 +251,7 @@ have added [F# samples](https://github.com/Azure/azure-functions-durable-extensi
 to the official repository.
 
 Here are two examples from that old F# code of mine (they have nothing to do with our 
-gift fulfullment domain):
+gift fulfillment domain):
 
 ``` fsharp
 // 1. Simple sequencing of activities
@@ -324,9 +324,9 @@ let workflow wishlist = orchestrator {
 
 Notice how closely it matches the workflow definition from our domain model:
 
-![Async Function vs Durable Orchestrator](durable-orchestrator-vs-async.png)
+![Async Function vs. Durable Orchestrator](durable-orchestrator-vs-async.png)
 
-<center class="img-caption">Async function vs Durable Orchestrator</center>
+<center class="img-caption">Async function vs. Durable Orchestrator</center>
 
 The only differences are:
 
@@ -359,7 +359,22 @@ let Workflow ([<OrchestrationTrigger>] context: DurableOrchestrationContext) =
     Orchestrator.run (workflow, context)
 ```
 
-The definitions are very mechanical and, again, strongly typed (apart from names).
+The definitions are very mechanical and, again, strongly typed (apart from Functions' names).
+
+### Ship It!
+
+These are all the bits required to get our Durable Wish Fulfillment service up and running.
+From this point, we can leverage all the existing tooling of Azure Functions:
+
+- Visual Studio and Visual Studio Code for development and debugging
+- [Azure Functions Core Tools](https://github.com/Azure/azure-functions-core-tools) to run
+the application locally and deploy it to Azure
+- The latest version of the Core Tools has dedicated commands to 
+[manage instances of Durable Functions](https://docs.microsoft.com/en-us/azure/azure-functions/durable/durable-functions-instance-management)
+
+There is a learning curve in the process of adopting the serverless architecture. However, a small
+project like ours is a great way to do the learning. It sets Santa's IT department on the road
+to success, and children will get better gifts more reliably!
 
 DurableFunctions.FSharp
 -----------------------
@@ -378,9 +393,11 @@ usage of `Task`-based API of `DurableOrchestrationContext`
 
 - `Activity` module with helper functions to call activities
 
-- API of the original Durable Extensions is still available, so you can fallback to them if needed
+- Adapters for Azure Functions definition for `Async` and `Orchestrator`
 
-In my opinion, F# is a great language to develop serverless Functions. Simplicity of working with functions,
+- API of the original Durable Extensions is still available, so you can fall back to them if needed
+
+In my opinion, F# is a great language to develop serverless Functions. The simplicity of working with functions,
 immutability by default, strong type system, focus on data pipelines are all useful in the world of
 event-driven cloud applications.
 
@@ -396,3 +413,10 @@ on the [GitHub repository](https://github.com/mikhailshilkov/DurableFunctions.FS
 This would be super awesome!
 
 Happy coding, and Merry Christmas!
+
+Acknowledgments
+---------------
+
+Many thanks to [Katy Shimizu](https://twitter.com/kashimizMSFT), [Devon Burriss](https://twitter.com/DevonBurriss),
+[Dave Lowe](https://twitter.com/iwasdavid), [Chris Gillum](https://twitter.com/cgillum)
+for reviewing the draft of this article and their valuable contributions and suggestions.
