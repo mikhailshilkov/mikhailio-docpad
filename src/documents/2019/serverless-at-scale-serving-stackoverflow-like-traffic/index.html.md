@@ -1,12 +1,12 @@
 ---
 layout: post
 title: Serverless at Scale: Serving StackOverflow-like Traffic
-date: 2019-01-10
+date: 2019-01-21
 tags: ["Azure", "Azure Functions", "Serverless", "Performance", "Scalability", "AWS", "AWS Lambda", "GCP", "Google Cloud Functions"]
 teaserImage: teaser.jpg
-description: TODO
+description: Scalability test for HTTP-triggered serverless functions across AWS, Azure and GCP
 originalSource: Binaris Blog
-originalUrl: https://blog.binaris.com/todo/
+originalUrl: https://blog.binaris.com/serverless-at-scale/
 ---
 
 Serverless compute is a very productive and quick way to get an application up and running. A developer writes a piece of code that solves a particular task and uploads it to the cloud. The provider handles code deployment and the ops burden of managing all the required infrastructure, so that the Function is always available, secure and performant.

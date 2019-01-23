@@ -6,6 +6,26 @@ menu: Talks
 menuOrder: 3
 ---
 <div class="abstract">
+    <div class="abstract-year">2019</div>
+    <div class="abstract-date">Jan 17</div>
+    <div class="abstract-title">Serverless Workflows with Durable Functions
+    </div>
+    <div class="abstract-tags">
+        <a href='https://speakerdeck.com/mikhailshilkov/serverless-workflows-with-azure-durable-functions' target="_blank">Slides</a>
+        at <a href='https://www.microsoft.com/en-sg/ignite-the-tour/singapore' target="_blank">Microsoft Ignite | The Tour Singapore</a>
+    </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
+    <div class="abstract-date">Jan 16</div>
+    <div class="abstract-title">All-In on Cloud
+    </div>
+    <div class="abstract-tags">
+        <a href='https://speakerdeck.com/mikhailshilkov/all-in-on-cloud-how-we-moved-from-million-euro-worth-of-hardware-to-azure-paas-ddde25bc-fb2b-43aa-aa61-a3e3391c64bd' target="_blank">Slides</a>
+        at <a href='https://www.microsoft.com/en-sg/ignite-the-tour/singapore' target="_blank">Microsoft Ignite | The Tour Singapore</a>
+    </div>
+</div>
+<div class="abstract">
     <div class="abstract-year">2018</div>
     <div class="abstract-date">Nov 29</div>
     <div class="abstract-title">Serverless Workflows with Durable Functions
@@ -21,6 +41,7 @@ menuOrder: 3
     <div class="abstract-title">All-in on Cloud: How We Moved from Million Euro Worth of Hardware to Azure PaaS
     </div>
     <div class="abstract-tags">
+        <a href='https://www.youtube.com/watch?v=1PzQuVeK07Y' target="_blank">Video</a>,          
         <a href='https://speakerdeck.com/mikhailshilkov/all-in-on-cloud-how-we-moved-from-million-euro-worth-of-hardware-to-azure-paas' target="_blank">Slides</a>
         at <a href='https://www.buildstuff.lt/' target="_blank">BuildStuff</a>
     </div>

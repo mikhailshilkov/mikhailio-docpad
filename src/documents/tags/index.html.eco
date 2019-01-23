@@ -6,7 +6,7 @@ menu: Topics
 menuOrder: 1
 ---
 
-<% for topic in ['Azure', 'F#', 'Actor Model', 'Event Sourcing', 'Functional Programming', 'Poker Bot', 'Aurelia', 'Clean Code']: %>
+<% for topic in ['Serverless', 'Azure Functions', 'Azure', 'F#', 'Functional Programming']: %>
   <h1 class="abstract2-section"><a href="/tags/<%= @getTagUrl(topic) %>"><%= topic %></a></h1>
   <% for document in @getFiles(tags: $has: topic, { date: -1 }).toJSON(): %>
     <% date = @moment(document.date) %>
