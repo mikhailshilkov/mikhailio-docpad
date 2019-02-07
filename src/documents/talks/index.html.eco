@@ -5,11 +5,22 @@ priority: 0.3
 menu: Talks
 menuOrder: 3
 ---
+
 <div class="abstract">
     <div class="abstract-year">2019</div>
-    <div class="abstract-date">Jan 17</div>
-    <div class="abstract-title">Serverless Workflows with Durable Functions
+    <div class="abstract-date">Feb 2</div>
+    <div class="abstract-title">Infrastructure as Typescript</div>
+    <div class="abstract-tags">
+        <a href='https://video.fosdem.org/2019/K.3.201/typescript_for_infrastructure.mp4' target="_blank">Video,</a>
+        <a href='https://speakerdeck.com/mikhailshilkov/infrastructure-as-typescript' target="_blank">Slides</a>,
+        <a href='https://github.com/mikhailshilkov/fosdem2019/tree/master/samples' target="_blank">Code</a>
+        at <a href='https://fosdem.org/2019/schedule/event/typescript_for_infrastructure/' target="_blank">FOSDEM 2019</a>
     </div>
+</div>
+<div class="abstract">
+    <div class="abstract-year"></div>
+    <div class="abstract-date">Jan 17</div>
+    <div class="abstract-title">Serverless Workflows with Durable Functions</div>
     <div class="abstract-tags">
         <a href='https://speakerdeck.com/mikhailshilkov/serverless-workflows-with-azure-durable-functions' target="_blank">Slides</a>
         at <a href='https://www.microsoft.com/en-sg/ignite-the-tour/singapore' target="_blank">Microsoft Ignite | The Tour Singapore</a>
@@ -18,8 +29,7 @@ menuOrder: 3
 <div class="abstract">
     <div class="abstract-year"></div>
     <div class="abstract-date">Jan 16</div>
-    <div class="abstract-title">All-In on Cloud
-    </div>
+    <div class="abstract-title">All-In on Cloud</div>
     <div class="abstract-tags">
         <a href='https://speakerdeck.com/mikhailshilkov/all-in-on-cloud-how-we-moved-from-million-euro-worth-of-hardware-to-azure-paas-ddde25bc-fb2b-43aa-aa61-a3e3391c64bd' target="_blank">Slides</a>
         at <a href='https://www.microsoft.com/en-sg/ignite-the-tour/singapore' target="_blank">Microsoft Ignite | The Tour Singapore</a>
@@ -28,8 +38,7 @@ menuOrder: 3
 <div class="abstract">
     <div class="abstract-year">2018</div>
     <div class="abstract-date">Nov 29</div>
-    <div class="abstract-title">Serverless Workflows with Durable Functions
-    </div>
+    <div class="abstract-title">Serverless Workflows with Durable Functions</div>
     <div class="abstract-tags">
         <a href='https://speakerdeck.com/mikhailshilkov/serverless-workflows-with-durable-functions' target="_blank">Slides</a>
         at <a href='https://milan2018.codemotionworld.com/conference/' target="_blank">Codemotion Milan</a>
@@ -38,8 +47,7 @@ menuOrder: 3
 <div class="abstract">
     <div class="abstract-year"></div>
     <div class="abstract-date">Nov 16</div>
-    <div class="abstract-title">All-in on Cloud: How We Moved from Million Euro Worth of Hardware to Azure PaaS
-    </div>
+    <div class="abstract-title">All-in on Cloud: How We Moved from Million Euro Worth of Hardware to Azure PaaS</div>
     <div class="abstract-tags">
         <a href='https://www.youtube.com/watch?v=1PzQuVeK07Y' target="_blank">Video</a>,          
         <a href='https://speakerdeck.com/mikhailshilkov/all-in-on-cloud-how-we-moved-from-million-euro-worth-of-hardware-to-azure-paas' target="_blank">Slides</a>
@@ -49,8 +57,7 @@ menuOrder: 3
 <div class="abstract">
     <div class="abstract-year"></div>
     <div class="abstract-date">Nov 12</div>
-    <div class="abstract-title">Performance Tales of Serverless
-    </div>
+    <div class="abstract-title">Performance Tales of Serverless</div>
     <div class="abstract-tags">
         <a href='https://www.youtube.com/watch?v=_3y5QSTNYq4' target="_blank">Video</a>,
         <a href='https://speakerdeck.com/mikhailshilkov/performance-tales-of-serverless-10413e55-28aa-4a3d-bb98-272a825892c0' target="_blank">Slides</a>
@@ -60,8 +67,7 @@ menuOrder: 3
 <div class="abstract">
     <div class="abstract-year"></div>
     <div class="abstract-date">Nov 1</div>
-    <div class="abstract-title">All-in on Cloud: How We Moved from Million Euro Worth of Hardware to Azure PaaS
-    </div>
+    <div class="abstract-title">All-in on Cloud: How We Moved from Million Euro Worth of Hardware to Azure PaaS</div>
     <div class="abstract-tags">
         <a href='https://youtu.be/-wycjfKA8c0' target="_blank">Video</a>,
         <a href='https://speakerdeck.com/mikhailshilkov/all-in-on-cloud-how-we-moved-from-million-euro-worth-of-hardware-to-azure-paas' target="_blank">Slides</a>
@@ -71,8 +77,7 @@ menuOrder: 3
 <div class="abstract">
     <div class="abstract-year"></div>
     <div class="abstract-date">Oct 13</div>
-    <div class="abstract-title">Performance Tales of Serverless
-    </div>
+    <div class="abstract-title">Performance Tales of Serverless</div>
     <div class="abstract-tags">
         <a href='https://speakerdeck.com/mikhailshilkov/performance-tales-of-serverless' target="_blank">Slides</a>
         at <a href='https://www.cloudbrew.be/' target="_blank">CloudBrew</a>

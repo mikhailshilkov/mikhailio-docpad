@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Pulumi
-date: 2019-02-05
+title: From YAML to TypeScript: Developer's View on Cloud Automation
+date: 2019-02-12
 tags: ["Pulumi", "TypeScript", "Infrastructure as Code", "AWS", "AWS Lambda"]
 teaserImage: teaser.jpg
 description: 
@@ -27,7 +27,7 @@ This app is simple to describe but involves enough moving parts to be representa
 Serverless URL Shortener
 ------------------------
 
-I'm a big proponent of the serverless architecture: the style of cloud applications being a combination of serverless functions and managed cloud services. They are fast to develop, effortless to run and cost pennies unless the application gets lots of users.
+I'm a big proponent of the serverless architecture: the style of cloud applications being a combination of serverless functions and managed cloud services. They are fast to develop, effortless to run and cost pennies unless the application gets lots of users. However, even serverless applications require infrastructure provisioning, like databases, queues, and other sources of events and destinations of data.
 
 My examples are going to use Amazon AWS, but this could be Microsoft Azure or Google Cloud Platform too.
 
@@ -120,10 +120,11 @@ aws apigateway create-stage --rest-api-id 1234123412 --stage-name 'dev' --descri
 
 The initial experience might not be as smooth as clicking buttons in the browser, but the huge benefit is that you can *reuse* commands that you once wrote. You can build scripts by combining many commands into cohesive scenarios. So, your colleague can benefit from the same script that you created. You can provision multiple environments by parameterizing the scripts.
 
-Frankly speaking, I've never done that for two related reasons:
+Frankly speaking, I've never done that for several reasons:
 
 - CLI scripts feel too imperative to me. I have to describe "how" to do things, not "what" I want to get in the end.
 - There seems to be no good story for updating existing resources. Do I write small delta scripts for each change? Do I have to keep them forever and run the full suite every time I need a new environment?
+- If a failure occurs mid-way through the script, I need to manually repair everything to a consistent state. This gets messy real quick, and I have no desire to exercise this process, especially in production.
 
 To overcome such limitations, the notion of the **Desired State Configuration** (DSC) was invented. Under this paradigm, one describes the desired layout of the infrastructure, and then the tooling takes care of either provisioning it from scratch or applying the required changes to an existing environment.
 
@@ -207,6 +208,8 @@ functions:
 ```
 
 The domain-specific language yields a shorter definition: this example has 45 lines of YAML + 123 lines of JavaScript functions.
+
+However, the conciseness has a flip side: as soon as you veer outside of the fairly "thin" golden path&mdash;the cloud functions and an incomplete list of event sources&mdash;you have to fall back to more generic tools like CloudFormation. As soon as your landscape includes lower-level infrastructure work or some container-based components, you're stuck using multiple config languages and tools again.
 
 Amazon's [AWS Serverless Application Model](https://docs.aws.amazon.com/serverless-application-model/index.html) (SAM) looks very similar to the Serverless Framework but tailored to be AWS-specific.
 
@@ -360,7 +363,7 @@ You can see that the complexity kicked in and the code size is growing. However,
 - If the type of the input parameter doesn't match the type of the object I'm passing, I get an error again.
 - I can use language features like `JSON.stringify` right inside my program. In fact, I can reference and use any NPM module.
 
-You can see the code for API Gateway [here](TODO). It looks too verbose, doesn't it? Moreover, I'm only half-way through with only one Lambda function defined.
+You can see the code for API Gateway [here](https://github.com/mikhailshilkov/fosdem2019/blob/master/samples/1-raw/index.ts#L60-L118). It looks too verbose, doesn't it? Moreover, I'm only half-way through with only one Lambda function defined.
 
 Reusable Components
 -------------------
@@ -437,7 +440,7 @@ Previewing update (fosdem-component-urlshortener):
  +     aws:dynamodb:Table                urls                  create
 ```
 
-The `Endpoint` component simplifies definition of API Gateway (see [the source](todo)):
+The `Endpoint` component simplifies definition of API Gateway (see [the source](https://github.com/mikhailshilkov/fosdem2019/blob/master/samples/2-components/endpoint.ts)):
 
 ``` typescript
 const api = new Endpoint("urlapi", {
@@ -496,7 +499,9 @@ endpoint.post("/url", async (req, res) => {
 export let endpointUrl = endpoint.publish().url;
 ```
 
-The coolest thing here is that the actual *implementation code* of AWS Lambdas is intertwined with the *definition of resources*. The code looks very similar to an Express application. AWS Lambdas are defined as TypeScript lambdas. All strongly typed and compile-time checked.
+The coolest thing here is that the actual *implementation code* of AWS Lambdas is [intertwined](https://blog.pulumi.com/lambdas-as-lambdas-the-magic-of-simple-serverless-functions) with the *definition of resources*. The code looks very similar to an Express application. AWS Lambdas are defined as TypeScript lambdas. All strongly typed and compile-time checked.
+
+It's worth noting that at the moment such high-level components only exist in TypeScript. One could create their custom components in Python or Go, but there is no standard library available. Pulumi folks [are actively trying to figure out a way to bridge this gap](https://github.com/pulumi/pulumi/issues/2430).
 
 Avoiding Vendor Lock-in?
 ------------------------
