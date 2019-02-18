@@ -4,30 +4,30 @@ title: From YAML to TypeScript: Developer's View on Cloud Automation
 date: 2019-02-12
 tags: ["Pulumi", "TypeScript", "Infrastructure as Code", "AWS", "AWS Lambda"]
 teaserImage: teaser.jpg
-description: 
+description: An expressive and powerful way to design cloud-native and serverless infrastructure
 ---
 
-The rise of managed cloud services, cloud-native and serverless applications brings both new possibilities and challenges. More and more practices from software development process like version control, code review, continuous integration, and automated testing are applied to the cloud infrastructure provisioning.
+The rise of managed cloud services, cloud-native and serverless applications brings both new possibilities and challenges. More and more practices from software development process like version control, code review, continuous integration, and automated testing are applied to the cloud infrastructure automation.
 
-Most existing tools suggest defining infrastructure in text-based markup formats. In this article, I'm making a case for using real programming languages like TypeScript instead. Such a change makes even more software development practices applicable to the infrastructure realm.
+Most existing tools suggest defining infrastructure in text-based markup formats, YAML being the favorite. In this article, I'm making a case for using real programming languages like TypeScript instead. Such a change makes even more software development practices applicable to the infrastructure realm.
 
 Sample Application
 ------------------
 
-It's easier to make a case given a specific example. For this article, I define a URL Shortener application, a basic clone of tinyurl.com or bit.ly. There is an administrative page where one can define short aliases for long URLs:
+It's easier to make a case given a specific example. For this essay, I define a URL Shortener application, a basic clone of tinyurl.com or bit.ly. There is an administrative page where one can define short aliases for long URLs:
 
 ![URL Shortener sample app](url-shortener.png)
 
 <figcaption>URL Shortener sample app</figcaption>
 
-Now, whenever somebody goes to the base URL of the application + an existing alias, they get redirected to the full URL.
+Now, whenever a visitor goes to the base URL of the application + an existing alias, they get redirected to the full URL.
 
 This app is simple to describe but involves enough moving parts to be representative of some real-world issues. As a bonus, there are many existing implementations on the web to compare with.
 
 Serverless URL Shortener
 ------------------------
 
-I'm a big proponent of the serverless architecture: the style of cloud applications being a combination of serverless functions and managed cloud services. They are fast to develop, effortless to run and cost pennies unless the application gets lots of users. However, even serverless applications require infrastructure provisioning, like databases, queues, and other sources of events and destinations of data.
+I'm a big proponent of the serverless architecture: the style of cloud applications being a combination of serverless functions and managed cloud services. They are fast to develop, effortless to run and cost pennies unless the application gets lots of users. However, even serverless applications have to deal with infrastructure, like databases, queues, and other sources of events and destinations of data.
 
 My examples are going to use Amazon AWS, but this could be Microsoft Azure or Google Cloud Platform too.
 
@@ -37,9 +37,9 @@ So, the gist is to store URLs with short names as key-value pairs in Amazon Dyna
 
 <figcaption>URL Shortener with AWS Lambda and DynamoDB</figcaption>
 
-The Lambda on the top receives an event when somebody decides to add a new URL. It extracts the name and the URL from the request and saves them as an item in the DynamoDB table.
+The Lambda at the top receives an event when somebody decides to add a new URL. It extracts the name and the URL from the request and saves them as an item in the DynamoDB table.
 
-The Lambda at the bottom is called when a user navigates to a short URL. The code reads the full URL based on the requested path and returns a 301 response with the corresponding location.
+The Lambda at the bottom is called whenever a user navigates to a short URL. The code reads the full URL based on the requested path and returns a 301 response with the corresponding location.
 
 Here is the implementation of the `Open URL` Lambda in JavaScript:
 
@@ -60,14 +60,14 @@ exports.handler = async (event) => {
 };
 ```
 
-That's 11 lines of code. I'll skip the implementation of `Add URL` function because it's very similar. Considering a third function to list the existing URLs for UI, we might have 30-40 lines of JavaScript in total.
+That's 11 lines of code. I'll skip the implementation of `Add URL` function because it's very similar. Considering a third function to list the existing URLs for UI, we might end up with 30-40 lines of JavaScript in total.
 
 So, how do we deploy the application?
 
-Well, before we do that, we should realize that the above picture was an over-simplification.
+Well, before we do that, we should realize that the above picture was an over-simplification:
 
 - AWS Lambda can't handle HTTP requests directly, so we need to add AWS API Gateway in front of it.
-- We also need to serve some static files for the UI, which we'll put into AWS S3 and front it with the same API Gateway.
+- We also need to serve some static files for the UI, which we'll put into AWS S3 and proxy it with the same API Gateway.
 
 Here is the updated diagram:
 
@@ -78,14 +78,14 @@ Here is the updated diagram:
 This is a viable design, but the details are even more complicated:
 
 - API Gateway is a complex beast which needs Stages, Deployments, and REST Endpoints to be appropriately configured.
-- Permissions and policies need to be defined so that API Gateway could call Lambda and Lambda could access DynamoDB.
+- Permissions and Policies need to be defined so that API Gateway could call Lambda and Lambda could access DynamoDB.
 - Static Files should go to S3 Bucket Objects.
 
 So, the actual setup involves a couple of dozen objects to be configured in AWS:
 
-![Cloud resources to be provisioned](apigateway-lambda-dynamodb-s3-details.png)
+![All cloud resources to be provisioned](apigateway-lambda-dynamodb-s3-details.png)
 
-<figcaption>Cloud resources to be provisioned</figcaption>
+<figcaption>All cloud resources to be provisioned</figcaption>
 
 How do we approach this task?
 
@@ -222,7 +222,7 @@ So what have we learned while going through the existing landscape? The perfect 
 
 - Provide **reproducible** results of deployments
 - Be **scriptable**, i.e., require no human intervention after the definition is complete
-- Define **desired state** rather than exact steps to achieve it
+- Define the **desired state** rather than exact steps to achieve it
 - Support **multiple cloud providers** and hybrid scenarios
 - Be **universal** in the sense of using the same tool to define any type of resource
 - Be **succinct** and **concise** to stay readable and manageable
@@ -236,9 +236,9 @@ Have you noticed that I haven't mentioned **Infrastructure as code** a single ti
 
 Shouldn't it be called "Infrastructure as definition files", or "Infrastructure as YAML"?
 
-As a software developer, what I really want is "Infrastructure as actual code, you know, the program thing". I want to use **the same language** that I already know. I want to stay in the same editor. I want to get IntelliSense **auto-completion** when I type. I want to see the **compilation errors** when what I typed is not syntactically correct. I want to reuse the **developer skills** that I already have. I want to come up with **abstractions** to generalize my code and create **reusable components**. I want to **leverage open-source community** who would create much better components than I ever could. I want to **combine the code and infrastructure** in one code project.
+As a software developer, what I really want is "Infrastructure as actual code, you know, the program thing". I want to use **the same language** that I already know. I want to stay in the same editor. I want to get IntelliSense **auto-completion** when I type. I want to see the **compilation errors** when what I typed is not syntactically correct. I want to reuse the **developer skills** that I already have. I want to come up with **abstractions** to generalize my code and create **reusable components**. I want to **leverage the open-source community** who would create much better components than I ever could. I want to **combine the code and infrastructure** in one code project.
 
-If you are with me on that, keep reading. You get all of that with [Pulumi](https://pulumi.io/).
+If you are with me on that, keep reading. You get all of that with Pulumi.
 
 Pulumi
 ------
@@ -255,18 +255,18 @@ How Pulumi Works
 Let's start defining our URL shortener application in TypeScript. I installed `@pulumi/pulumi` and `@pulumi/aws` NPM modules so that I can start the program. The first resource to create is a DynamoDB table:
 
 ``` typescript
-import * as aws from "@pulumi/aws";
+    import * as aws from "@pulumi/aws";
 
-// A DynamoDB table with a single primary key
-let counterTable = new aws.dynamodb.Table("urls", {
-    name: "urls",
-    attributes: [
-        { name: "name", type: "S" },
-    ],
-    hashKey: "name",
-    readCapacity: 1,
-    writeCapacity: 1
-});
+    // A DynamoDB table with a single primary key
+    let counterTable = new aws.dynamodb.Table("urls", {
+        name: "urls",
+        attributes: [
+            { name: "name", type: "S" },
+        ],
+        hashKey: "name",
+        readCapacity: 1,
+        writeCapacity: 1
+    });
 ```
 
 I use `pulumi` CLI to run this program to provision the actual resource in AWS:
@@ -294,7 +294,7 @@ Resources:
     + 2 created
 ```
 
-The CLI first shows the preview of the changes to be made, and when I confirm, it creates the resource. It also creates a *stack*&mdash;a container for all the resources of the application.
+The CLI first shows the preview of the changes to be made, and when I confirm, it creates the resource. It also creates a **stack**&mdash;a container for all the resources of the application.
 
 This code might look like an imperative command to create a DynamoDB table, but it actually isn't. If I go ahead and change `readCapacity` to `2` and then re-run `pulumi up`, it produces a different outcome:
 
@@ -429,7 +429,7 @@ The interface `LambdaOptions` defines options that are important for my abstract
 A nice effect is that one can see the structure in `pulumi` preview:
 
 ``` console
-Previewing update (fosdem-component-urlshortener):
+Previewing update (urlshortener):
 
      Type                                Name                  Plan
  +   pulumi:pulumi:Stack                 urlshortener          create
@@ -440,7 +440,7 @@ Previewing update (fosdem-component-urlshortener):
  +     aws:dynamodb:Table                urls                  create
 ```
 
-The `Endpoint` component simplifies definition of API Gateway (see [the source](https://github.com/mikhailshilkov/fosdem2019/blob/master/samples/2-components/endpoint.ts)):
+The `Endpoint` component simplifies the definition of API Gateway (see [the source](https://github.com/mikhailshilkov/fosdem2019/blob/master/samples/2-components/endpoint.ts)):
 
 ``` typescript
 const api = new Endpoint("urlapi", {
@@ -449,12 +449,12 @@ const api = new Endpoint("urlapi", {
 });
 ```
 
-The component hides the complexity from the clients; if the abstraction was selected correctly, that is. The component class can be reused in multiple places, in several projects, across teams, etc.
+The component hides the complexity from the clients&mdash;if the abstraction was selected correctly, that is. The component class can be reused in multiple places, in several projects, across teams, etc.
 
 Standard Component Library
 --------------------------
 
-In fact, Pulumi team came up with lots of high-level components that build abstractions on top of raw resources. The components from `@pulumi/cloud-aws` package are particularly useful for serverless applications.
+In fact, Pulumi team came up with lots of high-level components that build abstractions on top of raw resources. The components from the `@pulumi/cloud-aws` package are particularly useful for serverless applications.
 
 Here is the full URL shortener application with DynamoDB table, Lambdas, API Gateway, and S3-based static files:
 
