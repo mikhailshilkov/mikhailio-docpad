@@ -179,7 +179,7 @@ how the domain experts would think of this abstraction. Here is the result:
 ``` csharp
 namespace Planning
 {
-    public class IDurationCalculator
+    public interface IDurationCalculator
     {
         TimeSpan CalculateDuration(Hub origin, Hub destination);
     }
@@ -204,7 +204,7 @@ namespace Planning
 
 namespace Mapping
 {
-    public class RouteCalculator : IRouteCalculator
+    public class RouteCalculator : IDurationCalculator
     {
         public TimeSpan CalculateDuration(Hub origin, Hub destination)
         {
