@@ -42,7 +42,7 @@
     "docpad-plugin-partials": "~2.13.0",
     "docpad-plugin-sitemap": "~2.5.0",
     "docpad-plugin-tags": "~2.2.0",
-    "moment": "^2.22.2"
+    "moment": "^2.29.4"
   },
   "devDependencies": {},
   "main": "node_modules/docpad/bin/docpad-server"
